@@ -34,6 +34,7 @@ import androidx.core.content.ContextCompat
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.concurrent.thread
+import java.util.concurrent.atomic.AtomicReference
 
 private const val SAMPLE_RATE = 44100
 
@@ -74,8 +75,14 @@ private fun OsenVoiceR() {
     var recordingActive by remember { mutableStateOf(false) }
     var playbackActive by remember { mutableStateOf(false) }
 
+    var isLive by remember { mutableStateOf(false) }
+    var liveRecorder by remember { mutableStateOf<AudioRecord?>(null) }
+    var liveTrack by remember { mutableStateOf<AudioTrack?>(null) }
+    var liveActive by remember { mutableStateOf(false) }
+    val liveEffectRef = remember { AtomicReference(VoiceEffect.DEEP) }
+
     fun startRecording() {
-        if (isRecording || isPlaying) return
+        if (isRecording || isPlaying || isLive) return
         val minBuffer = AudioRecord.getMinBufferSize(
             SAMPLE_RATE,
             AudioFormat.CHANNEL_IN_MONO,
@@ -126,6 +133,109 @@ private fun OsenVoiceR() {
         }
     }
 
+    fun stopLiveVoice() {
+        liveActive = false
+        try { liveRecorder?.stop() } catch (_: Exception) {}
+        try { liveRecorder?.release() } catch (_: Exception) {}
+        try {
+            liveTrack?.pause()
+            liveTrack?.flush()
+            liveTrack?.stop()
+        } catch (_: Exception) {}
+        try { liveTrack?.release() } catch (_: Exception) {}
+        liveRecorder = null
+        liveTrack = null
+        isLive = false
+        status = "Live voice changer stopped"
+    }
+
+    fun startLiveVoice() {
+        if (isLive || isRecording || isPlaying) return
+        val minRecordBuffer = AudioRecord.getMinBufferSize(
+            SAMPLE_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT
+        )
+        val minTrackBuffer = AudioTrack.getMinBufferSize(
+            SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT
+        )
+        if (minRecordBuffer <= 0 || minTrackBuffer <= 0) {
+            status = "Live audio is unavailable on this device"
+            return
+        }
+        var input: AudioRecord? = null
+        var output: AudioTrack? = null
+        try {
+            val createdInput = AudioRecord(
+                MediaRecorder.AudioSource.MIC, SAMPLE_RATE,
+                AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT,
+                maxOf(minRecordBuffer * 2, 8192)
+            )
+            input = createdInput
+            if (createdInput.state != AudioRecord.STATE_INITIALIZED) {
+                createdInput.release()
+                status = "Could not initialize live microphone"
+                return
+            }
+            val createdOutput = AudioTrack.Builder()
+                .setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                        .build()
+                )
+                .setAudioFormat(
+                    AudioFormat.Builder()
+                        .setSampleRate(SAMPLE_RATE)
+                        .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
+                        .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                        .build()
+                )
+                .setBufferSizeInBytes(maxOf(minTrackBuffer * 2, 8192))
+                .setTransferMode(AudioTrack.MODE_STREAM)
+                .build()
+            output = createdOutput
+            createdInput.startRecording()
+            createdOutput.play()
+            liveRecorder = createdInput
+            liveTrack = createdOutput
+            liveActive = true
+            isLive = true
+            status = "Live ${liveEffectRef.get().title} voice is on — use headphones"
+            val activeInput = createdInput
+            val activeOutput = createdOutput
+            thread(name = "OsenLiveVoice") {
+                val buffer = ByteArray(2048)
+                try {
+                    while (liveActive) {
+                        val count = activeInput.read(buffer, 0, buffer.size, AudioRecord.READ_BLOCKING)
+                        if (count > 1 && liveActive) {
+                            val usableCount = count - (count % 2)
+                            val changed = applyVoiceEffect(buffer.copyOf(usableCount), liveEffectRef.get())
+                            if (changed.isNotEmpty() && liveActive) {
+                                activeOutput.write(changed, 0, changed.size, AudioTrack.WRITE_BLOCKING)
+                            }
+                        }
+                    }
+                } catch (_: Exception) {
+                } finally {
+                    (context as? ComponentActivity)?.runOnUiThread {
+                        if (isLive) {
+                            stopLiveVoice()
+                            status = "Live voice session ended"
+                        }
+                    }
+                }
+            }
+        } catch (_: Exception) {
+            try { input?.release() } catch (_: Exception) {}
+            try { output?.release() } catch (_: Exception) {}
+            liveRecorder = null
+            liveTrack = null
+            liveActive = false
+            isLive = false
+            status = "Could not start live voice changer"
+        }
+    }
+
     fun stopRecording() {
         recordingActive = false
         try {
@@ -136,7 +246,7 @@ private fun OsenVoiceR() {
         recorder = null
         isRecording = false
         status = if (recordingFile.exists() && recordingFile.length() > 0L) {
-            "Recording saved. Audio effects are not processed yet."
+            "Recording saved. Choose an effect and play it back."
         } else {
             "Recording stopped"
         }
@@ -156,7 +266,7 @@ private fun OsenVoiceR() {
     }
 
     fun playRecording() {
-        if (isRecording || isPlaying) return
+        if (isRecording || isPlaying || isLive) return
         if (!recordingFile.exists() || recordingFile.length() == 0L) {
             status = "Record your voice first"
             return
@@ -222,6 +332,12 @@ private fun OsenVoiceR() {
         if (granted) startRecording() else status = "Microphone permission is required"
     }
 
+    val liveMicrophonePermission = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) startLiveVoice() else status = "Microphone permission is required for live voice"
+    }
+
     val effects = VoiceEffect.values()
 
     Surface(
@@ -277,7 +393,8 @@ private fun OsenVoiceR() {
                             Button(
                                 onClick = {
                                     selectedEffect = effect
-                                    status = "${effect.title} selected. Audio effect processing is not connected yet."
+                                    liveEffectRef.set(effect)
+                                    status = "${effect.title} selected"
                                 },
                                 modifier = Modifier.fillMaxWidth(),
                                 contentPadding = PaddingValues(horizontal = 4.dp, vertical = 10.dp),
@@ -290,6 +407,43 @@ private fun OsenVoiceR() {
                             }
                         }
                     }
+                }
+            }
+
+            Spacer(Modifier.height(18.dp))
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFF21183A)),
+                shape = RoundedCornerShape(20.dp)
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth().padding(18.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text("LIVE VOICE CHANGER", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 17.sp)
+                    Spacer(Modifier.height(8.dp))
+                    Text("Speak and hear your selected voice effect in real time", color = Color(0xFFC8BCEB), fontSize = 12.sp)
+                    Spacer(Modifier.height(12.dp))
+                    Button(
+                        onClick = {
+                            if (isLive) {
+                                stopLiveVoice()
+                            } else if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+                                startLiveVoice()
+                            } else {
+                                liveMicrophonePermission.launch(Manifest.permission.RECORD_AUDIO)
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(containerColor = if (isLive) Color(0xFFB83250) else Color(0xFF267D91))
+                    ) {
+                        Text(if (isLive) "STOP LIVE VOICE" else "●  START LIVE VOICE")
+                    }
+                    Spacer(Modifier.height(6.dp))
+                    Text(
+                        "Headphones recommended to prevent audio feedback. This is live monitoring inside the app, not direct Free Fire microphone routing.",
+                        color = Color(0xFFAAA2BC), fontSize = 10.sp, lineHeight = 14.sp
+                    )
                 }
             }
 
@@ -351,9 +505,7 @@ private fun OsenVoiceR() {
 
             Spacer(Modifier.height(16.dp))
             Text(
-                "Note: This build restores the app screen and basic recording/playback. " +
-                    "Deep, Robot, Echo and other audio processing still need to be implemented. " +
-                    "This app does not currently send changed microphone audio directly into Free Fire.",
+                "Live voice effects are monitored inside this app. Direct routing of changed microphone audio into Free Fire is not provided by this build.",
                 color = Color(0xFFAAA2BC),
                 fontSize = 11.sp,
                 lineHeight = 16.sp
