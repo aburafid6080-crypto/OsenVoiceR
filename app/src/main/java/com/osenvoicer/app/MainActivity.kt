@@ -163,7 +163,8 @@ private fun OsenVoiceR() {
         }
 
         try {
-            val bytes = recordingFile.readBytes()
+            val originalBytes = recordingFile.readBytes()
+            val bytes = applyVoiceEffect(originalBytes, selectedEffect)
             val minBuffer = AudioTrack.getMinBufferSize(
                 SAMPLE_RATE,
                 AudioFormat.CHANNEL_OUT_MONO,
@@ -190,7 +191,7 @@ private fun OsenVoiceR() {
             audioTrack = track
             playbackActive = true
             isPlaying = true
-            status = "Playing original recording (no effect processing yet)"
+            status = "Playing ${selectedEffect.title} effect"
             track.play()
 
             thread {
@@ -361,3 +362,97 @@ private fun OsenVoiceR() {
         }
     }
 }
+
+
+/**
+ * Offline PCM effect processing for the recorded sample.
+ * Input/output: mono, signed 16-bit little-endian PCM.
+ */
+private fun applyVoiceEffect(input: ByteArray, effect: VoiceEffect): ByteArray {
+    val usableSize = input.size - (input.size % 2)
+    if (usableSize < 2 || effect == VoiceEffect.NORMAL) {
+        return input.copyOf(usableSize)
+    }
+
+    val samples = ShortArray(usableSize / 2) { index ->
+        val low = input[index * 2].toInt() and 0xFF
+        val high = input[index * 2 + 1].toInt()
+        ((high shl 8) or low).toShort()
+    }
+
+    fun clamp(value: Double): Short =
+        value.toInt().coerceIn(Short.MIN_VALUE.toInt(), Short.MAX_VALUE.toInt()).toShort()
+
+    fun resample(rate: Double): ShortArray {
+        val outputSize = (samples.size / rate).toInt().coerceAtLeast(1)
+        return ShortArray(outputSize) { i ->
+            val position = i * rate
+            val left = position.toInt().coerceIn(0, samples.lastIndex)
+            val right = (left + 1).coerceAtMost(samples.lastIndex)
+            val fraction = position - left
+            clamp(samples[left] * (1.0 - fraction) + samples[right] * fraction)
+        }
+    }
+
+    val processed: ShortArray = when (effect) {
+        VoiceEffect.NORMAL -> samples
+        VoiceEffect.DEEP -> resample(0.82)
+        VoiceEffect.CHIPMUNK -> resample(1.28)
+        VoiceEffect.PITCH -> resample(1.12)
+        VoiceEffect.MONSTER -> {
+            val lowered = resample(0.68)
+            ShortArray(lowered.size) { i -> clamp(lowered[i] * 1.12) }
+        }
+        VoiceEffect.ROBOT -> {
+            val modulationHz = 38.0
+            ShortArray(samples.size) { i ->
+                val carrier = kotlin.math.sin(2.0 * Math.PI * modulationHz * i / SAMPLE_RATE)
+                clamp(samples[i] * carrier * 1.35)
+            }
+        }
+        VoiceEffect.ECHO -> {
+            val delay = (SAMPLE_RATE * 0.24).toInt()
+            val output = ShortArray(samples.size + delay * 2)
+            for (i in samples.indices) {
+                output[i] = samples[i]
+                output[i + delay] = clamp(output[i + delay] + samples[i] * 0.48)
+                output[i + delay * 2] = clamp(output[i + delay * 2] + samples[i] * 0.22)
+            }
+            output
+        }
+        VoiceEffect.REVERB -> {
+            val delay1 = (SAMPLE_RATE * 0.055).toInt()
+            val delay2 = (SAMPLE_RATE * 0.091).toInt()
+            val output = ShortArray(samples.size + delay2)
+            for (i in samples.indices) {
+                output[i] = clamp(
+                    samples[i] +
+                        (if (i >= delay1) output[i - delay1] * 0.24 else 0.0) +
+                        (if (i >= delay2) output[i - delay2] * 0.16 else 0.0)
+                )
+            }
+            output
+        }
+        VoiceEffect.RADIO -> {
+            var previousInput = 0.0
+            var previousOutput = 0.0
+            ShortArray(samples.size) { i ->
+                val current = samples[i].toDouble()
+                val highPassed = 0.88 * (previousOutput + current - previousInput)
+                previousInput = current
+                previousOutput = highPassed
+                // Gentle saturation gives a narrow-band, radio-like character.
+                clamp(kotlin.math.tanh(highPassed / 9000.0) * 12500.0)
+            }
+        }
+    }
+
+    val output = ByteArray(processed.size * 2)
+    for (i in processed.indices) {
+        val value = processed[i].toInt()
+        output[i * 2] = (value and 0xFF).toByte()
+        output[i * 2 + 1] = ((value shr 8) and 0xFF).toByte()
+    }
+    return output
+}
+
