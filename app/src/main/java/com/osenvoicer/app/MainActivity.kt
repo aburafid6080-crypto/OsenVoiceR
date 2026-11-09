@@ -1,127 +1,96 @@
- fun play() {
+package com.osenvoicer.app
+
+import android.Manifest
+import android.content.pm.PackageManager
+import android.media.*
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import kotlin.concurrent.thread
+import kotlin.math.PI
+import kotlin.math.sin
+
+private const val RATE = 44100
+private enum class Effect(val label: String) {
+    Normal("Normal"), Deep("Deep"), Robot("Robot"), Echo("Echo"), Radio("Radio"),
+    Monster("Monster"), Chipmunk("Chipmunk"), Reverb("Reverb"), Pitch("Pitch")
+}
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent { OsenVoiceR() }
+    }
+}
+
+@Composable
+private fun OsenVoiceR() {
+    val ctx = LocalContext.current
+    val file = remember { File(ctx.cacheDir, "osen_recording.pcm") }
+    var effect by remember { mutableStateOf(Effect.Deep) }
+    var recording by remember { mutableStateOf(false) }
+    var playing by remember { mutableStateOf(false) }
+    var status by remember { mutableStateOf("Ready to create your voice") }
+    var recorder by remember { mutableStateOf<AudioRecord?>(null) }
+    var track by remember { mutableStateOf<AudioTrack?>(null) }
+    var recOn by remember { mutableStateOf(false) }
+    var playOn by remember { mutableStateOf(false) }
+
+    fun startRec() {
         if (recording || playing) return
-        if (!file.exists() || file.length() < 2) { status = "Record your voice first"; return }
-        val min = AudioTrack.getMinBufferSize(RATE, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT)
-        if (min <= 0) { status = "Audio playback unavailable"; return }
+        val min = AudioRecord.getMinBufferSize(RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
+        if (min <= 0) { status = "Microphone unavailable"; return }
         try {
-            val fmt = AudioFormat.Builder().setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-                .setSampleRate(RATE).setChannelMask(AudioFormat.CHANNEL_OUT_MONO).build()
-            val t = AudioTrack.Builder()
-                .setAudioAttributes(AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build())
-                .setAudioFormat(fmt).setBufferSizeInBytes(maxOf(min * 2, 8192))
-                .setTransferMode(AudioTrack.MODE_STREAM).build()
-            if (effect == Effect.Chipmunk) t.playbackRate = 56000
-            if (effect == Effect.Pitch) t.playbackRate = 52000
-            track = t; playOn = true; playing = true; status = "Playing ${effect.label}…"
+            val r = AudioRecord(MediaRecorder.AudioSource.MIC, RATE, AudioFormat.CHANNEL_IN_MONO,
+                AudioFormat.ENCODING_PCM_16BIT, maxOf(min * 2, 8192))
+            if (r.state != AudioRecord.STATE_INITIALIZED) { r.release(); status = "Microphone could not start"; return }
+            r.startRecording()
+            recorder = r; recOn = true; recording = true; status = "Recording… speak now"
             thread {
-                val delay = ShortArray(RATE / 3)
-                var di = 0
-                var low = 0.0
-                var idx = 0L
                 try {
-                    t.play()
-                    FileInputStream(file).use { input ->
-                        val bytes = ByteArray(4096)
-                        while (playOn) {
-                            val n = input.read(bytes)
-                            if (n <= 0) break
-                            val size = n - n % 2
-                            val out = ByteArray(size)
-                            var p = 0
-                            while (p < size) {
-                                val raw = ((bytes[p + 1].toInt() shl 8) or (bytes[p].toInt() and 255)).toShort()
-                                var x = raw.toDouble()
-                                when (effect) {
-                                    Effect.Normal -> Unit
-                                    Effect.Deep -> { low += .15 * (x - low); x = low * 1.2 }
-                                    Effect.Robot -> x *= sin(2 * PI * 38 * idx / RATE) * .9
-                                    Effect.Echo, Effect.Reverb -> {
-                                        val old = delay[di].toDouble()
-                                        delay[di] = (x * if (effect == Effect.Echo) 1.0 else .55)
-                                            .toInt().coerceIn(-32768, 32767).toShort()
-                                        di = (di + 1) % delay.size
-                                        x += old * if (effect == Effect.Echo) .48 else .30
-                                    }
-                                    Effect.Radio -> { low += .22 * (x - low); x = (x - low) * 1.8 }
-                                    Effect.Monster -> { low += .10 * (x - low); x = (low * 1.7).coerceIn(-30000.0, 30000.0) }
-                                    Effect.Chipmunk, Effect.Pitch -> x *= .95
-                                }
-                                val s = x.toInt().coerceIn(-32768, 32767)
-                                out[p] = s.toByte(); out[p + 1] = (s shr 8).toByte()
-                                p += 2; idx++
-                            }
-                            var off = 0
-                            while (off < size && playOn) {
-                                val w = t.write(out, off, size - off)
-                                if (w <= 0) break
-                                off += w
-                            }
+                    FileOutputStream(file, false).use { out ->
+                        val b = ByteArray(4096)
+                        while (recOn) {
+                            val n = r.read(b, 0, b.size)
+                            if (n > 0) out.write(b, 0, n)
                         }
                     }
-                } catch (_: Exception) {
-                    (ctx as ComponentActivity).runOnUiThread { status = "Playback error" }
-                } finally {
-                    try { t.stop(); t.release() } catch (_: Exception) {}
-                    (ctx as ComponentActivity).runOnUiThread {
-                        track = null; playing = false; playOn = false
-                        if (status.startsWith("Playing")) status = "Playback finished"
-                    }
-                }
+                } catch (_: Exception) { (ctx as ComponentActivity).runOnUiThread { status = "Recording error" } }
             }
-        } catch (_: Exception) { status = "Could not play audio"; playing = false }
+        } catch (_: Exception) { status = "Could not start recording" }
     }
 
-    val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-        status = if (granted) "Permission granted • Press Start Recording" else "Microphone permission denied"
+    fun stopRec() {
+        recOn = false
+        try { recorder?.stop(); recorder?.release() } catch (_: Exception) {}
+        recorder = null; recording = false
+        status = if (file.exists() && file.length() > 0) "Recording saved • ${effect.label} selected" else "Recording stopped"
     }
 
-    DisposableEffect(Unit) {
-        onDispose {
-            recOn = false; playOn = false
-            try { recorder?.stop(); recorder?.release() } catch (_: Exception) {}
-            try { track?.stop(); track?.release() } catch (_: Exception) {}
-        }
+    fun stopPlay() {
+        playOn = false
+        try { track?.pause(); track?.flush(); track?.stop(); track?.release() } catch (_: Exception) {}
+        track = null; playing = false
     }
-
-    Surface(Modifier.fillMaxSize(), color = Color(0xFF0B0A18)) {
-        Column(Modifier.fillMaxSize().padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("OSEN VOICE R", color = Color.White, fontSize = 29.sp, fontWeight = FontWeight.Bold)
-            Text("GAMING VOICE STUDIO", color = Color(0xFF55C8F2), fontSize = 14.sp)
-            Spacer(Modifier.height(24.dp))
-            Column(Modifier.fillMaxWidth().background(Color(0xFF191A31), RoundedCornerShape(24.dp)).padding(20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("VOICE STUDIO", color = Color(0xFF9B6BFF))
-                Spacer(Modifier.height(10.dp))
-                Text("Create your sound.", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                Text(status, color = Color(0xFFCECCDA), fontSize = 13.sp)
-                Spacer(Modifier.height(18.dp))
-                Button(onClick = {
-                    if (ContextCompat.checkSelfPermission(ctx, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) startRec()
-                    else permission.launch(Manifest.permission.RECORD_AUDIO)
-                }, enabled = !recording && !playing, modifier = Modifier.fillMaxWidth().height(54.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8B50F6))) {
-                    Text("START RECORDING", color = Color(0xFF171027))
-                }
-                Spacer(Modifier.height(10.dp))
-                OutlinedButton(onClick = { stopRec() }, enabled = recording, modifier = Modifier.fillMaxWidth().height(52.dp)) {
-                    Text("STOP", color = Color(0xFFB58BFF))
-                }
-                Spacer(Modifier.height(10.dp))
-                OutlinedButton(onClick = { if (playing) stopPlay() else play() },
-                    enabled = !recording && file.exists(), modifier = Modifier.fillMaxWidth().height(52.dp)) {
-                    Text(if (playing) "STOP PLAYBACK" else "PLAY WITH EFFECT", color = Color(0xFFB58BFF))
-                }
-            }
-            Spacer(Modifier.height(20.dp))
-            Text("VOICE EFFECTS", color = Color(0xFF55C8F2), fontSize = 17.sp, fontWeight = FontWeight.Bold)
-            Spacer(Modifier.height(12.dp))
-            LazyVerticalGrid(columns = GridCells.Fixed(2), modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(10.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                items(Effect.values().toList()) { item ->
-                    Surface(Modifier.fillMaxWidth().height(66.dp).clickable(enabled = !recording && !playing) {
-                        effect = item; status = "${item.label} selected"
-                    }, color = if (effect == item) Color(0xFF493078) else Color(0xFF202139),
-                        shape = RoundedCornerShape(15.dp)) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Text(item.label, color = Color.White, fontSize = 17.sp,
