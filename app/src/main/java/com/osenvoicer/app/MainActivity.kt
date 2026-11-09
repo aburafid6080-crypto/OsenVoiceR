@@ -1,173 +1,127 @@
-package com.osenvoicer.app
-import androidx.activity.compose.setContent
-import android.Manifest
-import android.media.MediaPlayer
-import android.media.MediaRecorder
-import android.os.Build
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
-import android.content.pm.PackageManager
-import java.io.File
-
-private val Ink = Color(0xFF080914)
-private val Purple = Color(0xFF8B5CF6)
-private val Blue = Color(0xFF38BDF8)
-
-class MainActivity : ComponentActivity() {
-    private var recorder: MediaRecorder? = null
-    private var player: MediaPlayer? = null
-    private var recordingFile: File? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent { OsenApp(
-            onRecord = { startRecording() },
-            onStop = { stopRecording() },
-            onPlay = { playRecording() },
-            hasRecording = { recordingFile?.exists() == true }
-        ) }
-    }
-
-    private fun startRecording() {
+ fun play() {
+        if (recording || playing) return
+        if (!file.exists() || file.length() < 2) { status = "Record your voice first"; return }
+        val min = AudioTrack.getMinBufferSize(RATE, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT)
+        if (min <= 0) { status = "Audio playback unavailable"; return }
         try {
-            val file = File(cacheDir, "osen_recording.m4a")
-            recordingFile = file
-            val r = if (Build.VERSION.SDK_INT >= 31) MediaRecorder(this) else MediaRecorder()
-            recorder = r
-            r.setAudioSource(MediaRecorder.AudioSource.MIC)
-            r.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-            r.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-            r.setOutputFile(file.absolutePath)
-            r.prepare()
-            r.start()
-        } catch (_: Exception) { recorder = null }
-    }
-
-    private fun stopRecording() {
-        try { recorder?.stop() } catch (_: Exception) { }
-        try { recorder?.release() } catch (_: Exception) { }
-        recorder = null
-    }
-
-    private fun playRecording() {
-        val file = recordingFile ?: return
-        if (!file.exists()) return
-        try {
-            player?.release()
-            player = MediaPlayer().apply {
-                setDataSource(file.absolutePath)
-                prepare()
-                start()
-                setOnCompletionListener { it.release(); player = null }
-            }
-        } catch (_: Exception) { player = null }
-    }
-
-    override fun onDestroy() {
-        stopRecording()
-        player?.release()
-        super.onDestroy()
-    }
-}
-
-@Composable
-private fun OsenApp(
-    onRecord: () -> Unit,
-    onStop: () -> Unit,
-    onPlay: () -> Unit,
-    hasRecording: () -> Boolean
-) {
-    var recording by remember { mutableStateOf(false) }
-    var permissionGranted by remember { mutableStateOf(false) }
-    var status by remember { mutableStateOf("Ready to create your voice") }
-    val permission = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { granted ->
-        permissionGranted = granted
-        status = if (granted) "Microphone ready" else "Microphone permission required"
-    }
-
-    MaterialTheme(colorScheme = darkColorScheme(
-        background = Ink, surface = Color(0xFF15172A), primary = Purple
-    )) {
-        Column(
-            Modifier.fillMaxSize().background(
-                Brush.verticalGradient(listOf(Ink, Color(0xFF17102D), Ink))
-            ).padding(22.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(Modifier.height(24.dp))
-            Text("OSEN VOICE R", color = Color.White, fontSize = 27.sp)
-            Text("GAMING VOICE STUDIO", color = Blue, fontSize = 11.sp)
-            Spacer(Modifier.height(28.dp))
-            Card(
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF191B31)),
-                shape = RoundedCornerShape(24.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(Modifier.padding(20.dp)) {
-                    Text("VOICE STUDIO", color = Purple, fontSize = 12.sp)
-                    Spacer(Modifier.height(8.dp))
-                    Text("Create your sound.", color = Color.White, fontSize = 23.sp)
-                    Text(status, color = Color.LightGray, fontSize = 13.sp)
-                    Spacer(Modifier.height(20.dp))
-                    Button(
-                        onClick = {
-                            if (!permissionGranted) permission.launch(Manifest.permission.RECORD_AUDIO)
-                            else if (!recording) {
-                                onRecord(); recording = true; status = "Recording…"
+            val fmt = AudioFormat.Builder().setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                .setSampleRate(RATE).setChannelMask(AudioFormat.CHANNEL_OUT_MONO).build()
+            val t = AudioTrack.Builder()
+                .setAudioAttributes(AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build())
+                .setAudioFormat(fmt).setBufferSizeInBytes(maxOf(min * 2, 8192))
+                .setTransferMode(AudioTrack.MODE_STREAM).build()
+            if (effect == Effect.Chipmunk) t.playbackRate = 56000
+            if (effect == Effect.Pitch) t.playbackRate = 52000
+            track = t; playOn = true; playing = true; status = "Playing ${effect.label}…"
+            thread {
+                val delay = ShortArray(RATE / 3)
+                var di = 0
+                var low = 0.0
+                var idx = 0L
+                try {
+                    t.play()
+                    FileInputStream(file).use { input ->
+                        val bytes = ByteArray(4096)
+                        while (playOn) {
+                            val n = input.read(bytes)
+                            if (n <= 0) break
+                            val size = n - n % 2
+                            val out = ByteArray(size)
+                            var p = 0
+                            while (p < size) {
+                                val raw = ((bytes[p + 1].toInt() shl 8) or (bytes[p].toInt() and 255)).toShort()
+                                var x = raw.toDouble()
+                                when (effect) {
+                                    Effect.Normal -> Unit
+                                    Effect.Deep -> { low += .15 * (x - low); x = low * 1.2 }
+                                    Effect.Robot -> x *= sin(2 * PI * 38 * idx / RATE) * .9
+                                    Effect.Echo, Effect.Reverb -> {
+                                        val old = delay[di].toDouble()
+                                        delay[di] = (x * if (effect == Effect.Echo) 1.0 else .55)
+                                            .toInt().coerceIn(-32768, 32767).toShort()
+                                        di = (di + 1) % delay.size
+                                        x += old * if (effect == Effect.Echo) .48 else .30
+                                    }
+                                    Effect.Radio -> { low += .22 * (x - low); x = (x - low) * 1.8 }
+                                    Effect.Monster -> { low += .10 * (x - low); x = (low * 1.7).coerceIn(-30000.0, 30000.0) }
+                                    Effect.Chipmunk, Effect.Pitch -> x *= .95
+                                }
+                                val s = x.toInt().coerceIn(-32768, 32767)
+                                out[p] = s.toByte(); out[p + 1] = (s shr 8).toByte()
+                                p += 2; idx++
                             }
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(containerColor = Purple)
-                    ) { Text(if (recording) "RECORDING" else "START RECORDING") }
-                    Spacer(Modifier.height(8.dp))
-                    OutlinedButton(
-                        onClick = { onStop(); recording = false; status = "Recording stopped" },
-                        modifier = Modifier.fillMaxWidth()
-                    ) { Text("STOP") }
-                    Spacer(Modifier.height(8.dp))
-                    OutlinedButton(
-                        onClick = { onPlay(); status = "Playing saved test recording" },
-                        modifier = Modifier.fillMaxWidth()
-                    ) { Text("PLAY RECORDING") }
-                }
-            }
-            Spacer(Modifier.height(22.dp))
-            Text("VOICE EFFECTS", color = Blue, fontSize = 13.sp)
-            Spacer(Modifier.height(10.dp))
-            val effects = listOf("Deep", "Robot", "Echo", "Radio", "Monster", "Chipmunk", "Reverb", "Pitch")
-            effects.chunked(2).forEach { pair ->
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    pair.forEach { effect ->
-                        Card(
-                            modifier = Modifier.weight(1f).padding(vertical = 4.dp),
-                            colors = CardDefaults.cardColors(containerColor = Color(0xFF20213A))
-                        ) {
-                            Box(Modifier.fillMaxWidth().padding(15.dp), contentAlignment = Alignment.Center) {
-                                Text(effect, color = Color.White)
+                            var off = 0
+                            while (off < size && playOn) {
+                                val w = t.write(out, off, size - off)
+                                if (w <= 0) break
+                                off += w
                             }
                         }
                     }
-                    if (pair.size == 1) Spacer(Modifier.weight(1f))
+                } catch (_: Exception) {
+                    (ctx as ComponentActivity).runOnUiThread { status = "Playback error" }
+                } finally {
+                    try { t.stop(); t.release() } catch (_: Exception) {}
+                    (ctx as ComponentActivity).runOnUiThread {
+                        track = null; playing = false; playOn = false
+                        if (status.startsWith("Playing")) status = "Playback finished"
+                    }
                 }
             }
-            Spacer(Modifier.weight(1f))
-            Text("Local recording prototype • Effects UI preview only", color = Color.Gray, fontSize = 10.sp)
+        } catch (_: Exception) { status = "Could not play audio"; playing = false }
+    }
+
+    val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        status = if (granted) "Permission granted • Press Start Recording" else "Microphone permission denied"
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            recOn = false; playOn = false
+            try { recorder?.stop(); recorder?.release() } catch (_: Exception) {}
+            try { track?.stop(); track?.release() } catch (_: Exception) {}
         }
     }
-}
+
+    Surface(Modifier.fillMaxSize(), color = Color(0xFF0B0A18)) {
+        Column(Modifier.fillMaxSize().padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            Text("OSEN VOICE R", color = Color.White, fontSize = 29.sp, fontWeight = FontWeight.Bold)
+            Text("GAMING VOICE STUDIO", color = Color(0xFF55C8F2), fontSize = 14.sp)
+            Spacer(Modifier.height(24.dp))
+            Column(Modifier.fillMaxWidth().background(Color(0xFF191A31), RoundedCornerShape(24.dp)).padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally) {
+                Text("VOICE STUDIO", color = Color(0xFF9B6BFF))
+                Spacer(Modifier.height(10.dp))
+                Text("Create your sound.", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                Text(status, color = Color(0xFFCECCDA), fontSize = 13.sp)
+                Spacer(Modifier.height(18.dp))
+                Button(onClick = {
+                    if (ContextCompat.checkSelfPermission(ctx, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) startRec()
+                    else permission.launch(Manifest.permission.RECORD_AUDIO)
+                }, enabled = !recording && !playing, modifier = Modifier.fillMaxWidth().height(54.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8B50F6))) {
+                    Text("START RECORDING", color = Color(0xFF171027))
+                }
+                Spacer(Modifier.height(10.dp))
+                OutlinedButton(onClick = { stopRec() }, enabled = recording, modifier = Modifier.fillMaxWidth().height(52.dp)) {
+                    Text("STOP", color = Color(0xFFB58BFF))
+                }
+                Spacer(Modifier.height(10.dp))
+                OutlinedButton(onClick = { if (playing) stopPlay() else play() },
+                    enabled = !recording && file.exists(), modifier = Modifier.fillMaxWidth().height(52.dp)) {
+                    Text(if (playing) "STOP PLAYBACK" else "PLAY WITH EFFECT", color = Color(0xFFB58BFF))
+                }
+            }
+            Spacer(Modifier.height(20.dp))
+            Text("VOICE EFFECTS", color = Color(0xFF55C8F2), fontSize = 17.sp, fontWeight = FontWeight.Bold)
+            Spacer(Modifier.height(12.dp))
+            LazyVerticalGrid(columns = GridCells.Fixed(2), modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(10.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                items(Effect.values().toList()) { item ->
+                    Surface(Modifier.fillMaxWidth().height(66.dp).clickable(enabled = !recording && !playing) {
+                        effect = item; status = "${item.label} selected"
+                    }, color = if (effect == item) Color(0xFF493078) else Color(0xFF202139),
+                        shape = RoundedCornerShape(15.dp)) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Text(item.label, color = Color.White, fontSize = 17.sp,
