@@ -420,9 +420,9 @@ private fun OsenVoiceR() {
                     modifier = Modifier.fillMaxWidth().padding(18.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text("LIVE VOICE CHANGER", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 17.sp)
+                    Text("LIVE VOICE MONITOR (APP ONLY)", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 17.sp)
                     Spacer(Modifier.height(8.dp))
-                    Text("Speak and hear your selected voice effect in real time", color = Color(0xFFC8BCEB), fontSize = 12.sp)
+                    Text("Hear your selected voice effect in real time inside Osen Voice R", color = Color(0xFFC8BCEB), fontSize = 12.sp)
                     Spacer(Modifier.height(12.dp))
                     Button(
                         onClick = {
@@ -443,6 +443,36 @@ private fun OsenVoiceR() {
                     Text(
                         "Headphones recommended to prevent audio feedback. This is live monitoring inside the app, not direct Free Fire microphone routing.",
                         color = Color(0xFFAAA2BC), fontSize = 10.sp, lineHeight = 14.sp
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(18.dp))
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFF241A35)),
+                shape = RoundedCornerShape(20.dp)
+            ) {
+                Column(Modifier.fillMaxWidth().padding(18.dp)) {
+                    Text(
+                        "FREE FIRE MODE",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 17.sp
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        "Choose a voice effect above and test it in Osen Voice R. Android does not allow a regular app to inject its processed microphone audio directly into another app's voice chat, so this build cannot send changed audio into Free Fire.",
+                        color = Color(0xFFC8BCEB),
+                        fontSize = 12.sp,
+                        lineHeight = 18.sp
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    Text(
+                        "Free Fire microphone routing: Not supported by this APK",
+                        color = Color(0xFFFFB6C5),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.SemiBold
                     )
                 }
             }
