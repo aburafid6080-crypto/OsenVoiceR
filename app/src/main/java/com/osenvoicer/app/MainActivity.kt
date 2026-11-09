@@ -1,5 +1,5 @@
 package com.osenvoicer.app
-
+import androidx.activity.compose.setContent
 import android.Manifest
 import android.media.MediaPlayer
 import android.media.MediaRecorder
