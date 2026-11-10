@@ -220,6 +220,7 @@ private fun StatsPage(stats: DeviceStats, onRefresh: () -> Unit) {
 
 @Composable
 private fun GamesPage(status: androidx.compose.runtime.MutableState<String>, onLaunch: () -> Unit) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(14.dp)
@@ -251,10 +252,7 @@ private fun GamesPage(status: androidx.compose.runtime.MutableState<String>, onL
                 Text("FREE FIRE MAX", color = Cyan, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold)
                 Text("Garena Free Fire MAX", color = White, fontSize = 17.sp, fontWeight = FontWeight.Bold)
                 ActionButton("▶  LAUNCH FREE FIRE MAX", Cyan) {
-                    status.value = launchGameByPackage(
-                        LocalContext.current,
-                        "com.dts.freefiremax"
-                    )
+                    status.value = launchSpecificGame(context, "com.dts.freefiremax", "Free Fire MAX")
                 }
             }
         }
@@ -381,6 +379,18 @@ private fun readDeviceStats(context: Context): DeviceStats {
     val freeStorageGb = storage.availableBytes.toDouble() / (1024.0 * 1024.0 * 1024.0)
     val manufacturer = Build.MANUFACTURER.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
     return DeviceStats(String.format(Locale.getDefault(), "%.1f GB", availableRamGb), String.format(Locale.getDefault(), "%.1f GB", freeStorageGb), "$manufacturer ${Build.MODEL}")
+}
+
+private fun launchSpecificGame(context: Context, packageName: String, gameName: String): String {
+    val intent = context.packageManager.getLaunchIntentForPackage(packageName)
+        ?: return "$gameName is not installed."
+    return try {
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
+        "$gameName launched successfully"
+    } catch (_: Exception) {
+        "Could not open $gameName on this device."
+    }
 }
 
 private fun launchFreeFire(context: Context): String {
