@@ -87,9 +87,12 @@ private fun TurboPlayScreen() {
                         Text("OSEN TURBOPLAY", color = White, fontSize = 26.sp, fontWeight = FontWeight.Black)
                         Text("━  GAME BOOSTER  ━", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 2.sp)
                     }
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        NeonCircle("⚙", Violet) { openAppSettings(context) }
-                        NeonCircle("⚡", Cyan) { selectedTab.value = "Tools" }
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(7.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        NeonCircle("⚙", Violet, "SETTINGS") { openAppSettings(context) }
+                        NeonCircle("⚡", Cyan, "BOOST") { selectedTab.value = "Tools" }
                     }
                 }
 
@@ -133,16 +136,6 @@ private fun TurboPlayScreen() {
 @Composable
 private fun HomePage(context: Context, stats: DeviceStats, status: androidx.compose.runtime.MutableState<String>) {
     Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-        Card(modifier = Modifier.fillMaxWidth().border(1.dp, Cyan, RoundedCornerShape(24.dp)), shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = Panel)) {
-            Column(modifier = Modifier.background(Brush.linearGradient(listOf(Color(0xFF201044), Color(0xFF0B1028), Color(0xFF17052B)))).padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                Text("PLAY SMARTER  •  BE STRONGER", color = White, fontSize = 21.sp, fontWeight = FontWeight.Black)
-                Text("FREE FIRE  •  FREE FIRE MAX", color = Cyan, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold)
-                Text("Your gaming space. Your next match starts here.", color = Muted, fontSize = 12.sp)
-                Button(onClick = { status.value = launchFreeFire(context) }, modifier = Modifier.fillMaxWidth().height(52.dp), colors = ButtonDefaults.buttonColors(containerColor = Gold), shape = RoundedCornerShape(15.dp)) {
-                    Text("▶  PLAY FREE FIRE  🔥", color = Color(0xFF170B20), fontWeight = FontWeight.Black)
-                }
-            }
-        }
         Card(modifier = Modifier.fillMaxWidth().border(1.dp, Purple, RoundedCornerShape(22.dp)), shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = Panel)) {
             Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
                 Text("🚀  YOUR NEXT MATCH STARTS HERE", color = White, fontSize = 17.sp, fontWeight = FontWeight.Black)
@@ -255,9 +248,20 @@ private fun NoteCard() {
 }
 
 @Composable
-private fun NeonCircle(symbol: String, color: Color, onClick: () -> Unit) {
-    Column(modifier = Modifier.size(46.dp).clickable(onClick = onClick).background(Brush.linearGradient(listOf(color, Violet)), CircleShape).border(1.dp, color, CircleShape), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-        Text(symbol, color = White, fontSize = 24.sp, fontWeight = FontWeight.Black)
+private fun NeonCircle(symbol: String, color: Color, label: String, onClick: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .clickable(onClick = onClick)
+            .background(Brush.linearGradient(listOf(color.copy(alpha = 0.95f), Color(0xFF17102D))), CircleShape)
+            .border(2.dp, Brush.linearGradient(listOf(Color.White.copy(alpha = 0.85f), color, Cyan)), CircleShape)
+            .padding(3.dp)
+            .background(Color(0xFF090616), CircleShape)
+            .padding(horizontal = 7.dp, vertical = 5.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(1.dp)
+    ) {
+        Text(symbol, color = White, fontSize = 25.sp, fontWeight = FontWeight.Black)
+        Text(label, color = color, fontSize = 7.sp, fontWeight = FontWeight.Black, letterSpacing = 0.7.sp)
     }
 }
 
