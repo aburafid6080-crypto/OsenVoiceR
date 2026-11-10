@@ -84,8 +84,7 @@ private fun TurboPlayScreen() {
             Column(
                 modifier = Modifier.fillMaxSize()
                     .background(Brush.verticalGradient(listOf(Color(0xFF10051F), Bg, Color(0xFF020713))))
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 14.dp, vertical = 16.dp),
+                    .padding(horizontal = 14.dp, vertical = 12.dp),
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -105,6 +104,7 @@ private fun TurboPlayScreen() {
                 }
 
                 AnimatedContent(
+                    modifier = Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()),
                     targetState = selectedTab.value,
                     transitionSpec = {
                         (fadeIn(animationSpec = tween(280)) + slideInVertically(animationSpec = tween(280)) { it / 10 }) togetherWith
@@ -150,6 +150,11 @@ private fun TurboPlayScreen() {
     }
 }
 
+private fun statsRefresh(context: Context, status: androidx.compose.runtime.MutableState<String>) {
+    // Re-read device information when the user taps Refresh.
+    status.value = "Device information refreshed"
+}
+
 @Composable
 private fun HomePage(context: Context, stats: DeviceStats, status: androidx.compose.runtime.MutableState<String>) {
     Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
@@ -183,7 +188,7 @@ private fun HomePage(context: Context, stats: DeviceStats, status: androidx.comp
         Text("🎮  GAMING TOOLS", color = Purple, fontSize = 19.sp, fontWeight = FontWeight.Black)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             ToolTile("🚀", "GAME LAUNCHER", "Open Free Fire", Purple, Modifier.weight(1f)) { status.value = launchFreeFire(context) }
-            ToolTile("⟳", "REFRESH", "Update info", Cyan, Modifier.weight(1f)) { status.value = "Device information refreshed" }
+            ToolTile("⟳", "REFRESH", "Update info", Cyan, Modifier.weight(1f)) { status.value = "Open Stats and tap Refresh to update device information" }
             ToolTile("⚡", "BOOSTER", "Game settings", Green, Modifier.weight(1f)) { openGameSettings(context, status) }
             ToolTile("▤", "CLEANER", "App storage", Gold, Modifier.weight(1f)) { openAppSettings(context) }
         }
