@@ -214,7 +214,7 @@ private fun ToolsPage(onRefresh: () -> Unit, onBooster: () -> Unit, onCleaner: (
 @Composable
 private fun AboutPage() {
     PageTitle("ABOUT OSEN TURBOPLAY", "Version 1.3")
-    InfoCard("DEVELOPER", "OSEN GAMING")
+    InfoCard("DEVELOPER", "Abu Rafid")
     InfoCard("PURPOSE", "Game launcher and device information dashboard")
     NoteCard()
 }
