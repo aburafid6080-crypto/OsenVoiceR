@@ -4,4 +4,4 @@ dependencyResolutionManagement {
     repositories { google(); mavenCentral() }
 }
 rootProject.name = "OsenVoiceR"
-include(":app")
+include(":app", ":booster")
