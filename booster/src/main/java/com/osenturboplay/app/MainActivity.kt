@@ -104,25 +104,36 @@ private fun TurboPlayScreen() {
                 }
 
                 AnimatedContent(
-                    modifier = Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()),
+                    modifier = Modifier.weight(1f).fillMaxWidth(),
                     targetState = selectedTab.value,
                     transitionSpec = {
-                        (fadeIn(animationSpec = tween(280)) + slideInVertically(animationSpec = tween(280)) { it / 10 }) togetherWith
-                            (fadeOut(animationSpec = tween(180)) + slideOutVertically(animationSpec = tween(180)) { -it / 10 })
+                        fadeIn(animationSpec = tween(220, delayMillis = 120)) togetherWith
+                            fadeOut(animationSpec = tween(120))
                     },
                     label = "page_transition"
                 ) { tab ->
-                    when (tab) {
-                        "Home" -> HomePage(context, stats.value, status)
-                        "Stats" -> StatsPage(stats.value) { stats.value = readDeviceStats(context); status.value = "Device information refreshed" }
-                        "Games" -> GamesPage(status) { status.value = launchFreeFire(context) }
-                        "Tools" -> ToolsPage(
-                            onRefresh = { stats.value = readDeviceStats(context); status.value = "Device information refreshed" },
-                            onBooster = { openGameSettings(context, status) },
-                            onCleaner = { openAppSettings(context) },
-                            onDevice = { openDeviceSettings(context) }
-                        )
-                        else -> AboutPage()
+                    Column(
+                        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+                        verticalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        when (tab) {
+                            "Home" -> HomePage(context, stats.value, status)
+                            "Stats" -> StatsPage(stats.value) {
+                                stats.value = readDeviceStats(context)
+                                status.value = "Device information refreshed"
+                            }
+                            "Games" -> GamesPage(status) { status.value = launchFreeFire(context) }
+                            "Tools" -> ToolsPage(
+                                onRefresh = {
+                                    stats.value = readDeviceStats(context)
+                                    status.value = "Device information refreshed"
+                                },
+                                onBooster = { openGameSettings(context, status) },
+                                onCleaner = { openAppSettings(context) },
+                                onDevice = { openDeviceSettings(context) }
+                            )
+                            else -> AboutPage()
+                        }
                     }
                 }
 
@@ -209,11 +220,51 @@ private fun StatsPage(stats: DeviceStats, onRefresh: () -> Unit) {
 
 @Composable
 private fun GamesPage(status: androidx.compose.runtime.MutableState<String>, onLaunch: () -> Unit) {
-    PageTitle("MY GAMES", "Launch a supported game installed on this phone")
-    InfoCard("FREE FIRE", "Garena Free Fire")
-    ActionButton("▶  LAUNCH FREE FIRE", Purple, onLaunch)
-    InfoCard("FREE FIRE MAX", "Garena Free Fire MAX")
-    Text("The launcher checks whether either supported game is installed. Other games are not listed yet.", color = Muted, fontSize = 12.sp)
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(14.dp)
+    ) {
+        PageTitle("MY GAMES", "Choose a game installed on this phone")
+        Card(
+            modifier = Modifier.fillMaxWidth().border(1.dp, Purple.copy(alpha = 0.8f), RoundedCornerShape(18.dp)),
+            shape = RoundedCornerShape(18.dp),
+            colors = CardDefaults.cardColors(containerColor = Panel)
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text("FREE FIRE", color = Cyan, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold)
+                Text("Garena Free Fire", color = White, fontSize = 17.sp, fontWeight = FontWeight.Bold)
+                ActionButton("▶  LAUNCH FREE FIRE", Purple, onLaunch)
+            }
+        }
+        Card(
+            modifier = Modifier.fillMaxWidth().border(1.dp, Cyan.copy(alpha = 0.75f), RoundedCornerShape(18.dp)),
+            shape = RoundedCornerShape(18.dp),
+            colors = CardDefaults.cardColors(containerColor = Panel)
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text("FREE FIRE MAX", color = Cyan, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold)
+                Text("Garena Free Fire MAX", color = White, fontSize = 17.sp, fontWeight = FontWeight.Bold)
+                ActionButton("▶  LAUNCH FREE FIRE MAX", Cyan) {
+                    status.value = launchGameByPackage(
+                        LocalContext.current,
+                        "com.dts.freefiremax"
+                    )
+                }
+            }
+        }
+        Text(
+            "Only installed games can be opened. This launcher does not modify game files or guarantee extra FPS.",
+            color = Muted,
+            fontSize = 12.sp,
+            lineHeight = 18.sp
+        )
+    }
 }
 
 @Composable
