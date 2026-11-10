@@ -87,9 +87,9 @@ private fun TurboPlayScreen() {
                         Text("OSEN TURBOPLAY", color = White, fontSize = 26.sp, fontWeight = FontWeight.Black)
                         Text("━  GAME BOOSTER  ━", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 2.sp)
                     }
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(7.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         NeonCircle("⚙", Violet, "SETTINGS") { openAppSettings(context) }
                         NeonCircle("⚡", Cyan, "BOOST") { selectedTab.value = "Tools" }
@@ -251,17 +251,24 @@ private fun NoteCard() {
 private fun NeonCircle(symbol: String, color: Color, label: String, onClick: () -> Unit) {
     Column(
         modifier = Modifier
+            .width(64.dp)
+            .height(68.dp)
             .clickable(onClick = onClick)
-            .background(Brush.linearGradient(listOf(color.copy(alpha = 0.95f), Color(0xFF17102D))), CircleShape)
-            .border(2.dp, Brush.linearGradient(listOf(Color.White.copy(alpha = 0.85f), color, Cyan)), CircleShape)
-            .padding(3.dp)
-            .background(Color(0xFF090616), CircleShape)
-            .padding(horizontal = 7.dp, vertical = 5.dp),
+            .background(
+                Brush.linearGradient(listOf(color.copy(alpha = 0.32f), Color(0xFF100B24), Color(0xFF080615))),
+                RoundedCornerShape(18.dp)
+            )
+            .border(
+                width = 1.5.dp,
+                brush = Brush.linearGradient(listOf(Color.White.copy(alpha = 0.75f), color, Cyan.copy(alpha = 0.8f))),
+                shape = RoundedCornerShape(18.dp)
+            )
+            .padding(vertical = 7.dp, horizontal = 3.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(1.dp)
+        verticalArrangement = Arrangement.spacedBy(3.dp)
     ) {
         Text(symbol, color = White, fontSize = 25.sp, fontWeight = FontWeight.Black)
-        Text(label, color = color, fontSize = 7.sp, fontWeight = FontWeight.Black, letterSpacing = 0.7.sp)
+        Text(label, color = color, fontSize = 7.sp, fontWeight = FontWeight.Black, letterSpacing = 0.45.sp)
     }
 }
 
