@@ -10,6 +10,13 @@ import android.os.StatFs
 import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -97,17 +104,26 @@ private fun TurboPlayScreen() {
                     }
                 }
 
-                when (selectedTab.value) {
-                    "Home" -> HomePage(context, stats.value, status)
-                    "Stats" -> StatsPage(stats.value) { stats.value = readDeviceStats(context); status.value = "Device information refreshed" }
-                    "Games" -> GamesPage(status) { status.value = launchFreeFire(context) }
-                    "Tools" -> ToolsPage(
-                        onRefresh = { stats.value = readDeviceStats(context); status.value = "Device information refreshed" },
-                        onBooster = { openGameSettings(context, status) },
-                        onCleaner = { openAppSettings(context) },
-                        onDevice = { openDeviceSettings(context) }
-                    )
-                    else -> AboutPage()
+                AnimatedContent(
+                    targetState = selectedTab.value,
+                    transitionSpec = {
+                        (fadeIn(animationSpec = tween(280)) + slideInVertically(animationSpec = tween(280)) { it / 10 }) togetherWith
+                            (fadeOut(animationSpec = tween(180)) + slideOutVertically(animationSpec = tween(180)) { -it / 10 })
+                    },
+                    label = "page_transition"
+                ) { tab ->
+                    when (tab) {
+                        "Home" -> HomePage(context, stats.value, status)
+                        "Stats" -> StatsPage(stats.value) { stats.value = readDeviceStats(context); status.value = "Device information refreshed" }
+                        "Games" -> GamesPage(status) { status.value = launchFreeFire(context) }
+                        "Tools" -> ToolsPage(
+                            onRefresh = { stats.value = readDeviceStats(context); status.value = "Device information refreshed" },
+                            onBooster = { openGameSettings(context, status) },
+                            onCleaner = { openAppSettings(context) },
+                            onDevice = { openDeviceSettings(context) }
+                        )
+                        else -> AboutPage()
+                    }
                 }
 
                 Text(status.value, color = Cyan, fontSize = 11.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
