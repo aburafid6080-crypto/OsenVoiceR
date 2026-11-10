@@ -226,42 +226,64 @@ private fun OsenVoiceR() {
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = Color(0xFF090711)
+        color = Color(0xFF070416)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(
                     Brush.verticalGradient(
-                        listOf(Color(0xFF17102D), Color(0xFF090711), Color(0xFF10172B))
+                        listOf(Color(0xFF10052A), Color(0xFF070416), Color(0xFF10052A))
                     )
                 )
                 .verticalScroll(rememberScrollState())
-                .padding(20.dp),
+                .padding(horizontal = 16.dp, vertical = 18.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(Modifier.height(18.dp))
-            Text(
-                text = "OSEN VOICE R",
-                color = Color.White,
-                fontSize = 30.sp,
-                fontWeight = FontWeight.ExtraBold
-            )
-            Text(
-                text = "VOICE CHANGER STUDIO",
-                color = Color(0xFFB69CFF),
-                fontSize = 12.sp,
-                letterSpacing = 3.sp
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text("🎙", fontSize = 34.sp)
+                Spacer(Modifier.width(12.dp))
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "OSEN VOICE R",
+                        color = Color.White,
+                        fontSize = 29.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                    Text(
+                        text = "VOICE CHANGER STUDIO",
+                        color = Color(0xFFC04BFF),
+                        fontSize = 12.sp,
+                        letterSpacing = 2.5.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                Spacer(Modifier.width(12.dp))
+                Text("✧", color = Color(0xFFB52BFF), fontSize = 34.sp)
+            }
             Spacer(Modifier.height(24.dp))
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF1B1730)),
-                shape = RoundedCornerShape(20.dp)
+                colors = CardDefaults.cardColors(containerColor = Color(0xFF110B29)),
+                shape = RoundedCornerShape(24.dp),
+                border = androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFF8C24FF))
             ) {
-                Column(Modifier.padding(18.dp)) {
-                    Text("Choose Voice Effect", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Column(
+                    Modifier
+                        .background(Brush.verticalGradient(listOf(Color(0xFF1B0D3D), Color(0xFF0D0921))))
+                        .padding(18.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text("⚙", color = Color(0xFFB82DFF), fontSize = 24.sp)
+                        Spacer(Modifier.width(10.dp))
+                        Text("Choose Voice Effect", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                    }
                     Spacer(Modifier.height(12.dp))
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(3),
@@ -282,11 +304,18 @@ private fun OsenVoiceR() {
                                 modifier = Modifier.fillMaxWidth(),
                                 contentPadding = PaddingValues(horizontal = 4.dp, vertical = 10.dp),
                                 colors = ButtonDefaults.buttonColors(
-                                    containerColor = if (selected) Color(0xFF7046D8) else Color(0xFF302849)
+                                    containerColor = if (selected) Color(0xFF7624F5) else Color(0xFF292044)
                                 ),
-                                shape = RoundedCornerShape(12.dp)
+                                shape = RoundedCornerShape(18.dp),
+                                border = if (selected) androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFFE15BFF)) else null,
+                                elevation = ButtonDefaults.buttonElevation(defaultElevation = 5.dp, pressedElevation = 1.dp)
                             ) {
-                                Text(effect.title, fontSize = 12.sp, color = Color.White)
+                                Text(
+                                    if (selected) "${effect.title}  ✓" else effect.title,
+                                    fontSize = 12.sp,
+                                    color = Color.White,
+                                    fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium
+                                )
                             }
                         }
                     }
@@ -296,16 +325,16 @@ private fun OsenVoiceR() {
             Spacer(Modifier.height(18.dp))
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF1D1235)),
-                shape = RoundedCornerShape(24.dp),
-                border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF8B35F5))
+                colors = CardDefaults.cardColors(containerColor = Color(0xFF160A32)),
+                shape = RoundedCornerShape(26.dp),
+                border = androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFF9C2BFF))
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
                             Brush.verticalGradient(
-                                listOf(Color(0xFF28134A), Color(0xFF17102B))
+                                listOf(Color(0xFF241047), Color(0xFF100925))
                             )
                         )
                         .padding(18.dp)
@@ -326,11 +355,11 @@ private fun OsenVoiceR() {
                         Surface(
                             color = Color(0xFF173B2A),
                             shape = RoundedCornerShape(50),
-                            border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF27C76F))
+                            border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFFFB43B))
                         ) {
                             Text(
-                                "READY",
-                                color = Color(0xFF63F59A),
+                                "NOT CONNECTED",
+                                color = Color(0xFFFFD36B),
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp)
@@ -339,8 +368,8 @@ private fun OsenVoiceR() {
                     }
                     Spacer(Modifier.height(14.dp))
                     Text(
-                        "Choose a voice effect above and test it with your recordings. Your selected effect will be used when you play back a recording.",
-                        color = Color(0xFFE0D5F7),
+                        "Choose a voice effect above and test it with your recordings. The selected effect is applied when you play back your recording.",
+                        color = Color(0xFFE8DFFF),
                         fontSize = 13.sp,
                         lineHeight = 19.sp
                     )
@@ -357,8 +386,8 @@ private fun OsenVoiceR() {
                             Text("ⓘ", color = Color(0xFFD77BFF), fontSize = 20.sp)
                             Spacer(Modifier.width(9.dp))
                             Text(
-                                "Free Fire microphone routing: Not supported by this APK. The app cannot send changed microphone audio directly into Free Fire.",
-                                color = Color(0xFFFFC1E8),
+                                "Free Fire microphone routing: Not supported by this APK. Changed voice cannot be sent directly into Free Fire voice chat.",
+                                color = Color(0xFFFFB8EE),
                                 fontSize = 12.sp,
                                 lineHeight = 17.sp
                             )
@@ -370,14 +399,18 @@ private fun OsenVoiceR() {
             Spacer(Modifier.height(18.dp))
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF1B1730)),
-                shape = RoundedCornerShape(20.dp)
+                colors = CardDefaults.cardColors(containerColor = Color(0xFF100A28)),
+                shape = RoundedCornerShape(26.dp),
+                border = androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFF7E35E8))
             ) {
                 Column(
-                    modifier = Modifier.fillMaxWidth().padding(18.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Brush.verticalGradient(listOf(Color(0xFF1D1240), Color(0xFF0D0922))))
+                        .padding(18.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text("VOICE RECORDER", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 17.sp)
+                    Text("🎙  VOICE RECORDER", color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 20.sp)
                     Spacer(Modifier.height(8.dp))
                     Text(
                         status,
@@ -401,8 +434,10 @@ private fun OsenVoiceR() {
                         },
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = if (isRecording) Color(0xFFB83250) else Color(0xFF7046D8)
-                        )
+                            containerColor = if (isRecording) Color(0xFFB83250) else Color(0xFF7818F5)
+                        ),
+                        shape = RoundedCornerShape(50),
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 7.dp)
                     ) {
                         Text(if (isRecording) "STOP RECORDING" else "●  START RECORDING")
                     }
@@ -411,7 +446,9 @@ private fun OsenVoiceR() {
                     OutlinedButton(
                         onClick = { playRecording() },
                         modifier = Modifier.fillMaxWidth(),
-                        enabled = !isRecording && !isPlaying
+                        enabled = !isRecording && !isPlaying,
+                        shape = RoundedCornerShape(50),
+                        border = androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFF9D7BFF))
                     ) {
                         Text("▶  PLAY RECORDING", color = Color.White)
                     }
