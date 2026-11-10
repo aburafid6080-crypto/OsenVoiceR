@@ -88,6 +88,7 @@ private fun TurboPlayScreen() {
                         Text("━  GAME BOOSTER  ━", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 2.sp)
                     }
                     Row(
+                        modifier = Modifier.padding(top = 12.dp),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
