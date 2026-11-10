@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
+import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -68,7 +69,7 @@ class MainActivity : ComponentActivity() {
 private fun TurboPlayScreen() {
     val context = LocalContext.current
     val stats = remember { mutableStateOf(readDeviceStats(context)) }
-    val status = remember { mutableStateOf("TurboPlay is ready for your next match") }
+    val status = remember { mutableStateOf("TurboPlay is ready") }
     val selectedTab = remember { mutableStateOf("Home") }
 
     MaterialTheme {
@@ -83,155 +84,186 @@ private fun TurboPlayScreen() {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         Text("♛  OSEN GAMING", color = Muted, fontSize = 10.sp, fontWeight = FontWeight.Bold, letterSpacing = 3.sp)
-                        Text("OSEN", color = White, fontSize = 21.sp, fontWeight = FontWeight.Black, letterSpacing = 2.sp)
-                        Text("TURBOPLAY", color = Purple, fontSize = 30.sp, fontWeight = FontWeight.Black, letterSpacing = 0.sp)
+                        Text("OSEN TURBOPLAY", color = White, fontSize = 26.sp, fontWeight = FontWeight.Black)
                         Text("━  GAME BOOSTER  ━", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 2.sp)
                     }
-                    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                        NeonCircle("⚙", Violet)
-                        NeonCircle("⚡", Cyan)
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        NeonCircle("⚙", Violet) { openAppSettings(context) }
+                        NeonCircle("⚡", Cyan) { selectedTab.value = "Tools" }
                     }
                 }
 
-                Card(
-                    modifier = Modifier.fillMaxWidth().border(1.dp, Cyan.copy(alpha = 0.75f), RoundedCornerShape(24.dp)),
-                    shape = RoundedCornerShape(24.dp),
-                    colors = CardDefaults.cardColors(containerColor = Panel)
-                ) {
-                    Column(
-                        modifier = Modifier.background(Brush.linearGradient(listOf(Color(0xFF201044), Color(0xFF0B1028), Color(0xFF17052B))))
-                            .padding(18.dp),
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        Text("PLAY SMARTER\nBE STRONGER", color = White, fontSize = 24.sp, lineHeight = 27.sp, fontWeight = FontWeight.Black)
-                        Text("FREE FIRE  •  FREE FIRE MAX", color = Cyan, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.5.sp)
-                        Text("Your gaming space. Your next victory starts here.", color = Muted, fontSize = 12.sp)
-                        Button(
-                            onClick = { status.value = if (launchFreeFire(context)) "Free Fire launch requested" else "Free Fire not found. Install it first." },
-                            modifier = Modifier.fillMaxWidth().height(54.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = Gold),
-                            shape = RoundedCornerShape(16.dp)
-                        ) { Text("▶   PLAY FREE FIRE  🔥", color = Color(0xFF170B20), fontSize = 15.sp, fontWeight = FontWeight.Black) }
-                    }
-                }
-
-                Card(
-                    modifier = Modifier.fillMaxWidth().border(1.dp, Purple, RoundedCornerShape(22.dp)),
-                    shape = RoundedCornerShape(22.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFF110A22))
-                ) {
-                    Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text("🚀  YOUR NEXT MATCH STARTS HERE", color = White, fontSize = 17.sp, fontWeight = FontWeight.Black)
-                        Text("Launch Free Fire and jump into the action!", color = Muted, fontSize = 12.sp)
-                        Button(
-                            onClick = { status.value = if (launchFreeFire(context)) "Free Fire launch requested" else "Free Fire not found. Install it first." },
-                            modifier = Modifier.fillMaxWidth().height(48.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = Purple),
-                            shape = RoundedCornerShape(15.dp)
-                        ) { Text("▶  LAUNCH GAME", color = White, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.sp) }
-                        Text("⚡  Free Fire & Free Fire MAX supported when installed", color = Cyan, fontSize = 10.sp)
-                    }
-                }
-
-                Text("DEVICE OVERVIEW", color = White, fontSize = 14.sp, fontWeight = FontWeight.Black, letterSpacing = 1.4.sp)
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    NeonMetric("▦", "RAM AVAILABLE", stats.value.ramAvailable, "MEMORY", Purple, Modifier.weight(1f))
-                    NeonMetric("▤", "STORAGE FREE", stats.value.storageFree, "INTERNAL", Cyan, Modifier.weight(1f))
-                }
-
-                Card(
-                    modifier = Modifier.fillMaxWidth().border(1.dp, Cyan.copy(alpha = 0.8f), RoundedCornerShape(20.dp)),
-                    colors = CardDefaults.cardColors(containerColor = Panel),
-                    shape = RoundedCornerShape(20.dp)
-                ) {
-                    Row(modifier = Modifier.padding(15.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Text("📱", fontSize = 31.sp)
-                        Spacer(Modifier.width(12.dp))
-                        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Text("▣  DEVICE INFORMATION", color = Cyan, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold)
-                            Text(stats.value.deviceName, color = White, fontSize = 14.sp, fontWeight = FontWeight.Bold)
-                            Text("Android ${Build.VERSION.RELEASE}  •  API ${Build.VERSION.SDK_INT}", color = Muted, fontSize = 11.sp)
-                        }
-                        Text("VIEW\nDETAILS  ➜", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
-                    }
-                }
-
-                Text("🎮  GAMING TOOLS", color = Purple, fontSize = 19.sp, fontWeight = FontWeight.Black, letterSpacing = 1.sp)
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    ToolTile("🚀", "GAME\nLAUNCHER", "Open games", Purple, Modifier.weight(1f)) {
-                        status.value = if (launchFreeFire(context)) "Free Fire launch requested" else "Free Fire not found. Install it first."
-                    }
-                    ToolTile("⟳", "REFRESH", "Update info", Cyan, Modifier.weight(1f)) {
-                        stats.value = readDeviceStats(context); status.value = "Device information refreshed"
-                    }
-                    ToolTile("⚡", "BOOSTER", "Performance info", Green, Modifier.weight(1f)) {
-                        status.value = "Android manages game performance automatically; no FPS boost is guaranteed."
-                    }
-                    ToolTile("▤", "CLEANER", "App storage", Gold, Modifier.weight(1f)) {
-                        status.value = "Use Android Settings to review and clear app storage safely."
-                        val intent = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                        intent.data = android.net.Uri.parse("package:${context.packageName}")
-                        context.startActivity(intent)
-                    }
-                }
-
-                Card(
-                    modifier = Modifier.fillMaxWidth().border(1.dp, Purple.copy(alpha = 0.7f), RoundedCornerShape(18.dp)),
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFF160C2C)),
-                    shape = RoundedCornerShape(18.dp)
-                ) {
-                    Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Text("💡  GAMING NOTE", color = Cyan, fontSize = 12.sp, fontWeight = FontWeight.Black)
-                        Text("TurboPlay provides quick game launch and device information. Android controls many performance settings automatically; this app does not promise extra FPS or unfair advantages.", color = Muted, fontSize = 11.sp, lineHeight = 16.sp)
-                    }
+                when (selectedTab.value) {
+                    "Home" -> HomePage(context, stats.value, status)
+                    "Stats" -> StatsPage(stats.value) { stats.value = readDeviceStats(context); status.value = "Device information refreshed" }
+                    "Games" -> GamesPage(status) { status.value = launchFreeFire(context) }
+                    "Tools" -> ToolsPage(
+                        onRefresh = { stats.value = readDeviceStats(context); status.value = "Device information refreshed" },
+                        onBooster = { openGameSettings(context, status) },
+                        onCleaner = { openAppSettings(context) },
+                        onDevice = { openDeviceSettings(context) }
+                    )
+                    else -> AboutPage()
                 }
 
                 Text(status.value, color = Cyan, fontSize = 11.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
                 Row(
-                    modifier = Modifier.fillMaxWidth().background(Color(0xFF100B20), RoundedCornerShape(18.dp)).padding(vertical = 13.dp),
+                    modifier = Modifier.fillMaxWidth().background(Color(0xFF100B20), RoundedCornerShape(18.dp))
+                        .border(1.dp, Purple.copy(alpha = 0.45f), RoundedCornerShape(18.dp)).padding(vertical = 12.dp),
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     listOf("⌂" to "Home", "▥" to "Stats", "🎮" to "Games", "◇" to "Tools", "♛" to "About").forEach { item ->
                         Column(
-                            modifier = Modifier.clickable { selectedTab.value = item.second; status.value = when(item.second) {
-                                "Home" -> "Home dashboard"
-                                "Stats" -> "RAM and storage values are shown above"
-                                "Games" -> "Use Play Free Fire to launch your installed game"
-                                "Tools" -> "Gaming tools are shown above"
-                                else -> "OSEN TURBOPLAY 1.1"
-                            }}.padding(horizontal = 4.dp),
+                            modifier = Modifier.clickable { selectedTab.value = item.second }.padding(horizontal = 5.dp, vertical = 4.dp),
                             horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(3.dp)
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
-                            Text(item.first, color = if (selectedTab.value == item.second) Purple else Muted, fontSize = 21.sp, fontWeight = FontWeight.Bold)
-                            Text(item.second, color = if (selectedTab.value == item.second) White else Muted, fontSize = 9.sp, fontWeight = FontWeight.Bold)
+                            Text(item.first, color = if (selectedTab.value == item.second) Purple else Muted, fontSize = 22.sp, fontWeight = FontWeight.Bold)
+                            Text(item.second, color = if (selectedTab.value == item.second) White else Muted, fontSize = 10.sp, fontWeight = FontWeight.Bold)
                         }
                     }
                 }
-                Text("OSEN GAMING  •  TURBOPLAY 1.2", color = Muted.copy(alpha = 0.55f), fontSize = 9.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+                Text("OSEN GAMING  •  TURBOPLAY 1.3", color = Muted.copy(alpha = 0.55f), fontSize = 9.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
             }
         }
     }
 }
 
 @Composable
-private fun NeonCircle(symbol: String, color: Color) {
-    Column(
-        modifier = Modifier.size(48.dp).background(Brush.linearGradient(listOf(color, Violet)), CircleShape)
-            .border(1.dp, color, CircleShape),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) { Text(symbol, color = White, fontSize = 25.sp, fontWeight = FontWeight.Black) }
+private fun HomePage(context: Context, stats: DeviceStats, status: androidx.compose.runtime.MutableState<String>) {
+    Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        Card(modifier = Modifier.fillMaxWidth().border(1.dp, Cyan, RoundedCornerShape(24.dp)), shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = Panel)) {
+            Column(modifier = Modifier.background(Brush.linearGradient(listOf(Color(0xFF201044), Color(0xFF0B1028), Color(0xFF17052B)))).padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text("PLAY SMARTER  •  BE STRONGER", color = White, fontSize = 21.sp, fontWeight = FontWeight.Black)
+                Text("FREE FIRE  •  FREE FIRE MAX", color = Cyan, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold)
+                Text("Your gaming space. Your next match starts here.", color = Muted, fontSize = 12.sp)
+                Button(onClick = { status.value = launchFreeFire(context) }, modifier = Modifier.fillMaxWidth().height(52.dp), colors = ButtonDefaults.buttonColors(containerColor = Gold), shape = RoundedCornerShape(15.dp)) {
+                    Text("▶  PLAY FREE FIRE  🔥", color = Color(0xFF170B20), fontWeight = FontWeight.Black)
+                }
+            }
+        }
+        Card(modifier = Modifier.fillMaxWidth().border(1.dp, Purple, RoundedCornerShape(22.dp)), shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = Panel)) {
+            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
+                Text("🚀  YOUR NEXT MATCH STARTS HERE", color = White, fontSize = 17.sp, fontWeight = FontWeight.Black)
+                Text("Launch Free Fire and jump into the action!", color = Muted, fontSize = 12.sp)
+                Button(onClick = { status.value = launchFreeFire(context) }, modifier = Modifier.fillMaxWidth().height(48.dp), colors = ButtonDefaults.buttonColors(containerColor = Purple), shape = RoundedCornerShape(15.dp)) {
+                    Text("▶  LAUNCH GAME", color = White, fontWeight = FontWeight.ExtraBold)
+                }
+                Text("⚡  Free Fire & Free Fire MAX supported when installed", color = Cyan, fontSize = 10.sp)
+            }
+        }
+        Text("DEVICE OVERVIEW", color = White, fontSize = 14.sp, fontWeight = FontWeight.Black, letterSpacing = 1.4.sp)
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            NeonMetric("▦", "RAM AVAILABLE", stats.ramAvailable, "MEMORY", Purple, Modifier.weight(1f))
+            NeonMetric("▤", "STORAGE FREE", stats.storageFree, "INTERNAL", Cyan, Modifier.weight(1f))
+        }
+        Card(modifier = Modifier.fillMaxWidth().clickable { openDeviceSettings(context) }.border(1.dp, Cyan, RoundedCornerShape(20.dp)), colors = CardDefaults.cardColors(containerColor = Panel), shape = RoundedCornerShape(20.dp)) {
+            Row(modifier = Modifier.padding(15.dp), verticalAlignment = Alignment.CenterVertically) {
+                Text("📱", fontSize = 30.sp)
+                Spacer(Modifier.width(12.dp))
+                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text("DEVICE INFORMATION", color = Cyan, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold)
+                    Text(stats.deviceName, color = White, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                    Text("Android ${Build.VERSION.RELEASE}  •  API ${Build.VERSION.SDK_INT}", color = Muted, fontSize = 11.sp)
+                }
+                Text("VIEW DETAILS ➜", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+            }
+        }
+        Text("🎮  GAMING TOOLS", color = Purple, fontSize = 19.sp, fontWeight = FontWeight.Black)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            ToolTile("🚀", "GAME LAUNCHER", "Open Free Fire", Purple, Modifier.weight(1f)) { status.value = launchFreeFire(context) }
+            ToolTile("⟳", "REFRESH", "Update info", Cyan, Modifier.weight(1f)) { status.value = "Device information refreshed" }
+            ToolTile("⚡", "BOOSTER", "Game settings", Green, Modifier.weight(1f)) { openGameSettings(context, status) }
+            ToolTile("▤", "CLEANER", "App storage", Gold, Modifier.weight(1f)) { openAppSettings(context) }
+        }
+        NoteCard()
+    }
+}
+
+@Composable
+private fun StatsPage(stats: DeviceStats, onRefresh: () -> Unit) {
+    PageTitle("DEVICE STATISTICS", "Live information reported by Android")
+    NeonMetric("▦", "AVAILABLE RAM", stats.ramAvailable, "CURRENT FREE MEMORY", Purple)
+    NeonMetric("▤", "FREE STORAGE", stats.storageFree, "INTERNAL STORAGE", Cyan)
+    InfoCard("DEVICE", stats.deviceName)
+    InfoCard("ANDROID VERSION", "Android ${Build.VERSION.RELEASE}  •  API ${Build.VERSION.SDK_INT}")
+    ActionButton("↻  REFRESH DEVICE STATS", Cyan, onRefresh)
+    Text("RAM availability changes as apps open and close. Values are estimates reported by Android.", color = Muted, fontSize = 12.sp)
+}
+
+@Composable
+private fun GamesPage(status: androidx.compose.runtime.MutableState<String>, onLaunch: () -> Unit) {
+    PageTitle("MY GAMES", "Launch a supported game installed on this phone")
+    InfoCard("FREE FIRE", "Garena Free Fire")
+    ActionButton("▶  LAUNCH FREE FIRE", Purple, onLaunch)
+    InfoCard("FREE FIRE MAX", "Garena Free Fire MAX")
+    Text("The launcher checks whether either supported game is installed. Other games are not listed yet.", color = Muted, fontSize = 12.sp)
+}
+
+@Composable
+private fun ToolsPage(onRefresh: () -> Unit, onBooster: () -> Unit, onCleaner: () -> Unit, onDevice: () -> Unit) {
+    PageTitle("GAMING TOOLS", "Quick shortcuts for your device")
+    ActionButton("↻  REFRESH DEVICE INFO", Cyan, onRefresh)
+    ActionButton("⚡  OPEN ANDROID GAME SETTINGS", Green, onBooster)
+    ActionButton("▤  OPEN APP STORAGE SETTINGS", Gold, onCleaner)
+    ActionButton("📱  DEVICE SETTINGS", Purple, onDevice)
+    NoteCard()
+}
+
+@Composable
+private fun AboutPage() {
+    PageTitle("ABOUT OSEN TURBOPLAY", "Version 1.3")
+    InfoCard("DEVELOPER", "OSEN GAMING")
+    InfoCard("PURPOSE", "Game launcher and device information dashboard")
+    NoteCard()
+}
+
+@Composable
+private fun PageTitle(title: String, subtitle: String) {
+    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Text(title, color = White, fontSize = 22.sp, fontWeight = FontWeight.Black)
+        Text(subtitle, color = Muted, fontSize = 12.sp)
+    }
+}
+
+@Composable
+private fun InfoCard(title: String, value: String) {
+    Card(modifier = Modifier.fillMaxWidth().border(1.dp, Cyan.copy(alpha = 0.55f), RoundedCornerShape(17.dp)), colors = CardDefaults.cardColors(containerColor = Panel), shape = RoundedCornerShape(17.dp)) {
+        Column(modifier = Modifier.padding(15.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text(title, color = Cyan, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold)
+            Text(value, color = White, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+        }
+    }
+}
+
+@Composable
+private fun ActionButton(label: String, color: Color, onClick: () -> Unit) {
+    Button(onClick = onClick, modifier = Modifier.fillMaxWidth().height(52.dp), colors = ButtonDefaults.buttonColors(containerColor = color), shape = RoundedCornerShape(14.dp)) {
+        Text(label, color = White, fontWeight = FontWeight.ExtraBold)
+    }
+}
+
+@Composable
+private fun NoteCard() {
+    Card(modifier = Modifier.fillMaxWidth().border(1.dp, Purple.copy(alpha = 0.7f), RoundedCornerShape(18.dp)), colors = CardDefaults.cardColors(containerColor = Color(0xFF160C2C)), shape = RoundedCornerShape(18.dp)) {
+        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text("💡  GAMING NOTE", color = Cyan, fontSize = 12.sp, fontWeight = FontWeight.Black)
+            Text("TurboPlay provides game launch and device settings shortcuts. Android controls performance automatically; this app cannot promise extra FPS or safely force-close other apps.", color = Muted, fontSize = 11.sp, lineHeight = 16.sp)
+        }
+    }
+}
+
+@Composable
+private fun NeonCircle(symbol: String, color: Color, onClick: () -> Unit) {
+    Column(modifier = Modifier.size(46.dp).clickable(onClick = onClick).background(Brush.linearGradient(listOf(color, Violet)), CircleShape).border(1.dp, color, CircleShape), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+        Text(symbol, color = White, fontSize = 24.sp, fontWeight = FontWeight.Black)
+    }
 }
 
 @Composable
 private fun NeonMetric(icon: String, title: String, value: String, footer: String, accent: Color, modifier: Modifier = Modifier) {
-    Card(
-        modifier = modifier.border(1.dp, accent.copy(alpha = 0.9f), RoundedCornerShape(19.dp)),
-        colors = CardDefaults.cardColors(containerColor = Panel),
-        shape = RoundedCornerShape(19.dp)
-    ) {
+    Card(modifier = modifier.border(1.dp, accent, RoundedCornerShape(19.dp)), colors = CardDefaults.cardColors(containerColor = Panel), shape = RoundedCornerShape(19.dp)) {
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(icon, color = accent, fontSize = 22.sp, fontWeight = FontWeight.Black)
@@ -246,18 +278,9 @@ private fun NeonMetric(icon: String, title: String, value: String, footer: Strin
 
 @Composable
 private fun ToolTile(icon: String, title: String, subtitle: String, accent: Color, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    Card(
-        modifier = modifier.height(126.dp).clickable(onClick = onClick)
-            .border(1.dp, accent.copy(alpha = 0.85f), RoundedCornerShape(17.dp)),
-        colors = CardDefaults.cardColors(containerColor = Panel),
-        shape = RoundedCornerShape(17.dp)
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize().padding(horizontal = 5.dp, vertical = 10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            Text(icon, color = accent, fontSize = 25.sp, fontWeight = FontWeight.Black)
+    Card(modifier = modifier.height(126.dp).clickable(onClick = onClick).border(1.dp, accent, RoundedCornerShape(17.dp)), colors = CardDefaults.cardColors(containerColor = Panel), shape = RoundedCornerShape(17.dp)) {
+        Column(modifier = Modifier.fillMaxSize().padding(horizontal = 4.dp, vertical = 10.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text(icon, color = accent, fontSize = 24.sp, fontWeight = FontWeight.Black)
             Text(title, color = White, fontSize = 9.sp, lineHeight = 11.sp, fontWeight = FontWeight.Black, textAlign = TextAlign.Center)
             Text(subtitle, color = Muted, fontSize = 8.sp, textAlign = TextAlign.Center)
         }
@@ -273,21 +296,43 @@ private fun readDeviceStats(context: Context): DeviceStats {
     val storage = StatFs(Environment.getDataDirectory().path)
     val freeStorageGb = storage.availableBytes.toDouble() / (1024.0 * 1024.0 * 1024.0)
     val manufacturer = Build.MANUFACTURER.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
-    return DeviceStats(
-        String.format(Locale.getDefault(), "%.1f GB", availableRamGb),
-        String.format(Locale.getDefault(), "%.1f GB", freeStorageGb),
-        "$manufacturer ${Build.MODEL}"
-    )
+    return DeviceStats(String.format(Locale.getDefault(), "%.1f GB", availableRamGb), String.format(Locale.getDefault(), "%.1f GB", freeStorageGb), "$manufacturer ${Build.MODEL}")
 }
 
-private fun launchFreeFire(context: Context): Boolean {
+private fun launchFreeFire(context: Context): String {
     for (packageName in listOf("com.dts.freefireth", "com.dts.freefiremax")) {
-        val launchIntent: Intent? = context.packageManager.getLaunchIntentForPackage(packageName)
-        if (launchIntent != null) {
-            launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(launchIntent)
-            return true
+        val intent = context.packageManager.getLaunchIntentForPackage(packageName)
+        if (intent != null) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+            return "Game launched successfully"
         }
     }
-    return false
+    return "Free Fire not found. Install Free Fire or Free Fire MAX first."
+}
+
+private fun openAppSettings(context: Context) {
+    safeOpen(context, Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply { data = android.net.Uri.parse("package:${context.packageName}") })
+}
+
+private fun openDeviceSettings(context: Context) {
+    safeOpen(context, Intent(Settings.ACTION_DEVICE_INFO_SETTINGS))
+}
+
+private fun openGameSettings(context: Context, status: androidx.compose.runtime.MutableState<String>) {
+    try {
+        safeOpen(context, Intent("android.settings.GAME_SETTINGS"))
+        status.value = "Opened Android game settings if supported by this phone"
+    } catch (_: Exception) {
+        status.value = "Game settings are not available on this Android version"
+    }
+}
+
+private fun safeOpen(context: Context, intent: Intent) {
+    try {
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
+    } catch (_: Exception) {
+        // Some Android builds do not provide every optional settings screen.
+    }
 }
