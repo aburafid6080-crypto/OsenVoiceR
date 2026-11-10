@@ -112,8 +112,7 @@ private fun TurboPlayScreen() {
                             .padding(20.dp),
                         verticalArrangement = Arrangement.spacedBy(13.dp)
                     ) {
-                        Text("YOUR NEXT MATCH
-STARTS HERE", color = White, fontSize = 23.sp, lineHeight = 29.sp, fontWeight = FontWeight.Black)
+                        Text("YOUR NEXT MATCH STARTS HERE", color = White, fontSize = 23.sp, lineHeight = 29.sp, fontWeight = FontWeight.Black)
                         Text("Launch Free Fire and jump straight into the action.", color = TextMuted, fontSize = 13.sp, lineHeight = 19.sp)
                         Button(
                             onClick = {
