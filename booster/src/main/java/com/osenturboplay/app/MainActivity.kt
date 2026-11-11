@@ -176,45 +176,45 @@ private fun statsRefresh(context: Context, status: androidx.compose.runtime.Muta
 @Composable
 private fun HeroBanner() {
     Card(
-        modifier = Modifier.fillMaxWidth()
-            .border(2.dp, Brush.linearGradient(listOf(Purple, Cyan, Violet, Gold)), RoundedCornerShape(26.dp)),
-        shape = RoundedCornerShape(26.dp),
+        modifier = Modifier.fillMaxWidth().height(292.dp)
+            .border(2.dp, Brush.linearGradient(listOf(Purple, Cyan, Violet, Gold)), RoundedCornerShape(27.dp)),
+        shape = RoundedCornerShape(27.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFF07091B))
     ) {
         Box(
-            modifier = Modifier.fillMaxWidth()
-                .background(
-                    Brush.linearGradient(
-                        listOf(Color(0xFF260044), Color(0xFF080B25), Color(0xFF031B35), Color(0xFF17052D))
-                    )
-                )
-                .padding(16.dp)
+            modifier = Modifier.fillMaxSize()
+                .background(Brush.linearGradient(listOf(Color(0xFF250044), Color(0xFF080B25), Color(0xFF031B35), Color(0xFF17052D))))
+                .padding(15.dp)
         ) {
-            Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("♛  OSEN TURBOPLAY", color = Cyan, fontSize = 11.sp, fontWeight = FontWeight.Black, letterSpacing = 2.sp)
-                    Spacer(Modifier.weight(1f))
-                    Text("✦  LIVE", color = Gold, fontSize = 9.sp, fontWeight = FontWeight.Black)
-                }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                        Text("PLAY SMARTER", color = White, fontSize = 25.sp, fontWeight = FontWeight.Black)
-                        Text("BE STRONGER", color = Purple, fontSize = 25.sp, fontWeight = FontWeight.Black)
-                        Text("FREE FIRE  •  FREE FIRE MAX", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 0.7.sp)
-                    }
-                    Box(
-                        modifier = Modifier.size(112.dp)
-                            .background(Brush.radialGradient(listOf(Purple.copy(alpha = 0.65f), Cyan.copy(alpha = 0.18f), Color.Transparent)), CircleShape)
-                            .border(1.dp, Cyan.copy(alpha = 0.45f), CircleShape),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text("⚔", color = White, fontSize = 60.sp, fontWeight = FontWeight.Black)
-                        Text("⚡", color = Gold, fontSize = 31.sp, modifier = Modifier.align(Alignment.BottomEnd).padding(3.dp))
-                    }
-                }
-                Text("Your gaming space. Your next match starts here.", color = Muted, fontSize = 12.sp)
-                Text("🔥  READY FOR YOUR NEXT MATCH", color = Gold, fontSize = 12.sp, fontWeight = FontWeight.Black)
+            // Neon energy streaks and layered character panel recreate the requested gaming-banner layout.
+            Box(
+                modifier = Modifier.align(Alignment.CenterEnd).size(174.dp)
+                    .background(Brush.radialGradient(listOf(Purple.copy(alpha = 0.62f), Cyan.copy(alpha = 0.22f), Color.Transparent)), CircleShape)
+                    .border(1.dp, Cyan.copy(alpha = 0.5f), CircleShape)
+            )
+            Column(
+                modifier = Modifier.fillMaxWidth(0.72f).align(Alignment.CenterStart),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text("♛  OSEN TURBOPLAY", color = Cyan, fontSize = 11.sp, fontWeight = FontWeight.Black, letterSpacing = 2.sp)
+                Spacer(Modifier.height(5.dp))
+                Text("PLAY SMARTER", color = White, fontSize = 25.sp, fontWeight = FontWeight.Black)
+                Text("BE STRONGER", color = Color(0xFFE020FF), fontSize = 25.sp, fontWeight = FontWeight.Black)
+                Text("FREE FIRE  •  FREE FIRE MAX", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold)
+                Spacer(Modifier.height(7.dp))
+                Text("Your gaming space. Your next match starts here.", color = Muted, fontSize = 11.sp, lineHeight = 16.sp)
+                Text("🔥  READY FOR YOUR NEXT MATCH", color = Gold, fontSize = 10.sp, fontWeight = FontWeight.Black)
             }
+            Column(
+                modifier = Modifier.align(Alignment.CenterEnd).padding(end = 2.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(0.dp)
+            ) {
+                Text("👑", fontSize = 23.sp)
+                Text("🥷", fontSize = 76.sp)
+                Text("⚡", color = Gold, fontSize = 34.sp)
+            }
+            Text("✦ LIVE", color = Gold, fontSize = 9.sp, fontWeight = FontWeight.Black, modifier = Modifier.align(Alignment.TopEnd))
         }
     }
 }
@@ -237,8 +237,8 @@ private fun HomePage(context: Context, stats: DeviceStats, status: androidx.comp
         Text("DEVICE OVERVIEW", color = White, fontSize = 16.sp, fontWeight = FontWeight.Black, letterSpacing = 1.4.sp)
         Text("LIVE DEVICE INFORMATION", color = Muted, fontSize = 9.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.sp)
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            NeonMetric("▦", "RAM AVAILABLE", stats.ramAvailable, "MEMORY", Purple, Modifier.weight(1f))
-            NeonMetric("▤", "STORAGE FREE", stats.storageFree, "INTERNAL", Cyan, Modifier.weight(1f))
+            NeonMetric("▦", "RAM AVAILABLE", stats.ramAvailable, "Memory ${stats.ramUsedPercent}%", Purple, Modifier.weight(1f), stats.ramProgress)
+            NeonMetric("▤", "STORAGE FREE", stats.storageFree, "Internal ${stats.storageUsedPercent}%", Cyan, Modifier.weight(1f), stats.storageProgress)
         }
         Card(modifier = Modifier.fillMaxWidth().clickable { openDeviceSettings(context) }.border(1.5.dp, Cyan, RoundedCornerShape(21.dp)), colors = CardDefaults.cardColors(containerColor = Color(0xFF0C1024)), shape = RoundedCornerShape(21.dp)) {
             Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -400,16 +400,30 @@ private fun NeonCircle(symbol: String, color: Color, label: String, onClick: () 
 }
 
 @Composable
-private fun NeonMetric(icon: String, title: String, value: String, footer: String, accent: Color, modifier: Modifier = Modifier) {
-    Card(modifier = modifier.border(1.dp, accent, RoundedCornerShape(19.dp)), colors = CardDefaults.cardColors(containerColor = Color(0xFF090B20)), shape = RoundedCornerShape(19.dp)) {
-        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
+private fun NeonMetric(
+    icon: String, title: String, value: String, footer: String, accent: Color,
+    modifier: Modifier = Modifier, progress: Float = 0.5f
+) {
+    Card(
+        modifier = modifier.border(1.5.dp, Brush.linearGradient(listOf(accent, accent.copy(alpha = 0.45f), Violet)), RoundedCornerShape(21.dp)),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF090B20)),
+        shape = RoundedCornerShape(21.dp)
+    ) {
+        Column(modifier = Modifier.fillMaxWidth().padding(13.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(icon, color = accent, fontSize = 22.sp, fontWeight = FontWeight.Black)
-                Spacer(Modifier.width(6.dp))
-                Text(title, color = Muted, fontSize = 9.sp, fontWeight = FontWeight.Bold)
+                Spacer(Modifier.width(7.dp))
+                Text(title, color = White, fontSize = 9.sp, fontWeight = FontWeight.Bold)
+                Spacer(Modifier.weight(1f))
+                Text("GOOD", color = White, fontSize = 8.sp, fontWeight = FontWeight.Black,
+                    modifier = Modifier.background(Brush.horizontalGradient(listOf(Purple, accent)), RoundedCornerShape(20.dp)).padding(horizontal = 7.dp, vertical = 3.dp))
             }
-            Text(value, color = White, fontSize = 21.sp, fontWeight = FontWeight.Black)
-            Text(footer, color = accent, fontSize = 9.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.sp)
+            Text(value, color = White, fontSize = 23.sp, fontWeight = FontWeight.Black)
+            Box(Modifier.fillMaxWidth().height(8.dp).background(Color(0xFF24145A), RoundedCornerShape(20.dp))) {
+                Box(Modifier.fillMaxWidth(progress.coerceIn(0.03f, 1f)).height(8.dp)
+                    .background(Brush.horizontalGradient(listOf(Purple, accent)), RoundedCornerShape(20.dp)))
+            }
+            Text(footer, color = accent, fontSize = 9.sp, fontWeight = FontWeight.Bold)
         }
     }
 }
@@ -425,16 +439,38 @@ private fun ToolTile(icon: String, title: String, subtitle: String, accent: Colo
     }
 }
 
-private data class DeviceStats(val ramAvailable: String, val storageFree: String, val deviceName: String)
+private data class DeviceStats(
+    val ramAvailable: String,
+    val storageFree: String,
+    val deviceName: String,
+    val ramProgress: Float,
+    val storageProgress: Float,
+    val ramUsedPercent: Int,
+    val storageUsedPercent: Int
+)
 
 private fun readDeviceStats(context: Context): DeviceStats {
     val memory = ActivityManager.MemoryInfo()
     (context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).getMemoryInfo(memory)
-    val availableRamGb = memory.availMem.toDouble() / (1024.0 * 1024.0 * 1024.0)
+    val totalRam = memory.totalMem.coerceAtLeast(1L)
+    val availableRam = memory.availMem.coerceIn(0L, totalRam)
+    val ramProgress = (1f - availableRam.toFloat() / totalRam.toFloat()).coerceIn(0f, 1f)
     val storage = StatFs(Environment.getDataDirectory().path)
-    val freeStorageGb = storage.availableBytes.toDouble() / (1024.0 * 1024.0 * 1024.0)
+    val totalStorage = storage.totalBytes.coerceAtLeast(1L)
+    val freeStorage = storage.availableBytes.coerceIn(0L, totalStorage)
+    val storageProgress = (1f - freeStorage.toFloat() / totalStorage.toFloat()).coerceIn(0f, 1f)
+    val availableRamGb = availableRam.toDouble() / (1024.0 * 1024.0 * 1024.0)
+    val freeStorageGb = freeStorage.toDouble() / (1024.0 * 1024.0 * 1024.0)
     val manufacturer = Build.MANUFACTURER.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
-    return DeviceStats(String.format(Locale.getDefault(), "%.1f GB", availableRamGb), String.format(Locale.getDefault(), "%.1f GB", freeStorageGb), "$manufacturer ${Build.MODEL}")
+    return DeviceStats(
+        String.format(Locale.getDefault(), "%.1f GB", availableRamGb),
+        String.format(Locale.getDefault(), "%.1f GB", freeStorageGb),
+        "$manufacturer ${Build.MODEL}",
+        ramProgress,
+        storageProgress,
+        (ramProgress * 100).toInt(),
+        (storageProgress * 100).toInt()
+    )
 }
 
 private fun launchSpecificGame(context: Context, packageName: String, gameName: String): String {
