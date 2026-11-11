@@ -1,7 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <application android:theme="@android:style/Theme.Material.NoActionBar"
-        android:label="Osen Voice R" android:allowBackup="false">
+    <application
+        android:theme="@android:style/Theme.Material.NoActionBar"
+        android:label="OSEN TURBOPLAY"
+        android:allowBackup="false"
+        android:supportsRtl="true">
+        <activity android:name="com.osenvoicer.app.VoiceActivity" android:exported="false" />
+        <activity android:name="com.osenturboplay.app.TurboPlayActivity" android:exported="false" />
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
