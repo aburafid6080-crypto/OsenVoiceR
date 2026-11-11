@@ -227,6 +227,7 @@ class GameOverlayService : Service() {
             setPadding(dp(10), dp(9), dp(10), dp(9))
         }
         dndButton = dnd
+        updateDndButtonVisual(false)
         val bottomActions = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER
@@ -346,11 +347,49 @@ class GameOverlayService : Service() {
         return if (hz > 0) "DISPLAY\\n${hz} Hz" else "DISPLAY\\n—"
     }
 
-    private fun dndLabel(): String {
+    private fun isDndEnabled(): Boolean {
         val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
             manager.currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_NONE
-        ) "DO NOT DISTURB  •  ON" else "DO NOT DISTURB  •  OFF"
+    }
+
+    private fun dndLabel(): String {
+        return if (isDndEnabled()) "◉  DO NOT DISTURB  •  ON"
+        else "◉  DO NOT DISTURB  •  OFF"
+    }
+
+    private fun updateDndButtonVisual(animateChange: Boolean) {
+        val button = dndButton ?: return
+        val enabled = isDndEnabled()
+        val border = if (enabled) Color.rgb(80, 240, 255) else Color.rgb(65, 155, 220)
+        val gradient = if (enabled) {
+            intArrayOf(Color.rgb(0, 190, 220), Color.rgb(0, 88, 160), Color.rgb(3, 35, 75))
+        } else {
+            intArrayOf(Color.rgb(8, 75, 125), Color.rgb(3, 43, 82), Color.rgb(2, 24, 52))
+        }
+        val applyVisual = {
+            button.text = dndLabel()
+            button.background = GradientDrawable(
+                GradientDrawable.Orientation.LEFT_RIGHT, gradient
+            ).apply {
+                cornerRadius = dp(14).toFloat()
+                setStroke(dp(if (enabled) 2 else 1), border)
+            }
+            button.elevation = dp(if (enabled) 10 else 4).toFloat()
+            button.alpha = 1f
+            button.scaleX = 1f
+            button.scaleY = 1f
+        }
+        if (!animateChange) {
+            applyVisual()
+            return
+        }
+        button.animate().cancel()
+        button.animate().scaleX(1.045f).scaleY(1.045f).alpha(0.72f).setDuration(110)
+            .withEndAction {
+                applyVisual()
+                button.animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration(170).start()
+            }.start()
     }
 
     private fun readFpsInfo(): String {
@@ -447,7 +486,7 @@ class GameOverlayService : Service() {
             val result = if (turningOff) "DO NOT DISTURB OFF • interruptions restored."
                 else "DO NOT DISTURB ON • interruptions silenced."
             showPanelStatus(result)
-            dndButton?.text = dndLabel()
+            updateDndButtonVisual(true)
         } catch (_: SecurityException) {
             showPanelStatus("Android denied DND access. Check OSEN permission.")
         }
