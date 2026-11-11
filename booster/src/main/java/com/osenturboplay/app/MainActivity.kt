@@ -665,23 +665,29 @@ private fun openAppSettings(context: Context) {
 }
 
 private fun openDeviceSettings(context: Context) {
-    safeOpen(context, Intent(Settings.ACTION_DEVICE_INFO_SETTINGS))
+    // "Phone Settings" should open the main Android Settings screen, not Device Info.
+    safeOpen(context, Intent(Settings.ACTION_SETTINGS))
 }
 
 private fun openGameSettings(context: Context, status: androidx.compose.runtime.MutableState<String>) {
-    // Android does not define a universal Game Settings screen. Try the optional
-    // manufacturer screen directly; if unavailable, open the standard Settings app.
+    // Game Settings is optional and manufacturer-specific. Check whether Android
+    // can resolve it before launching; always provide a working Settings fallback.
+    val gameSettingsIntent = Intent("android.settings.GAME_SETTINGS")
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    val settingsIntent = Intent(Settings.ACTION_SETTINGS)
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     try {
-        context.startActivity(
-            Intent("android.settings.GAME_SETTINGS").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        )
-        status.value = "Opened Game Settings"
+        val canOpenGameSettings = gameSettingsIntent.resolveActivity(context.packageManager) != null
+        context.startActivity(if (canOpenGameSettings) gameSettingsIntent else settingsIntent)
+        status.value = if (canOpenGameSettings) {
+            "Opened Android Game Settings"
+        } else {
+            "No separate Game Settings on this phone; opened Phone Settings"
+        }
     } catch (_: Exception) {
         try {
-            context.startActivity(
-                Intent(Settings.ACTION_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            )
-            status.value = "No separate Game Settings on this phone; opened Phone Settings"
+            context.startActivity(settingsIntent)
+            status.value = "Opened Phone Settings"
         } catch (_: Exception) {
             status.value = "Could not open Android Settings"
         }
