@@ -146,7 +146,7 @@ private fun TurboPlayScreen() {
 
                 Text(status.value, color = Cyan, fontSize = 9.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp), maxLines = 1)
                 Row(
-                    modifier = Modifier.fillMaxWidth().background(Color(0xFF100B20), RoundedCornerShape(18.dp))
+                    modifier = Modifier.fillMaxWidth().shadow(16.dp, RoundedCornerShape(18.dp), clip = false).background(Brush.verticalGradient(listOf(Color(0xFF241044), Color(0xFF100B20), Color(0xFF070615))), RoundedCornerShape(18.dp))
                         .border(1.dp, Purple.copy(alpha = 0.45f), RoundedCornerShape(18.dp)).padding(vertical = 10.dp),
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
@@ -302,25 +302,25 @@ private fun HomePage(context: Context, stats: DeviceStats, status: androidx.comp
                 Text("⚡  Free Fire & Free Fire MAX supported when installed", color = Cyan, fontSize = 10.sp)
             }
         }
-        Text("DEVICE OVERVIEW", color = White, fontSize = 16.sp, fontWeight = FontWeight.Black, letterSpacing = 1.4.sp)
+        ThreeDMetalText("DEVICE OVERVIEW", 16, White, Cyan)
         Text("LIVE DEVICE INFORMATION", color = Muted, fontSize = 9.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.sp)
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             NeonMetric("▦", "RAM AVAILABLE", stats.ramAvailable, "Memory ${stats.ramUsedPercent}%", Purple, Modifier.weight(1f), stats.ramProgress)
             NeonMetric("▤", "STORAGE FREE", stats.storageFree, "Internal ${stats.storageUsedPercent}%", Cyan, Modifier.weight(1f), stats.storageProgress)
         }
-        Card(modifier = Modifier.fillMaxWidth().clickable { openDeviceSettings(context) }.border(1.5.dp, Cyan, RoundedCornerShape(21.dp)), colors = CardDefaults.cardColors(containerColor = Color(0xFF0C1024)), shape = RoundedCornerShape(21.dp)) {
+        Card(modifier = Modifier.fillMaxWidth().shadow(16.dp, RoundedCornerShape(21.dp), clip = false).clickable { openDeviceSettings(context) }.border(1.8.dp, Brush.linearGradient(listOf(Color.White, Cyan, Violet)), RoundedCornerShape(21.dp)), colors = CardDefaults.cardColors(containerColor = Color(0xFF0C1024)), shape = RoundedCornerShape(21.dp)) {
             Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                 Text("📱", fontSize = 31.sp)
                 Spacer(Modifier.width(12.dp))
                 Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                    Text("DEVICE INFORMATION", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.Black, letterSpacing = 1.sp)
+                    ThreeDMetalText("DEVICE INFORMATION", 10, Cyan, Violet)
                     Text(stats.deviceName, color = White, fontSize = 14.sp, fontWeight = FontWeight.Bold)
                     Text("Android ${Build.VERSION.RELEASE}  •  API ${Build.VERSION.SDK_INT}", color = Muted, fontSize = 11.sp)
                 }
                 Text("VIEW DETAILS  ➜", color = Cyan, fontSize = 9.sp, fontWeight = FontWeight.Black)
             }
         }
-        Text("🎮  GAMING TOOLS", color = Purple, fontSize = 19.sp, fontWeight = FontWeight.Black)
+        ThreeDMetalText("🎮  GAMING TOOLS", 19, Color(0xFFE7B8FF), Purple)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             ToolTile("🚀", "GAME LAUNCHER", "Open games", Purple, Modifier.weight(1f)) { status.value = launchFreeFire(context) }
             ToolTile("⟳", "REFRESH", "Update info", Cyan, Modifier.weight(1f), onRefresh)
@@ -463,9 +463,9 @@ private fun ThreeDMetalText(text: String, size: Int, face: Color, edge: Color, m
 
 @Composable
 private fun NoteCard() {
-    Card(modifier = Modifier.fillMaxWidth().border(1.dp, Purple.copy(alpha = 0.7f), RoundedCornerShape(18.dp)), colors = CardDefaults.cardColors(containerColor = Color(0xFF160C2C)), shape = RoundedCornerShape(18.dp)) {
+    Card(modifier = Modifier.fillMaxWidth().shadow(14.dp, RoundedCornerShape(18.dp), clip = false).border(1.5.dp, Brush.linearGradient(listOf(Color.White.copy(alpha = 0.6f), Purple, Cyan)), RoundedCornerShape(18.dp)), colors = CardDefaults.cardColors(containerColor = Color(0xFF160C2C)), shape = RoundedCornerShape(18.dp)) {
         Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text("💡  GAMING NOTE", color = Cyan, fontSize = 12.sp, fontWeight = FontWeight.Black)
+            ThreeDMetalText("💡  GAMING NOTE", 12, Cyan, Purple)
             Text("TurboPlay provides game launch and device settings shortcuts. Android controls performance automatically; this app cannot promise extra FPS or safely force-close other apps.", color = Muted, fontSize = 11.sp, lineHeight = 16.sp)
         }
     }
@@ -543,7 +543,7 @@ private fun NeonMetric(
                 Text("GOOD", color = White, fontSize = 8.sp, fontWeight = FontWeight.Black,
                     modifier = Modifier.background(Brush.horizontalGradient(listOf(Purple, accent)), RoundedCornerShape(20.dp)).padding(horizontal = 7.dp, vertical = 3.dp))
             }
-            Text(value, color = White, fontSize = 23.sp, fontWeight = FontWeight.Black)
+            Text(value, color = White, fontSize = 23.sp, fontWeight = FontWeight.Black, style = TextStyle(shadow = Shadow(accent.copy(alpha = 0.9f), Offset(2f, 3f), 9f)))
             Box(Modifier.fillMaxWidth().height(8.dp).background(Color(0xFF24145A), RoundedCornerShape(20.dp))) {
                 Box(Modifier.fillMaxWidth(progress.coerceIn(0.03f, 1f)).height(8.dp)
                     .background(Brush.horizontalGradient(listOf(Purple, accent)), RoundedCornerShape(20.dp)))
@@ -555,10 +555,10 @@ private fun NeonMetric(
 
 @Composable
 private fun ToolTile(icon: String, title: String, subtitle: String, accent: Color, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    Card(modifier = modifier.height(132.dp).clickable(onClick = onClick).border(1.3.dp, Brush.linearGradient(listOf(accent, Color.White.copy(alpha = 0.45f), accent)), RoundedCornerShape(17.dp)), colors = CardDefaults.cardColors(containerColor = Panel), shape = RoundedCornerShape(17.dp)) {
+    Card(modifier = modifier.height(132.dp).shadow(15.dp, RoundedCornerShape(17.dp), clip = false).clickable(onClick = onClick).border(1.6.dp, Brush.linearGradient(listOf(Color.White.copy(alpha = 0.8f), accent, Color.White.copy(alpha = 0.35f), accent)), RoundedCornerShape(17.dp)), colors = CardDefaults.cardColors(containerColor = Panel), shape = RoundedCornerShape(17.dp)) {
         Column(modifier = Modifier.fillMaxSize().padding(horizontal = 4.dp, vertical = 10.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text(icon, color = accent, fontSize = 24.sp, fontWeight = FontWeight.Black)
-            Text(title, color = White, fontSize = 9.sp, lineHeight = 11.sp, fontWeight = FontWeight.Black, textAlign = TextAlign.Center)
+            Text(icon, color = accent, fontSize = 24.sp, fontWeight = FontWeight.Black, style = TextStyle(shadow = Shadow(accent, Offset(0f, 0f), 12f)))
+            Text(title, color = White, fontSize = 9.sp, lineHeight = 11.sp, fontWeight = FontWeight.Black, textAlign = TextAlign.Center, style = TextStyle(shadow = Shadow(accent, Offset(1.5f, 2f), 6f)))
             Text(subtitle, color = Muted, fontSize = 8.sp, textAlign = TextAlign.Center)
         }
     }
