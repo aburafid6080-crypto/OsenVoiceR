@@ -426,7 +426,7 @@ private fun GamesPage(status: androidx.compose.runtime.MutableState<String>, onL
 @Composable
 private fun ToolsPage(onRefresh: () -> Unit, onBooster: () -> Unit, onCleaner: () -> Unit, onDevice: () -> Unit) {
     PageTitle("GAMING TOOLS", "Quick shortcuts for your device")
-    ActionButton("↻  REFRESH DEVICE INFO", Cyan, onRefresh)
+    ActionButton("📱  PHONE SETTINGS", Cyan) { onDevice() }
     ActionButton("⚡  OPEN ANDROID GAME SETTINGS", Green, onBooster)
     ActionButton("▤  OPEN APP STORAGE SETTINGS", Gold, onCleaner)
     ActionButton("📱  DEVICE SETTINGS", Purple, onDevice)
@@ -669,26 +669,21 @@ private fun openDeviceSettings(context: Context) {
 }
 
 private fun openGameSettings(context: Context, status: androidx.compose.runtime.MutableState<String>) {
-    // GAME_SETTINGS is not implemented by every Android manufacturer.
-    // Try the dedicated screen first, then always fall back to the real Settings app.
-    val gameSettings = Intent("android.settings.GAME_SETTINGS")
+    // Android does not define a universal Game Settings screen. Try the optional
+    // manufacturer screen directly; if unavailable, open the standard Settings app.
     try {
-        if (gameSettings.resolveActivity(context.packageManager) != null) {
-            gameSettings.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(gameSettings)
-            status.value = "Opened phone Game Settings"
-            return
-        }
-
-        val generalSettings = Intent(Settings.ACTION_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(generalSettings)
-        status.value = "This phone has no separate Game Settings; opened Android Settings"
+        context.startActivity(
+            Intent("android.settings.GAME_SETTINGS").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        )
+        status.value = "Opened Game Settings"
     } catch (_: Exception) {
         try {
-            context.startActivity(Intent(Settings.ACTION_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-            status.value = "Opened Android Settings"
+            context.startActivity(
+                Intent(Settings.ACTION_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            )
+            status.value = "No separate Game Settings on this phone; opened Phone Settings"
         } catch (_: Exception) {
-            status.value = "Could not open Settings on this phone"
+            status.value = "Could not open Android Settings"
         }
     }
 }
