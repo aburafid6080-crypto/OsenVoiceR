@@ -183,18 +183,15 @@ class GameOverlayService : Service() {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER
         }
-        val back = action("‹  BACK", "BACK") {
-            showPanelStatus("BACK BUTTON PRESSED")
-        }.apply {
+        val back = action("‹  BACK", "BACK").apply {
             background = rounded(Color.rgb(4, 25, 48), Color.rgb(0, 190, 255), 13f)
             textSize = 11f
             setTextColor(Color.WHITE)
             isClickable = true
             isFocusable = true
+            setOnClickListener { showActionPopup("BACK") }
         }
-        val boost = action("⚡  BOOST", "BOOST") {
-            showPanelStatus("BOOST BUTTON PRESSED")
-        }.apply {
+        val boost = action("⚡  BOOST", "BOOST").apply {
             background = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
                 intArrayOf(Color.rgb(255, 196, 45), Color.rgb(170, 94, 0))
@@ -206,6 +203,7 @@ class GameOverlayService : Service() {
             setTextColor(Color.WHITE)
             isClickable = true
             isFocusable = true
+            setOnClickListener { showActionPopup("BOOST") }
         }
         bottomActions.addView(back, LinearLayout.LayoutParams(0, dp(46), 1f).apply { marginEnd = dp(5) })
         bottomActions.addView(boost, LinearLayout.LayoutParams(0, dp(46), 1f).apply { marginStart = dp(5) })
