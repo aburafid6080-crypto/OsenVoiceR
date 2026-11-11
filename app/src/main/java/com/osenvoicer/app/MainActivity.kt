@@ -232,18 +232,46 @@ private fun OsenVoiceR() {
             track.play()
 
             thread {
+                var completed = false
                 try {
                     var offset = 0
                     while (offset < bytes.size && playbackActive) {
                         val written = track.write(bytes, offset, minOf(4096, bytes.size - offset))
-                        if (written <= 0) break
-                        offset += written
+                        if (written < 0) throw IllegalStateException("AudioTrack write failed")
+                        if (written == 0) {
+                            Thread.sleep(5)
+                        } else {
+                            offset += written
+                        }
                     }
+
+                    // AudioTrack.write() only queues audio. Wait until the hardware
+                    // playback head consumes the queued frames before releasing it.
+                    if (offset >= bytes.size) {
+                        val totalFrames = bytes.size / 2
+                        while (playbackActive &&
+                            track.playbackHeadPosition.toLong() < totalFrames.toLong()
+                        ) {
+                            Thread.sleep(10)
+                        }
+                        completed = playbackActive
+                    }
+                } catch (_: InterruptedException) {
+                    Thread.currentThread().interrupt()
                 } catch (_: Exception) {
                 } finally {
                     (context as? ComponentActivity)?.runOnUiThread {
-                        stopPlayback()
-                        status = "Playback finished"
+                        if (audioTrack === track) {
+                            playbackActive = false
+                            try {
+                                track.stop()
+                                track.release()
+                            } catch (_: Exception) {
+                            }
+                            audioTrack = null
+                            isPlaying = false
+                            status = if (completed) "Playback finished" else "Playback stopped"
+                        }
                     }
                 }
             }
