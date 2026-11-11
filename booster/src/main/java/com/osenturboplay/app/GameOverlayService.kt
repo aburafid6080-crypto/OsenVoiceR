@@ -79,8 +79,8 @@ class GameOverlayService : Service() {
         }
         val heading = label("OSEN TURBOPLAY", 15f, Color.rgb(0, 217, 255), true)
         val subheading = label("GAME SESSION PANEL", 10f, Color.LTGRAY, true)
-        val info = label("Quick panel connected.\nAndroid manages game performance.", 12f, Color.WHITE, false)
-        val minimize = action("MINIMIZE") { minimizePanel() }
+        val info = label("LOW-LAG MODE\nHides the panel to reduce OSEN overlay activity. Android manages game performance.", 12f, Color.WHITE, false)
+        val minimize = action("LOW-LAG MODE") { minimizePanel() }
         val close = action("CLOSE PANEL") { stopSelf() }
         panel.addView(heading)
         panel.addView(subheading, spacedParams(dp(4)))
