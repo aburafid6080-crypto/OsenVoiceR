@@ -80,8 +80,8 @@ class GameOverlayService : Service() {
         val heading = label("🐉 OSEN TURBOPLAY", 15f, Color.rgb(255, 112, 55), true)
         val subheading = label("DRAGON FIRE EDITION", 10f, Color.rgb(255, 74, 36), true)
         val info = label("DRAGON FIRE MODE\nA bold red-and-black look with lightweight controls. Android manages game performance.", 12f, Color.WHITE, false)
-        val minimize = action("LOW-LAG MODE") { stopSelf() }
-        val close = action("CLOSE PANEL") { stopSelf() }
+        val minimize = action("LOW-LAG MODE") { minimizePanel() }
+        val close = action("CLOSE PANEL") { minimizePanel() }
         panel.addView(heading)
         panel.addView(subheading, spacedParams(dp(4)))
         panel.addView(info, spacedParams(dp(12)))
