@@ -75,8 +75,8 @@ class GameOverlayService : Service() {
                 latestForegroundPackage == FREE_FIRE_MAX_PACKAGE
             if (isFreeFire) freeFireWasForeground = true
             else if (freeFireWasForeground && latestForegroundPackage != null) {
-                stopSelf()
-                return
+                freeFireWasForeground = false
+                if (expanded) minimizePanel("OSEN")
             }
             autoCloseHandler.postDelayed(this, 1500)
         }
@@ -118,7 +118,13 @@ class GameOverlayService : Service() {
                 28f
             )
             elevation = dp(8).toFloat()
-            setOnClickListener { showPanel() }
+            setOnClickListener {
+                animate().scaleX(0.78f).scaleY(0.78f).alpha(0.72f).setDuration(75)
+                    .withEndAction {
+                        animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration(110)
+                            .withEndAction { showPanel() }.start()
+                    }.start()
+            }
         }
         params = windowParams(if (isBoost) dp(76) else dp(58), if (isBoost) dp(42) else dp(58))
         overlayView = bubble
@@ -181,9 +187,9 @@ class GameOverlayService : Service() {
             }
         }
         val fpsInfo = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-        fpsInfo.addView(label("PERFORMANCE TARGET", 7f, muted, true))
-        fpsInfo.addView(label("60 FPS TARGET", 19f, brightGold, true), spacedParams(dp(1)))
-        fpsInfo.addView(label("LIVE FPS NOT MEASURED", 6f, Color.rgb(130, 180, 210), true), spacedParams(dp(1)))
+        fpsInfo.addView(label("YOUR PHONE", 7f, muted, true))
+        fpsInfo.addView(label(readPhoneName(), 15f, brightGold, true), spacedParams(dp(1)))
+        fpsInfo.addView(label("DEVICE MODEL", 6f, Color.rgb(130, 180, 210), true), spacedParams(dp(1)))
         fpsCard.addView(fpsInfo, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
         fpsCard.addView(label(readDisplayRate(), 9f, brightGold, true).apply {
             gravity = Gravity.CENTER
@@ -236,11 +242,12 @@ class GameOverlayService : Service() {
         val boost = action("⚡  BOOST", "BOOST").apply {
             background = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
-                intArrayOf(Color.rgb(255, 196, 45), Color.rgb(170, 94, 0))
+                intArrayOf(Color.rgb(255, 226, 92), Color.rgb(255, 157, 20), Color.rgb(205, 91, 0))
             ).apply {
                 cornerRadius = dp(13).toFloat()
-                setStroke(dp(2), Color.rgb(255, 225, 125))
+                setStroke(dp(2), Color.rgb(255, 241, 170))
             }
+            elevation = dp(8).toFloat()
             textSize = 11f
             setTextColor(Color.WHITE)
             isClickable = true
@@ -323,6 +330,15 @@ class GameOverlayService : Service() {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             Build.SOC_MODEL.takeIf { it.isNotBlank() } ?: Build.HARDWARE
         } else Build.HARDWARE
+    }
+
+    private fun readPhoneName(): String {
+        val manufacturer = Build.MANUFACTURER.orEmpty().trim()
+        val model = Build.MODEL.orEmpty().trim()
+        val phone = if (manufacturer.isNotBlank() && !model.startsWith(manufacturer, ignoreCase = true)) {
+            "$manufacturer $model"
+        } else model.ifBlank { manufacturer }
+        return phone.ifBlank { "Android Phone" }.take(30)
     }
 
     private fun readDisplayRate(): String {
@@ -600,6 +616,12 @@ class GameOverlayService : Service() {
         autoCloseHandler.removeCallbacks(autoCloseCheck)
         stopForeground(STOP_FOREGROUND_REMOVE)
         super.onDestroy()
+    }
+
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        autoCloseHandler.removeCallbacks(autoCloseCheck)
+        stopSelf()
+        super.onTaskRemoved(rootIntent)
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
