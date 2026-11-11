@@ -149,21 +149,36 @@ class GameOverlayService : Service() {
         var startY = 0
         var touchX = 0f
         var touchY = 0f
-        view.setOnTouchListener { _, event ->
+        var moved = false
+        val touchSlop = android.view.ViewConfiguration.get(this).scaledTouchSlop
+        view.setOnTouchListener { touchedView, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     startX = params.x
                     startY = params.y
                     touchX = event.rawX
                     touchY = event.rawY
+                    moved = false
                     true
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    params.x = startX + (event.rawX - touchX).toInt()
-                    params.y = startY + (event.rawY - touchY).toInt()
-                    try { windowManager.updateViewLayout(view, params) } catch (_: Exception) { }
+                    val dx = event.rawX - touchX
+                    val dy = event.rawY - touchY
+                    if (kotlin.math.abs(dx) > touchSlop || kotlin.math.abs(dy) > touchSlop) {
+                        moved = true
+                    }
+                    if (moved) {
+                        params.x = startX + dx.toInt()
+                        params.y = startY + dy.toInt()
+                        try { windowManager.updateViewLayout(view, params) } catch (_: Exception) { }
+                    }
                     true
                 }
+                MotionEvent.ACTION_UP -> {
+                    if (!moved) touchedView.performClick()
+                    true
+                }
+                MotionEvent.ACTION_CANCEL -> true
                 else -> false
             }
         }
