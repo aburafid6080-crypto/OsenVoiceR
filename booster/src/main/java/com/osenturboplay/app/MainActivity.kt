@@ -100,21 +100,10 @@ private fun TurboPlayScreen() {
                     .padding(horizontal = 14.dp, vertical = 10.dp),
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                        Text("✦  OSEN GAMING", color = Muted, fontSize = 10.sp, fontWeight = FontWeight.Bold, letterSpacing = 3.sp)
-                        Text("OSEN TURBOPLAY", color = White, fontSize = 26.sp, fontWeight = FontWeight.Black)
-                        Text("━  GAME BOOSTER  ━", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 2.sp)
-                    }
-                    Row(
-                        modifier = Modifier.padding(top = 12.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        NeonCircle("⚙", Violet, "SETTINGS") { openAppSettings(context) }
-                        NeonCircle("⚡", Cyan, "BOOST") { selectedTab.value = "Tools" }
-                    }
-                }
+                PremiumHeader(
+                    onSettings = { openAppSettings(context) },
+                    onBoost = { selectedTab.value = "Tools" }
+                )
 
                 AnimatedContent(
                     modifier = Modifier.weight(1f).fillMaxWidth(),
@@ -451,11 +440,39 @@ private fun NoteCard() {
 }
 
 @Composable
+private fun PremiumHeader(onSettings: () -> Unit, onBoost: () -> Unit) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(7.dp)
+    ) {
+        Box(
+            modifier = Modifier.size(54.dp)
+                .background(Brush.linearGradient(listOf(Color(0xFF3B176B), Color(0xFF090B20))), RoundedCornerShape(15.dp))
+                .border(1.5.dp, Brush.linearGradient(listOf(Gold, Purple, Cyan)), RoundedCornerShape(15.dp)),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy((-5).dp)) {
+                Text("♛", color = Gold, fontSize = 19.sp, fontWeight = FontWeight.Black)
+                Text("OG", color = White, fontSize = 19.sp, fontWeight = FontWeight.Black)
+            }
+        }
+        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(0.dp)) {
+            Text("OSEN", color = White, fontSize = 19.sp, fontWeight = FontWeight.Black, letterSpacing = 1.2.sp)
+            Text("TURBOPLAY", color = Gold, fontSize = 17.sp, fontWeight = FontWeight.Black, letterSpacing = 0.2.sp, maxLines = 1)
+            Text("━  GAME BOOSTER  ━", color = Cyan, fontSize = 8.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.1.sp, maxLines = 1)
+        }
+        NeonCircle("⚙", Violet, "SETTINGS", onSettings)
+        NeonCircle("⚡", Cyan, "BOOST", onBoost)
+    }
+}
+
+@Composable
 private fun NeonCircle(symbol: String, color: Color, label: String, onClick: () -> Unit) {
     Column(
         modifier = Modifier
-            .width(76.dp)
-            .height(82.dp)
+            .width(66.dp)
+            .height(76.dp)
             .clickable(onClick = onClick)
             .background(
                 Brush.linearGradient(listOf(color.copy(alpha = 0.42f), Color(0xFF100B24), Color(0xFF080615))),
