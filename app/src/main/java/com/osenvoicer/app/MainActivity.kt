@@ -8,6 +8,7 @@ import android.media.AudioTrack
 import android.media.MediaRecorder
 import android.media.AudioAttributes
 import android.os.Bundle
+import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -49,6 +50,41 @@ private enum class VoiceEffect(val title: String) {
     PITCH("Pitch")
 }
 
+private data class InstalledGameInfo(
+    val title: String,
+    val packageName: String,
+    val versionName: String,
+    val versionCode: Long
+)
+
+private fun findInstalledFreeFire(packageManager: PackageManager): List<InstalledGameInfo> {
+    val games = listOf(
+        "com.dts.freefireth" to "Free Fire",
+        "com.dts.freefiremax" to "Free Fire MAX"
+    )
+    return games.mapNotNull { (packageName, title) ->
+        try {
+            val info = if (Build.VERSION.SDK_INT >= 33) {
+                packageManager.getPackageInfo(
+                    packageName,
+                    PackageManager.PackageInfoFlags.of(0)
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                packageManager.getPackageInfo(packageName, 0)
+            }
+            InstalledGameInfo(
+                title = title,
+                packageName = packageName,
+                versionName = info.versionName ?: "Unknown",
+                versionCode = if (Build.VERSION.SDK_INT >= 28) info.longVersionCode else @Suppress("DEPRECATION") info.versionCode.toLong()
+            )
+        } catch (_: PackageManager.NameNotFoundException) {
+            null
+        }
+    }
+}
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +100,7 @@ class MainActivity : ComponentActivity() {
 private fun OsenVoiceR() {
     val context = LocalContext.current
     val recordingFile = remember { File(context.cacheDir, "osen_recording.pcm") }
+    val installedFreeFire = remember { findInstalledFreeFire(context.packageManager) }
 
     var selectedEffect by remember { mutableStateOf(VoiceEffect.DEEP) }
     var isRecording by remember { mutableStateOf(false) }
@@ -358,7 +395,7 @@ private fun OsenVoiceR() {
                             border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFFFB43B))
                         ) {
                             Text(
-                                "NOT CONNECTED",
+                                if (installedFreeFire.isEmpty()) "NOT INSTALLED" else "INSTALLED",
                                 color = Color(0xFFFFD36B),
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
@@ -368,7 +405,13 @@ private fun OsenVoiceR() {
                     }
                     Spacer(Modifier.height(14.dp))
                     Text(
-                        "Choose a voice effect above and test it with your recordings. The selected effect is applied when you play back your recording.",
+                        if (installedFreeFire.isEmpty()) {
+                            "Free Fire was not found on this phone. Install Free Fire or Free Fire MAX, then reopen OSEN Voice R."
+                        } else {
+                            installedFreeFire.joinToString(separator = "\\n") {
+                                "${it.title} detected\\nVersion: ${it.versionName} (code ${it.versionCode})"
+                            }
+                        },
                         color = Color(0xFFE8DFFF),
                         fontSize = 13.sp,
                         lineHeight = 19.sp
