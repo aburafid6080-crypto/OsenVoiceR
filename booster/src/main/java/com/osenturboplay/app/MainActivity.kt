@@ -669,11 +669,27 @@ private fun openDeviceSettings(context: Context) {
 }
 
 private fun openGameSettings(context: Context, status: androidx.compose.runtime.MutableState<String>) {
+    // GAME_SETTINGS is not implemented by every Android manufacturer.
+    // Try the dedicated screen first, then always fall back to the real Settings app.
+    val gameSettings = Intent("android.settings.GAME_SETTINGS")
     try {
-        safeOpen(context, Intent("android.settings.GAME_SETTINGS"))
-        status.value = "Opened Android game settings if supported by this phone"
+        if (gameSettings.resolveActivity(context.packageManager) != null) {
+            gameSettings.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(gameSettings)
+            status.value = "Opened phone Game Settings"
+            return
+        }
+
+        val generalSettings = Intent(Settings.ACTION_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(generalSettings)
+        status.value = "This phone has no separate Game Settings; opened Android Settings"
     } catch (_: Exception) {
-        status.value = "Game settings are not available on this Android version"
+        try {
+            context.startActivity(Intent(Settings.ACTION_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            status.value = "Opened Android Settings"
+        } catch (_: Exception) {
+            status.value = "Could not open Settings on this phone"
+        }
     }
 }
 
