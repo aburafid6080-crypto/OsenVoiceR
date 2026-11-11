@@ -3,6 +3,10 @@ package com.osenturboplay.app
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.usage.UsageEvents
+import android.app.usage.UsageStatsManager
+import android.os.Handler
+import android.os.Looper
 import android.app.Service
 import android.content.Intent
 import android.graphics.Color
@@ -40,6 +44,43 @@ class GameOverlayService : Service() {
     private var dndButton: TextView? = null
     private var ramValueView: TextView? = null
     private var storageValueView: TextView? = null
+    private val autoCloseHandler = Handler(Looper.getMainLooper())
+    private var freeFireWasForeground = false
+    private val autoCloseCheck = object : Runnable {
+        override fun run() {
+            if (!hasUsageAccess()) {
+                autoCloseHandler.postDelayed(this, 1500)
+                return
+            }
+            val now = System.currentTimeMillis()
+            val events = (getSystemService(USAGE_STATS_SERVICE) as UsageStatsManager)
+                .queryEvents(now - 15000L, now)
+            val event = UsageEvents.Event()
+            var latestForegroundPackage: String? = null
+            var latestForegroundTime = 0L
+            while (events.hasNextEvent()) {
+                events.getNextEvent(event)
+                val foreground = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    event.eventType == UsageEvents.Event.ACTIVITY_RESUMED ||
+                        event.eventType == UsageEvents.Event.MOVE_TO_FOREGROUND
+                } else {
+                    event.eventType == UsageEvents.Event.MOVE_TO_FOREGROUND
+                }
+                if (foreground && event.timeStamp >= latestForegroundTime) {
+                    latestForegroundTime = event.timeStamp
+                    latestForegroundPackage = event.packageName
+                }
+            }
+            val isFreeFire = latestForegroundPackage == FREE_FIRE_PACKAGE ||
+                latestForegroundPackage == FREE_FIRE_MAX_PACKAGE
+            if (isFreeFire) freeFireWasForeground = true
+            else if (freeFireWasForeground && latestForegroundPackage != null) {
+                stopSelf()
+                return
+            }
+            autoCloseHandler.postDelayed(this, 1500)
+        }
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -113,7 +154,7 @@ class GameOverlayService : Service() {
         }
         val identity = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         identity.addView(label("✦  OSEN TURBOPLAY", 13f, brightGold, true))
-        identity.addView(label("PRO GAME PANEL  •  PERFORMANCE HUD", 6f, muted, true), spacedParams(dp(1)))
+        identity.addView(label("PRO PANEL  •  DRAG HERE TO MOVE", 6f, muted, true), spacedParams(dp(1)))
         val live = label("● READY", 8f, Color.rgb(120, 255, 160), true).apply {
             gravity = Gravity.CENTER
             setPadding(dp(7), dp(5), dp(7), dp(5))
@@ -249,7 +290,7 @@ class GameOverlayService : Service() {
         }
     }
 
-    private fun readFreeRam(): String {
+    private fun hasUsageAccess(): Boolean {\n        val appOps = getSystemService(APP_OPS_SERVICE) as android.app.AppOpsManager\n        return appOps.checkOpNoThrow(\n            android.app.AppOpsManager.OPSTR_GET_USAGE_STATS,\n            android.os.Process.myUid(),\n            packageName\n        ) == android.app.AppOpsManager.MODE_ALLOWED\n    }\n\n    private fun readFreeRam(): String {
         val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
         val info = ActivityManager.MemoryInfo()
         manager.getMemoryInfo(info)
@@ -554,6 +595,6 @@ class GameOverlayService : Service() {
 
     companion object {
         private const val CHANNEL_ID = "osen_game_panel"
-        private const val NOTIFICATION_ID = 2107
+        private const val NOTIFICATION_ID = 2107\n        private const val FREE_FIRE_PACKAGE = "com.dts.freefireth"\n        private const val FREE_FIRE_MAX_PACKAGE = "com.dts.freefiremax"
     }
 }
