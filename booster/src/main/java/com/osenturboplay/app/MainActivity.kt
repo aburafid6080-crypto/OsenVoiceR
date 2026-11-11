@@ -136,7 +136,8 @@ private fun TurboPlayScreen() {
                                     status.value = "Device information refreshed"
                                 },
                                 onCleaner = { openAppSettings(context) },
-                                onDevice = { openDeviceSettings(context) }
+                                onPhoneSettings = { openDeviceSettings(context) },
+                                onDeviceInfo = { selectedTab.value = "Stats" }
                             )
                             else -> AboutPage()
                         }
@@ -423,11 +424,11 @@ private fun GamesPage(status: androidx.compose.runtime.MutableState<String>, onL
 }
 
 @Composable
-private fun ToolsPage(onRefresh: () -> Unit, onCleaner: () -> Unit, onDevice: () -> Unit) {
+private fun ToolsPage(onRefresh: () -> Unit, onCleaner: () -> Unit, onPhoneSettings: () -> Unit, onDeviceInfo: () -> Unit) {
     PageTitle("GAMING TOOLS", "Quick shortcuts for your device")
-    ActionButton("📱  PHONE SETTINGS", Cyan) { onDevice() }
+    ActionButton("📱  PHONE SETTINGS", Cyan, onPhoneSettings)
     ActionButton("▤  OPEN APP STORAGE SETTINGS", Gold, onCleaner)
-    ActionButton("📱  DEVICE SETTINGS", Purple, onDevice)
+    ActionButton("📊  DEVICE INFO", Purple, onDeviceInfo)
     NoteCard()
 }
 
