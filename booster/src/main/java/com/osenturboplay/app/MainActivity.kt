@@ -172,38 +172,53 @@ private fun statsRefresh(context: Context, status: androidx.compose.runtime.Muta
 
 @Composable
 private fun HomePage(context: Context, stats: DeviceStats, status: androidx.compose.runtime.MutableState<String>) {
-    Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-        Card(modifier = Modifier.fillMaxWidth().border(1.dp, Purple, RoundedCornerShape(22.dp)), shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = Panel)) {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Card(modifier = Modifier.fillMaxWidth().border(1.5.dp, Brush.linearGradient(listOf(Purple, Cyan, Violet)), RoundedCornerShape(24.dp)), shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = Color(0xFF090719))) {
+            Column(modifier = Modifier.fillMaxWidth().background(Brush.linearGradient(listOf(Color(0xFF241044), Color(0xFF080D22), Color(0xFF10102A)))).padding(17.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
+                Text("✦  OSEN TURBOPLAY  ✦", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.Black, letterSpacing = 2.sp)
+                Text("PLAY SMARTER", color = White, fontSize = 25.sp, fontWeight = FontWeight.Black)
+                Text("BE STRONGER  ⚡", color = Purple, fontSize = 21.sp, fontWeight = FontWeight.Black)
+                Text("FREE FIRE  •  FREE FIRE MAX", color = Cyan, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.2.sp)
+                Text("Your gaming space. Your next match starts here.", color = Muted, fontSize = 12.sp)
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
+                    Text("FREE FIRE", color = White, fontSize = 18.sp, fontWeight = FontWeight.Black)
+                    Spacer(Modifier.width(10.dp))
+                    Text("⚡ PLAY NOW", color = Gold, fontSize = 14.sp, fontWeight = FontWeight.Black)
+                }
+            }
+        }
+        Card(modifier = Modifier.fillMaxWidth().border(1.5.dp, Brush.linearGradient(listOf(Cyan, Purple, Violet)), RoundedCornerShape(23.dp)), shape = RoundedCornerShape(23.dp), colors = CardDefaults.cardColors(containerColor = Panel)) {
+            Column(modifier = Modifier.fillMaxWidth().padding(17.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text("🚀  YOUR NEXT MATCH STARTS HERE", color = White, fontSize = 17.sp, fontWeight = FontWeight.Black)
-                Text("Launch Free Fire and jump into the action!", color = Muted, fontSize = 12.sp)
-                Button(onClick = { status.value = launchFreeFire(context) }, modifier = Modifier.fillMaxWidth().height(48.dp), colors = ButtonDefaults.buttonColors(containerColor = Purple), shape = RoundedCornerShape(15.dp)) {
-                    Text("▶  LAUNCH GAME", color = White, fontWeight = FontWeight.ExtraBold)
+                Text("Launch Free Fire and jump straight into the action!", color = Muted, fontSize = 12.sp)
+                Button(onClick = { status.value = launchFreeFire(context) }, modifier = Modifier.fillMaxWidth().height(54.dp), colors = ButtonDefaults.buttonColors(containerColor = Purple), shape = RoundedCornerShape(17.dp)) {
+                    Text("▶  PLAY FREE FIRE  🔥", color = White, fontSize = 15.sp, fontWeight = FontWeight.Black)
                 }
                 Text("⚡  Free Fire & Free Fire MAX supported when installed", color = Cyan, fontSize = 10.sp)
             }
         }
-        Text("DEVICE OVERVIEW", color = White, fontSize = 14.sp, fontWeight = FontWeight.Black, letterSpacing = 1.4.sp)
+        Text("DEVICE OVERVIEW", color = White, fontSize = 16.sp, fontWeight = FontWeight.Black, letterSpacing = 1.4.sp)
+        Text("LIVE DEVICE INFORMATION", color = Muted, fontSize = 9.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.sp)
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             NeonMetric("▦", "RAM AVAILABLE", stats.ramAvailable, "MEMORY", Purple, Modifier.weight(1f))
             NeonMetric("▤", "STORAGE FREE", stats.storageFree, "INTERNAL", Cyan, Modifier.weight(1f))
         }
-        Card(modifier = Modifier.fillMaxWidth().clickable { openDeviceSettings(context) }.border(1.dp, Cyan, RoundedCornerShape(20.dp)), colors = CardDefaults.cardColors(containerColor = Panel), shape = RoundedCornerShape(20.dp)) {
-            Row(modifier = Modifier.padding(15.dp), verticalAlignment = Alignment.CenterVertically) {
-                Text("📱", fontSize = 30.sp)
+        Card(modifier = Modifier.fillMaxWidth().clickable { openDeviceSettings(context) }.border(1.5.dp, Cyan, RoundedCornerShape(21.dp)), colors = CardDefaults.cardColors(containerColor = Color(0xFF0C1024)), shape = RoundedCornerShape(21.dp)) {
+            Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                Text("📱", fontSize = 31.sp)
                 Spacer(Modifier.width(12.dp))
-                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text("DEVICE INFORMATION", color = Cyan, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold)
+                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                    Text("DEVICE INFORMATION", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.Black, letterSpacing = 1.sp)
                     Text(stats.deviceName, color = White, fontSize = 14.sp, fontWeight = FontWeight.Bold)
-                    Text("Android ${Build.VERSION.RELEASE}  •  API ${Build.VERSION.SDK_INT}", color = Muted, fontSize = 11.sp)
+                    Text("Android \${Build.VERSION.RELEASE}  •  API \${Build.VERSION.SDK_INT}", color = Muted, fontSize = 11.sp)
                 }
-                Text("VIEW DETAILS ➜", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                Text("VIEW DETAILS  ➜", color = Cyan, fontSize = 9.sp, fontWeight = FontWeight.Black)
             }
         }
         Text("🎮  GAMING TOOLS", color = Purple, fontSize = 19.sp, fontWeight = FontWeight.Black)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            ToolTile("🚀", "GAME LAUNCHER", "Open Free Fire", Purple, Modifier.weight(1f)) { status.value = launchFreeFire(context) }
-            ToolTile("⟳", "REFRESH", "Update info", Cyan, Modifier.weight(1f)) { status.value = "Open Stats and tap Refresh to update device information" }
+            ToolTile("🚀", "GAME LAUNCHER", "Open games", Purple, Modifier.weight(1f)) { status.value = launchFreeFire(context) }
+            ToolTile("⟳", "REFRESH", "Update info", Cyan, Modifier.weight(1f)) { status.value = "Device information refreshed" }
             ToolTile("⚡", "BOOSTER", "Game settings", Green, Modifier.weight(1f)) { openGameSettings(context, status) }
             ToolTile("▤", "CLEANER", "App storage", Gold, Modifier.weight(1f)) { openAppSettings(context) }
         }
