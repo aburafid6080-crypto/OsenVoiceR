@@ -81,6 +81,8 @@ class GameOverlayService : Service() {
 
     private fun showPanel() {
         val old = overlayView ?: return
+        val savedX = params.x
+        val savedY = params.y
         try { windowManager.removeView(old) } catch (_: Exception) { }
         expanded = true
 
@@ -207,10 +209,13 @@ class GameOverlayService : Service() {
         panel.addView(bottomActions, spacedParams(dp(7)))
 
         val width = min(dp(316), resources.displayMetrics.widthPixels - dp(24))
-        params = windowParams(width.coerceAtLeast(dp(220)), WindowManager.LayoutParams.WRAP_CONTENT)
+        params = windowParams(width.coerceAtLeast(dp(220)), WindowManager.LayoutParams.WRAP_CONTENT).apply {
+            x = savedX
+            y = savedY
+        }
         overlayView = panel
         windowManager.addView(panel, params)
-        makeDraggable(identity)
+        makeDraggable(header)
     }
 
     private fun goldInfoCard(title: String, value: String, footer: String): View {
@@ -376,6 +381,8 @@ class GameOverlayService : Service() {
 
     private fun minimizePanel() {
         val current = overlayView
+        val savedX = params.x
+        val savedY = params.y
         if (current != null) {
             try { windowManager.removeView(current) } catch (_: Exception) { }
         }
@@ -386,6 +393,9 @@ class GameOverlayService : Service() {
         storageValueView = null
         expanded = false
         showBubble()
+        params.x = savedX
+        params.y = savedY
+        overlayView?.let { try { windowManager.updateViewLayout(it, params) } catch (_: Exception) { } }
     }
 
     private fun action(text: String, click: () -> Unit) = TextView(this).apply {
