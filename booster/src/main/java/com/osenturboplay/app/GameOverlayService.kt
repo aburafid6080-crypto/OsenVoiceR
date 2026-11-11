@@ -19,6 +19,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import kotlin.math.min
 
 /**
@@ -85,6 +86,7 @@ class GameOverlayService : Service() {
         val subheading = label("DRAGON CORE  •  IN-GAME CONTROL", 9f, Color.rgb(255, 105, 68), true)
         val info = label("QUICK CONTROL DECK", 11f, Color.WHITE, true)
         val stats = label(readQuickStats(), 10f, Color.rgb(178, 198, 214), false)
+        val fpsInfo = label(readDisplayInfo(), 10f, Color.rgb(255, 177, 92), true)
         val status = label("READY  •  CONTROLS STAY IN GAME", 9f, Color.rgb(255, 177, 92), true)
         panelStatus = status
         val dnd = action("DND  •  TOGGLE") { toggleDnd() }
@@ -95,6 +97,7 @@ class GameOverlayService : Service() {
         panel.addView(subheading, spacedParams(dp(3)))
         panel.addView(info, spacedParams(dp(12)))
         panel.addView(stats, spacedParams(dp(5)))
+        panel.addView(fpsInfo, spacedParams(dp(4)))
         panel.addView(status, spacedParams(dp(7)))
         panel.addView(dnd, spacedParams(dp(10)))
         panel.addView(calls, spacedParams(dp(7)))
@@ -106,6 +109,11 @@ class GameOverlayService : Service() {
         overlayView = panel
         windowManager.addView(panel, params)
         makeDraggable(heading)
+    }
+
+    private fun readDisplayInfo(): String {
+        val hz = try { windowManager.defaultDisplay.refreshRate.toInt() } catch (_: Exception) { 0 }
+        return if (hz > 0) "GAME FPS  •  N/A     DISPLAY  •  " + hz + " Hz" else "GAME FPS  •  N/A     DISPLAY RATE UNAVAILABLE"
     }
 
     private fun readQuickStats(): String {
@@ -177,7 +185,13 @@ class GameOverlayService : Service() {
         setTextColor(Color.WHITE)
         setPadding(dp(10), dp(12), dp(10), dp(12))
         background = rounded(Color.rgb(25, 28, 42), Color.rgb(255, 142, 58), 12f)
-        setOnClickListener { click() }
+        setOnClickListener {
+            animate().scaleX(0.97f).scaleY(0.97f).setDuration(65).withEndAction {
+                animate().scaleX(1f).scaleY(1f).setDuration(90).start()
+            }.start()
+            Toast.makeText(context, text.toString(), Toast.LENGTH_SHORT).show()
+            click()
+        }
     }
 
     private fun label(text: String, size: Float, color: Int, bold: Boolean) = TextView(this).apply {
