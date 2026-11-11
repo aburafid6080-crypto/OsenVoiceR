@@ -638,12 +638,23 @@ private fun readDeviceStats(context: Context): DeviceStats {
 private fun launchSpecificGame(context: Context, packageName: String, gameName: String): String {
     val intent = context.packageManager.getLaunchIntentForPackage(packageName)
         ?: return "$gameName is not installed."
+    if (!Settings.canDrawOverlays(context)) {
+        safeOpen(
+            context,
+            Intent(
+                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                android.net.Uri.parse("package:${context.packageName}")
+            )
+        )
+        return "Allow OSEN TURBOPLAY to display over other apps, then tap PLAY again."
+    }
     return try {
+        context.startForegroundService(Intent(context, GameOverlayService::class.java))
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
-        "$gameName launched successfully"
+        "$gameName launched. OSEN floating panel is ready."
     } catch (_: Exception) {
-        "Could not open $gameName on this device."
+        "Could not start $gameName with the game panel on this device."
     }
 }
 
