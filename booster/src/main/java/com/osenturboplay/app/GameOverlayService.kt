@@ -38,6 +38,8 @@ class GameOverlayService : Service() {
     private var expanded = false
     private var panelStatus: TextView? = null
     private var dndButton: TextView? = null
+    private var ramValueView: TextView? = null
+    private var storageValueView: TextView? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -170,11 +172,28 @@ class GameOverlayService : Service() {
             setPadding(dp(12), dp(14), dp(12), dp(14))
         }
         dndButton = dnd
-        val minimize = action("⌄   MINIMIZE PANEL") { minimizePanel() }.apply {
-            background = rounded(Color.rgb(20, 19, 19), Color.rgb(105, 78, 35), 12f)
-            textSize = 9f
+        val bottomActions = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER
+        }
+        val back = action("‹  BACK") { minimizePanel() }.apply {
+            background = rounded(Color.rgb(24, 22, 19), Color.rgb(153, 115, 49), 13f)
+            textSize = 11f
             setTextColor(brightGold)
         }
+        val boost = action("⚡  BOOST") { refreshBoostInfo() }.apply {
+            background = GradientDrawable(
+                GradientDrawable.Orientation.LEFT_RIGHT,
+                intArrayOf(Color.rgb(130, 83, 12), Color.rgb(70, 43, 8))
+            ).apply {
+                cornerRadius = dp(13).toFloat()
+                setStroke(dp(1), brightGold)
+            }
+            textSize = 11f
+            setTextColor(Color.WHITE)
+        }
+        bottomActions.addView(back, LinearLayout.LayoutParams(0, dp(46), 1f).apply { marginEnd = dp(5) })
+        bottomActions.addView(boost, LinearLayout.LayoutParams(0, dp(46), 1f).apply { marginStart = dp(5) })
 
         panel.addView(header)
         panel.addView(divider, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(1)).apply { topMargin = dp(11); bottomMargin = dp(11) })
@@ -185,7 +204,7 @@ class GameOverlayService : Service() {
         panel.addView(hardware, spacedParams(dp(7)))
         panel.addView(status, spacedParams(dp(11)))
         panel.addView(dnd, spacedParams(dp(6)))
-        panel.addView(minimize, spacedParams(dp(7)))
+        panel.addView(bottomActions, spacedParams(dp(7)))
 
         val width = min(dp(316), resources.displayMetrics.widthPixels - dp(24))
         params = windowParams(width.coerceAtLeast(dp(220)), WindowManager.LayoutParams.WRAP_CONTENT)
@@ -206,7 +225,10 @@ class GameOverlayService : Service() {
                 setStroke(dp(1), Color.rgb(126, 88, 30))
             }
             addView(label(title, 8f, Color.rgb(195, 164, 101), true))
-            addView(label(value, 16f, Color.WHITE, true), spacedParams(dp(5)))
+            val valueView = label(value, 16f, Color.WHITE, true)
+            if (title == "RAM") ramValueView = valueView
+            if (title == "STORAGE") storageValueView = valueView
+            addView(valueView, spacedParams(dp(5)))
             addView(label(footer, 7f, Color.rgb(255, 195, 74), true), spacedParams(dp(2)))
         }
     }
@@ -221,6 +243,13 @@ class GameOverlayService : Service() {
     private fun readFreeStorage(): String {
         val stat = StatFs(android.os.Environment.getDataDirectory().path)
         return "${stat.availableBytes / (1024L * 1024L)} MB"
+    }
+
+    private fun refreshBoostInfo() {
+        // Refreshes displayed device information only; Android remains responsible for game scheduling.
+        ramValueView?.text = readFreeRam()
+        storageValueView?.text = readFreeStorage()
+        showPanelStatus("BOOST CHECK COMPLETE • DEVICE STATS REFRESHED")
     }
 
     private fun readCpuName(): String {
@@ -353,6 +382,8 @@ class GameOverlayService : Service() {
         overlayView = null
         panelStatus = null
         dndButton = null
+        ramValueView = null
+        storageValueView = null
         expanded = false
         showBubble()
     }
@@ -471,6 +502,8 @@ class GameOverlayService : Service() {
         overlayView = null
         panelStatus = null
         dndButton = null
+        ramValueView = null
+        storageValueView = null
         stopForeground(STOP_FOREGROUND_REMOVE)
         super.onDestroy()
     }
