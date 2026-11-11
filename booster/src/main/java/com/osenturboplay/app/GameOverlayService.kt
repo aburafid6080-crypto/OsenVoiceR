@@ -30,6 +30,7 @@ class GameOverlayService : Service() {
     private var overlayView: View? = null
     private lateinit var params: WindowManager.LayoutParams
     private var expanded = false
+    private var panelStatus: TextView? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -84,14 +85,17 @@ class GameOverlayService : Service() {
         val subheading = label("DRAGON CORE  •  IN-GAME CONTROL", 9f, Color.rgb(255, 105, 68), true)
         val info = label("QUICK CONTROL DECK", 11f, Color.WHITE, true)
         val stats = label(readQuickStats(), 10f, Color.rgb(178, 198, 214), false)
+        val status = label("READY  •  CONTROLS STAY IN GAME", 9f, Color.rgb(255, 177, 92), true)
+        panelStatus = status
         val dnd = action("DND  •  TOGGLE") { toggleDnd() }
-        val calls = action("CALLS  •  SILENCE") { enableDnd("Calls silenced by Android DND.") }
-        val notifications = action("ALERTS  •  SILENCE") { enableDnd("Notifications silenced by Android DND.") }
+        val calls = action("CALLS  •  SILENCE") { enableDnd("Calls silenced. Android DND is ON.") }
+        val notifications = action("ALERTS  •  SILENCE") { enableDnd("Notifications silenced. Android DND is ON.") }
         val minimize = action("HIDE PANEL  •  KEEP GAME RUNNING") { minimizePanel() }
         panel.addView(heading)
         panel.addView(subheading, spacedParams(dp(3)))
         panel.addView(info, spacedParams(dp(12)))
         panel.addView(stats, spacedParams(dp(5)))
+        panel.addView(status, spacedParams(dp(7)))
         panel.addView(dnd, spacedParams(dp(10)))
         panel.addView(calls, spacedParams(dp(7)))
         panel.addView(notifications, spacedParams(dp(7)))
@@ -116,25 +120,43 @@ class GameOverlayService : Service() {
 
     private fun toggleDnd() {
         val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            showPanelStatus("DND is not supported on this Android version.")
+            return
+        }
         if (!manager.isNotificationPolicyAccessGranted) {
-            try { startActivity(Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } catch (_: Exception) { }
+            showPanelStatus("One-time setup needed: grant OSEN DND access in app settings, then return here.")
             return
         }
         try {
             val isOff = manager.currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_NONE
             manager.setInterruptionFilter(if (isOff) NotificationManager.INTERRUPTION_FILTER_ALL else NotificationManager.INTERRUPTION_FILTER_NONE)
-        } catch (_: SecurityException) { }
+            showPanelStatus(if (isOff) "DND OFF • Calls and alerts restored." else "DND ON • Calls and alerts silenced.")
+        } catch (_: SecurityException) {
+            showPanelStatus("Android did not allow changing DND.")
+        }
     }
 
     private fun enableDnd(message: String) {
         val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
-        if (!manager.isNotificationPolicyAccessGranted) {
-            try { startActivity(Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } catch (_: Exception) { }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            showPanelStatus("DND is not supported on this Android version.")
             return
         }
-        try { manager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE) } catch (_: SecurityException) { }
+        if (!manager.isNotificationPolicyAccessGranted) {
+            showPanelStatus("One-time setup needed: grant OSEN DND access in app settings, then return here.")
+            return
+        }
+        try {
+            manager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
+            showPanelStatus(message)
+        } catch (_: SecurityException) {
+            showPanelStatus("Android did not allow changing DND.")
+        }
+    }
+
+    private fun showPanelStatus(message: String) {
+        panelStatus?.text = message
     }
 
     private fun minimizePanel() {
@@ -143,6 +165,7 @@ class GameOverlayService : Service() {
             try { windowManager.removeView(current) } catch (_: Exception) { }
         }
         overlayView = null
+        panelStatus = null
         expanded = false
         showBubble()
     }
@@ -253,6 +276,7 @@ class GameOverlayService : Service() {
             try { windowManager.removeView(view) } catch (_: Exception) { }
         }
         overlayView = null
+        panelStatus = null
         stopForeground(STOP_FOREGROUND_REMOVE)
         super.onDestroy()
     }
