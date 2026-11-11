@@ -335,7 +335,14 @@ private fun HomePage(context: Context, stats: DeviceStats, status: androidx.comp
                 Text("🚀  YOUR NEXT MATCH STARTS HERE", color = White, fontSize = 17.sp, fontWeight = FontWeight.Black)
                 Text("Launch Free Fire and jump straight into the action!", color = Muted, fontSize = 12.sp)
                 PremiumActionButton(label = "▶  PLAY FREE FIRE  🔥", onClick = { status.value = launchFreeFire(context) }, modifier = Modifier.fillMaxWidth().height(52.dp))
-                Text("⚡  Free Fire & Free Fire MAX supported when installed", color = Cyan, fontSize = 10.sp)
+                PremiumActionButton(
+                    label = "⚡  BOOST  •  OPEN GAME PANEL",
+                    onClick = { status.value = openGameBoostPanel(context) },
+                    modifier = Modifier.fillMaxWidth().height(50.dp),
+                    startColor = Color(0xFF087FC2),
+                    endColor = Color(0xFF064477)
+                )
+                Text("Opens OSEN floating game controls. It does not force-close apps or promise extra FPS.", color = Cyan, fontSize = 10.sp)
             }
         }
         ThreeDMetalText("DEVICE OVERVIEW", 16, White, Cyan)
@@ -666,6 +673,25 @@ private fun launchSpecificGame(context: Context, packageName: String, gameName: 
         "$gameName launched. OSEN floating panel is ready."
     } catch (_: Exception) {
         "Could not start $gameName with the game panel on this device."
+    }
+}
+
+private fun openGameBoostPanel(context: Context): String {
+    if (!Settings.canDrawOverlays(context)) {
+        safeOpen(
+            context,
+            Intent(
+                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                android.net.Uri.parse("package:${context.packageName}")
+            )
+        )
+        return "Allow display-over-other-apps permission, then tap BOOST again."
+    }
+    return try {
+        context.startForegroundService(Intent(context, GameOverlayService::class.java))
+        "OSEN game panel opened. Drag the floating logo to move it."
+    } catch (_: Exception) {
+        "Could not open OSEN game panel. Please try again."
     }
 }
 
