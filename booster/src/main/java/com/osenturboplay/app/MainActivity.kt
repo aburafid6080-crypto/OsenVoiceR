@@ -648,15 +648,29 @@ private fun launchSpecificGame(context: Context, packageName: String, gameName: 
 }
 
 private fun launchFreeFire(context: Context): String {
-    for (packageName in listOf("com.dts.freefireth", "com.dts.freefiremax")) {
-        val intent = context.packageManager.getLaunchIntentForPackage(packageName)
-        if (intent != null) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(intent)
-            return "Game launched successfully"
-        }
+    val gameIntent = listOf("com.dts.freefireth", "com.dts.freefiremax")
+        .firstNotNullOfOrNull { context.packageManager.getLaunchIntentForPackage(it) }
+        ?: return "Free Fire not found. Install Free Fire or Free Fire MAX first."
+
+    if (!Settings.canDrawOverlays(context)) {
+        safeOpen(
+            context,
+            Intent(
+                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                android.net.Uri.parse("package:${context.packageName}")
+            )
+        )
+        return "Allow OSEN TURBOPLAY to display over other apps, then tap PLAY again."
     }
-    return "Free Fire not found. Install Free Fire or Free Fire MAX first."
+
+    return try {
+        context.startForegroundService(Intent(context, GameOverlayService::class.java))
+        gameIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(gameIntent)
+        "Game launched. OSEN floating panel is ready."
+    } catch (_: Exception) {
+        "Could not start the game panel on this device."
+    }
 }
 
 private fun openAppSettings(context: Context) {
