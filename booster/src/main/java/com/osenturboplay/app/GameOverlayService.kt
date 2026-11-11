@@ -135,9 +135,9 @@ class GameOverlayService : Service() {
         })
 
         val resourceTitle = label("DEVICE RESOURCES", 9f, Color.rgb(130, 159, 189), true)
-        val resources = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
-        resources.addView(infoCard("MEMORY", readFreeRam(), "FREE RAM"), LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply { marginEnd = dp(5) })
-        resources.addView(infoCard("STORAGE", readFreeStorage(), "AVAILABLE"), LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply { marginStart = dp(5) })
+        val resourceCards = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
+        resourceCards.addView(infoCard("MEMORY", readFreeRam(), "FREE RAM"), LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply { marginEnd = dp(5) })
+        resourceCards.addView(infoCard("STORAGE", readFreeStorage(), "AVAILABLE"), LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply { marginStart = dp(5) })
 
         val hardwareTitle = label("HARDWARE PROFILE", 9f, Color.rgb(130, 159, 189), true)
         val hardware = LinearLayout(this).apply {
@@ -173,7 +173,7 @@ class GameOverlayService : Service() {
         bg.addView(top)
         bg.addView(fpsCard, spacedParams(dp(14)))
         bg.addView(resourceTitle, spacedParams(dp(14)))
-        bg.addView(resources, spacedParams(dp(7)))
+        bg.addView(resourceCards, spacedParams(dp(7)))
         bg.addView(hardwareTitle, spacedParams(dp(13)))
         bg.addView(hardware, spacedParams(dp(7)))
         bg.addView(status, spacedParams(dp(12)))
