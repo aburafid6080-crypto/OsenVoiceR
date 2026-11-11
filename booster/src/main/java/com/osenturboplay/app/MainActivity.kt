@@ -171,27 +171,44 @@ private fun statsRefresh(context: Context, status: androidx.compose.runtime.Muta
 }
 
 @Composable
+private fun HeroBanner() {
+    Card(
+        modifier = Modifier.fillMaxWidth()
+            .border(1.6.dp, Brush.linearGradient(listOf(Purple, Cyan, Violet, Gold)), RoundedCornerShape(25.dp)),
+        shape = RoundedCornerShape(25.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF08091A))
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth()
+                .background(Brush.linearGradient(listOf(Color(0xFF26064D), Color(0xFF080B20), Color(0xFF06152C))))
+                .padding(17.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text("✦  OSEN TURBOPLAY  ✦", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.Black, letterSpacing = 2.sp)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text("PLAY SMARTER", color = White, fontSize = 24.sp, fontWeight = FontWeight.Black)
+                    Text("BE STRONGER", color = Purple, fontSize = 23.sp, fontWeight = FontWeight.Black)
+                    Text("FREE FIRE  •  FREE FIRE MAX", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 0.8.sp)
+                }
+                Text("⚡", color = Gold, fontSize = 62.sp, fontWeight = FontWeight.Black)
+            }
+            Text("Your gaming space. Your next match starts here.", color = Muted, fontSize = 12.sp)
+            Text("🔥  READY FOR YOUR NEXT MATCH", color = Gold, fontSize = 12.sp, fontWeight = FontWeight.Black)
+        }
+    }
+}
+
+@Composable
 private fun HomePage(context: Context, stats: DeviceStats, status: androidx.compose.runtime.MutableState<String>, onRefresh: () -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Card(modifier = Modifier.fillMaxWidth().border(1.5.dp, Brush.linearGradient(listOf(Purple, Cyan, Violet)), RoundedCornerShape(24.dp)), shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = Color(0xFF090719))) {
-            Column(modifier = Modifier.fillMaxWidth().background(Brush.linearGradient(listOf(Color(0xFF241044), Color(0xFF080D22), Color(0xFF10102A)))).padding(17.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
-                Text("✦  OSEN TURBOPLAY  ✦", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.Black, letterSpacing = 2.sp)
-                Text("PLAY SMARTER", color = White, fontSize = 25.sp, fontWeight = FontWeight.Black)
-                Text("BE STRONGER  ⚡", color = Purple, fontSize = 21.sp, fontWeight = FontWeight.Black)
-                Text("FREE FIRE  •  FREE FIRE MAX", color = Cyan, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.2.sp)
-                Text("Your gaming space. Your next match starts here.", color = Muted, fontSize = 12.sp)
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
-                    Text("FREE FIRE", color = White, fontSize = 18.sp, fontWeight = FontWeight.Black)
-                    Spacer(Modifier.width(10.dp))
-                    Text("⚡ PLAY NOW", color = Gold, fontSize = 14.sp, fontWeight = FontWeight.Black)
-                }
-            }
-        }
+        HeroBanner()
+
         Card(modifier = Modifier.fillMaxWidth().border(1.5.dp, Brush.linearGradient(listOf(Cyan, Purple, Violet)), RoundedCornerShape(23.dp)), shape = RoundedCornerShape(23.dp), colors = CardDefaults.cardColors(containerColor = Panel)) {
             Column(modifier = Modifier.fillMaxWidth().padding(17.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text("🚀  YOUR NEXT MATCH STARTS HERE", color = White, fontSize = 17.sp, fontWeight = FontWeight.Black)
                 Text("Launch Free Fire and jump straight into the action!", color = Muted, fontSize = 12.sp)
-                Button(onClick = { status.value = launchFreeFire(context) }, modifier = Modifier.fillMaxWidth().height(54.dp), colors = ButtonDefaults.buttonColors(containerColor = Purple), shape = RoundedCornerShape(17.dp)) {
+                Button(onClick = { status.value = launchFreeFire(context) }, modifier = Modifier.fillMaxWidth().height(54.dp), colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8E13F8)), shape = RoundedCornerShape(17.dp)) {
                     Text("▶  PLAY FREE FIRE  🔥", color = White, fontSize = 15.sp, fontWeight = FontWeight.Black)
                 }
                 Text("⚡  Free Fire & Free Fire MAX supported when installed", color = Cyan, fontSize = 10.sp)
@@ -364,7 +381,7 @@ private fun NeonCircle(symbol: String, color: Color, label: String, onClick: () 
 
 @Composable
 private fun NeonMetric(icon: String, title: String, value: String, footer: String, accent: Color, modifier: Modifier = Modifier) {
-    Card(modifier = modifier.border(1.dp, accent, RoundedCornerShape(19.dp)), colors = CardDefaults.cardColors(containerColor = Panel), shape = RoundedCornerShape(19.dp)) {
+    Card(modifier = modifier.border(1.dp, accent, RoundedCornerShape(19.dp)), colors = CardDefaults.cardColors(containerColor = Color(0xFF090B20)), shape = RoundedCornerShape(19.dp)) {
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(icon, color = accent, fontSize = 22.sp, fontWeight = FontWeight.Black)
@@ -379,7 +396,7 @@ private fun NeonMetric(icon: String, title: String, value: String, footer: Strin
 
 @Composable
 private fun ToolTile(icon: String, title: String, subtitle: String, accent: Color, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    Card(modifier = modifier.height(126.dp).clickable(onClick = onClick).border(1.dp, accent, RoundedCornerShape(17.dp)), colors = CardDefaults.cardColors(containerColor = Panel), shape = RoundedCornerShape(17.dp)) {
+    Card(modifier = modifier.height(132.dp).clickable(onClick = onClick).border(1.3.dp, Brush.linearGradient(listOf(accent, Color.White.copy(alpha = 0.45f), accent)), RoundedCornerShape(17.dp)), colors = CardDefaults.cardColors(containerColor = Panel), shape = RoundedCornerShape(17.dp)) {
         Column(modifier = Modifier.fillMaxSize().padding(horizontal = 4.dp, vertical = 10.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(icon, color = accent, fontSize = 24.sp, fontWeight = FontWeight.Black)
             Text(title, color = White, fontSize = 9.sp, lineHeight = 11.sp, fontWeight = FontWeight.Black, textAlign = TextAlign.Center)
