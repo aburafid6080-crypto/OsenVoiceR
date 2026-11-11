@@ -19,3 +19,18 @@ An ordinary Android app can record audio only with the applicable permission and
 
 ## Test needed from the device
 A real test requires the Moto G85 5G, Android 16, Free Fire, and any proposed external audio accessory. Verify the input route in Android first, then use Free Fire's own microphone test/voice chat with a trusted teammate. Until this is done, teammate-side altered voice is unverified.
+
+
+## Additional Android / Moto G85 research
+- Android's official USB audio documentation says compatible USB digital audio peripherals can be routed for capture and voice-chat use. This means a supported USB audio device may provide an external microphone input, but it does not mean an app can inject its processed playback into Free Fire's microphone.
+- Android's audio-input sharing rules explain that microphone capture is controlled by system priority and routing. A second ordinary app cannot assume it will receive the same microphone while a game is capturing.
+- Motorola's Moto G85 hardware guide identifies a USB-C port and wired-headphone support. The published hardware information reviewed here does not confirm a specific USB audio interface or processed-audio loopback configuration for Free Fire.
+- No claim of compatibility is made until it is tested on the actual Moto G85 5G / Android 16 device.
+
+### References
+- Android USB digital audio: https://source.android.com/docs/core/audio/usb
+- Android sharing audio input: https://developer.android.com/media/platform/sharing-audio-input
+- Moto G85 hardware guide: https://help.motorola.com/hc/3585/14/global/en-us/CGT2002173049.html
+
+## Current decision
+Do not add a fake "Free Fire live voice" switch to the app. The next meaningful validation is a real-device check of whether the phone exposes a compatible external USB audio input and whether Free Fire actually selects it. A separate loopback-capable audio path would still be needed to feed OSEN's processed output into that input.
