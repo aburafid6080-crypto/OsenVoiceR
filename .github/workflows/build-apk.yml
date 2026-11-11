@@ -7,8 +7,12 @@ on:
     branches:
       - main
       - feature/osen-turboplay
+      - feature/osen-combined-app
     paths:
       - 'booster/**'
+      - 'app/**'
+      - 'settings.gradle.kts'
+      - 'build.gradle.kts'
       - '.github/workflows/build-apk.yml'
 
 permissions:
