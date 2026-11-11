@@ -17,6 +17,10 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.runtime.LaunchedEffect
+import kotlinx.coroutines.delay
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -94,6 +98,14 @@ private fun TurboPlayScreen() {
     val stats = remember { mutableStateOf(readDeviceStats(context)) }
     val status = remember { mutableStateOf("TurboPlay is ready") }
     val selectedTab = remember { mutableStateOf("Home") }
+    val boostAnimation = remember { mutableStateOf(false) }
+
+    LaunchedEffect(boostAnimation.value) {
+        if (boostAnimation.value) {
+            delay(1500)
+            boostAnimation.value = false
+        }
+    }
 
     MaterialTheme {
         Surface(modifier = Modifier.fillMaxSize(), color = Bg) {
@@ -107,7 +119,12 @@ private fun TurboPlayScreen() {
             ) {
                 PremiumHeader(
                     onSettings = { openAppSettings(context) },
-                    onBoost = { selectedTab.value = "Tools" }
+                    onBoost = {
+                        stats.value = readDeviceStats(context)
+                        boostAnimation.value = true
+                        status.value = "BOOST animation complete • No system performance settings changed"
+                    },
+                    isBoosting = boostAnimation.value
                 )
 
                 AnimatedContent(
@@ -519,7 +536,7 @@ private fun NoteCard() {
 }
 
 @Composable
-private fun PremiumHeader(onSettings: () -> Unit, onBoost: () -> Unit) {
+private fun PremiumHeader(onSettings: () -> Unit, onBoost: () -> Unit, isBoosting: Boolean) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -542,14 +559,16 @@ private fun PremiumHeader(onSettings: () -> Unit, onBoost: () -> Unit) {
             Text("━  GAME BOOSTER  ━", color = Cyan, fontSize = 8.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.1.sp, maxLines = 1)
         }
         NeonCircle("⚙", Violet, "SETTINGS", onSettings)
-        NeonCircle("⚡", Cyan, "BOOST", onBoost)
+        NeonCircle("⚡", Cyan, if (isBoosting) "BOOSTED" else "BOOST", onBoost, isBoosting)
     }
 }
 
 @Composable
-private fun NeonCircle(symbol: String, color: Color, label: String, onClick: () -> Unit) {
+private fun NeonCircle(symbol: String, color: Color, label: String, onClick: () -> Unit, isBoosting: Boolean = false) {
+    val pulseScale = animateFloatAsState(targetValue = if (isBoosting) 1.12f else 1f, animationSpec = tween(durationMillis = 260), label = "boost_pulse")
     Column(
         modifier = Modifier
+            .graphicsLayer { scaleX = pulseScale.value; scaleY = pulseScale.value }
             .width(66.dp)
             .height(76.dp)
             .clickable(onClick = onClick)
@@ -566,7 +585,7 @@ private fun NeonCircle(symbol: String, color: Color, label: String, onClick: () 
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        Text(symbol, color = White, fontSize = 30.sp, fontWeight = FontWeight.Black)
+        Text(if (isBoosting) "✓" else symbol, color = if (isBoosting) Green else White, fontSize = 30.sp, fontWeight = FontWeight.Black)
         Text(label, color = color, fontSize = 8.sp, fontWeight = FontWeight.Black, letterSpacing = 0.5.sp)
     }
 }
