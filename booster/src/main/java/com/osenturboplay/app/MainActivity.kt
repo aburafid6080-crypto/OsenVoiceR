@@ -164,7 +164,9 @@ private fun TurboPlayScreen() {
                                 },
                                 onCleaner = { openAppSettings(context) },
                                 onPhoneSettings = { openDeviceSettings(context) },
-                                onDeviceInfo = { selectedTab.value = "Stats" }
+                                onDeviceInfo = { selectedTab.value = "Stats" },
+                                onRamCleaner = { openRamSettings(context); status.value = "Android app management opened" },
+                                onStorageCleaner = { openStorageSettings(context); status.value = "Android storage settings opened" }
                             )
                             else -> AboutPage()
                         }
@@ -464,8 +466,10 @@ private fun GamesPage(status: androidx.compose.runtime.MutableState<String>, onL
 }
 
 @Composable
-private fun ToolsPage(onRefresh: () -> Unit, onCleaner: () -> Unit, onPhoneSettings: () -> Unit, onDeviceInfo: () -> Unit) {
+private fun ToolsPage(onRefresh: () -> Unit, onCleaner: () -> Unit, onPhoneSettings: () -> Unit, onDeviceInfo: () -> Unit, onRamCleaner: () -> Unit, onStorageCleaner: () -> Unit) {
     PageTitle("GAMING TOOLS", "Quick shortcuts for your device")
+    ActionButton("🧹  RAM CLEANER", Green, onRamCleaner)
+    ActionButton("🗑️  STORAGE CLEANER", Cyan, onStorageCleaner)
     ActionButton("📱  PHONE SETTINGS", Cyan, onPhoneSettings)
     ActionButton("▤  APP INFO", Gold, onCleaner)
     ActionButton("📊  DEVICE INFO", Purple, onDeviceInfo)
@@ -713,6 +717,15 @@ private fun openAppSettings(context: Context) {
 private fun openDeviceSettings(context: Context) {
     // "Phone Settings" should open the main Android Settings screen, not Device Info.
     safeOpen(context, Intent(Settings.ACTION_SETTINGS))
+}
+
+private fun openRamSettings(context: Context) {
+    // Android app-management settings let the user review and manage running apps safely.
+    safeOpen(context, Intent(Settings.ACTION_APPLICATION_SETTINGS))
+}
+
+private fun openStorageSettings(context: Context) {
+    safeOpen(context, Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS))
 }
 
 private fun safeOpen(context: Context, intent: Intent) {
