@@ -17,6 +17,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -51,7 +52,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -174,9 +180,72 @@ private fun statsRefresh(context: Context, status: androidx.compose.runtime.Muta
 }
 
 @Composable
+private fun AnimeGamerPortrait(modifier: Modifier = Modifier) {
+    Canvas(modifier = modifier) {
+        val sx = size.width / 200f
+        val sy = size.height / 200f
+        fun p(x: Float, y: Float) = Offset(x * sx, y * sy)
+        drawCircle(
+            brush = Brush.radialGradient(
+                colors = listOf(Color(0xFF7A16FF).copy(alpha = 0.52f), Color(0xFF00D9FF).copy(alpha = 0.20f), Color.Transparent),
+                center = p(100f, 100f), radius = 98f * sx
+            ),
+            radius = 98f * sx, center = p(100f, 100f)
+        )
+        drawCircle(Color(0xFF00D9FF).copy(alpha = 0.75f), 97f * sx, p(100f, 100f), style = Stroke(width = 2f * sx))
+        val hoodie = Path().apply {
+            moveTo(34f * sx, 190f * sy)
+            cubicTo(39f * sx, 150f * sy, 65f * sx, 137f * sy, 100f * sx, 137f * sy)
+            cubicTo(137f * sx, 137f * sy, 164f * sx, 153f * sy, 169f * sx, 190f * sy)
+            close()
+        }
+        drawPath(hoodie, Color(0xFF17102F))
+        drawPath(hoodie, Color(0xFF8C24FF), style = Stroke(width = 3f * sx))
+        drawRoundRect(Color(0xFF272044), p(83f, 124f), Size(34f * sx, 30f * sy), androidx.compose.ui.geometry.CornerRadius(8f * sx))
+        drawOval(Color(0xFFE9B18B), p(62f, 47f), Size(76f * sx, 91f * sy))
+        val hair = Path().apply {
+            moveTo(57f * sx, 78f * sy)
+            lineTo(38f * sx, 47f * sy)
+            lineTo(62f * sx, 55f * sy)
+            lineTo(55f * sx, 23f * sy)
+            lineTo(82f * sx, 43f * sy)
+            lineTo(91f * sx, 8f * sy)
+            lineTo(108f * sx, 39f * sy)
+            lineTo(135f * sx, 19f * sy)
+            lineTo(128f * sx, 52f * sy)
+            lineTo(157f * sx, 43f * sy)
+            lineTo(139f * sx, 83f * sy)
+            lineTo(130f * sx, 70f * sy)
+            lineTo(67f * sx, 82f * sy)
+            close()
+        }
+        drawPath(hair, Color(0xFFE9EEFF))
+        drawPath(hair, Color(0xFF8E58FF), style = Stroke(width = 2.5f * sx))
+        drawLine(Color(0xFF9C18FF), p(72f, 42f), p(93f, 20f), 3f * sx, cap = StrokeCap.Round)
+        drawLine(Color(0xFF00D9FF), p(103f, 40f), p(132f, 29f), 3f * sx, cap = StrokeCap.Round)
+        drawLine(Color(0xFF7B2BFF), p(72f, 91f), p(91f, 94f), 5f * sx, cap = StrokeCap.Round)
+        drawLine(Color(0xFF7B2BFF), p(109f, 94f), p(128f, 91f), 5f * sx, cap = StrokeCap.Round)
+        val mask = Path().apply {
+            moveTo(61f * sx, 101f * sy)
+            lineTo(100f * sx, 111f * sy)
+            lineTo(139f * sx, 101f * sy)
+            lineTo(130f * sx, 132f * sy)
+            lineTo(100f * sx, 145f * sy)
+            lineTo(70f * sx, 132f * sy)
+            close()
+        }
+        drawPath(mask, Color(0xFF080916))
+        drawPath(mask, Color(0xFF00D9FF), style = Stroke(width = 2f * sx))
+        drawLine(Color(0xFF9C18FF), p(81f, 123f), p(119f, 123f), 2f * sx)
+        drawLine(Color(0xFF00D9FF), p(45f, 177f), p(72f, 158f), 4f * sx, cap = StrokeCap.Round)
+        drawLine(Color(0xFFB51CFF), p(128f, 158f), p(157f, 179f), 4f * sx, cap = StrokeCap.Round)
+    }
+}
+
+@Composable
 private fun HeroBanner() {
     Card(
-        modifier = Modifier.fillMaxWidth().height(292.dp)
+        modifier = Modifier.fillMaxWidth().height(244.dp)
             .border(2.dp, Brush.linearGradient(listOf(Purple, Cyan, Violet, Gold)), RoundedCornerShape(27.dp)),
         shape = RoundedCornerShape(27.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFF07091B))
@@ -205,15 +274,9 @@ private fun HeroBanner() {
                 Text("Your gaming space. Your next match starts here.", color = Muted, fontSize = 11.sp, lineHeight = 16.sp)
                 Text("🔥  READY FOR YOUR NEXT MATCH", color = Gold, fontSize = 10.sp, fontWeight = FontWeight.Black)
             }
-            Column(
-                modifier = Modifier.align(Alignment.CenterEnd).padding(end = 2.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(0.dp)
-            ) {
-                Text("👑", fontSize = 23.sp)
-                Text("🥷", fontSize = 76.sp)
-                Text("⚡", color = Gold, fontSize = 34.sp)
-            }
+            AnimeGamerPortrait(
+                modifier = Modifier.align(Alignment.CenterEnd).padding(end = 1.dp).size(166.dp)
+            )
             Text("✦ LIVE", color = Gold, fontSize = 9.sp, fontWeight = FontWeight.Black, modifier = Modifier.align(Alignment.TopEnd))
         }
     }
@@ -221,7 +284,7 @@ private fun HeroBanner() {
 
 @Composable
 private fun HomePage(context: Context, stats: DeviceStats, status: androidx.compose.runtime.MutableState<String>, onRefresh: () -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         HeroBanner()
 
         Card(modifier = Modifier.fillMaxWidth().border(1.5.dp, Brush.linearGradient(listOf(Cyan, Purple, Violet)), RoundedCornerShape(23.dp)), shape = RoundedCornerShape(23.dp), colors = CardDefaults.cardColors(containerColor = Panel)) {
