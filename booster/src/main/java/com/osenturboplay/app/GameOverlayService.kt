@@ -11,6 +11,8 @@ import android.graphics.drawable.GradientDrawable
 import android.provider.Settings
 import android.os.Build
 import android.os.IBinder
+import android.os.StatFs
+import android.app.ActivityManager
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
@@ -53,11 +55,11 @@ class GameOverlayService : Service() {
     private fun showBubble() {
         if (overlayView != null) return
         val bubble = TextView(this).apply {
-            text = "OSEN\n🐉"
+            text = "OC\nOSEN"
             textSize = 12f
             gravity = Gravity.CENTER
             setTextColor(Color.WHITE)
-            background = rounded(Color.rgb(15, 7, 7), Color.rgb(255, 74, 36), 28f)
+            background = rounded(Color.rgb(12, 16, 27), Color.rgb(255, 142, 58), 28f)
             elevation = dp(8).toFloat()
             setOnClickListener { showPanel() }
         }
@@ -75,31 +77,41 @@ class GameOverlayService : Service() {
         val panel = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(dp(14), dp(12), dp(14), dp(12))
-            background = rounded(Color.rgb(15, 7, 7), Color.rgb(255, 74, 36), 18f)
+            background = rounded(Color.rgb(12, 16, 27), Color.rgb(255, 142, 58), 20f)
             elevation = dp(10).toFloat()
         }
-        val heading = label("🐉 OSEN TURBOPLAY", 15f, Color.rgb(255, 112, 55), true)
-        val subheading = label("DRAGON FIRE EDITION", 10f, Color.rgb(255, 74, 36), true)
-        val info = label("IN-GAME QUICK CONTROLS\nControl calls and notifications without leaving Free Fire after one-time Android permission.", 12f, Color.WHITE, false)
-        val dnd = action("🌙  DND ON / OFF") { toggleDnd() }
-        val calls = action("📵  SILENCE CALLS") { enableDnd("Calls silenced by Android DND.") }
-        val notifications = action("🔕  SILENCE NOTIFICATIONS") { enableDnd("Notifications silenced by Android DND.") }
-        val minimize = action("LOW-LAG MODE") { minimizePanel() }
-        val close = action("CLOSE PANEL") { minimizePanel() }
+        val heading = label("OSEN  /  TURBOPLAY", 15f, Color.rgb(255, 177, 92), true)
+        val subheading = label("DRAGON CORE  •  IN-GAME CONTROL", 9f, Color.rgb(255, 105, 68), true)
+        val info = label("QUICK CONTROL DECK", 11f, Color.WHITE, true)
+        val stats = label(readQuickStats(), 10f, Color.rgb(178, 198, 214), false)
+        val dnd = action("DND  •  TOGGLE") { toggleDnd() }
+        val calls = action("CALLS  •  SILENCE") { enableDnd("Calls silenced by Android DND.") }
+        val notifications = action("ALERTS  •  SILENCE") { enableDnd("Notifications silenced by Android DND.") }
+        val minimize = action("HIDE PANEL  •  KEEP GAME RUNNING") { minimizePanel() }
         panel.addView(heading)
-        panel.addView(subheading, spacedParams(dp(4)))
-        panel.addView(info, spacedParams(dp(10)))
-        panel.addView(dnd, spacedParams(dp(8)))
-        panel.addView(calls, spacedParams(dp(6)))
-        panel.addView(notifications, spacedParams(dp(6)))
+        panel.addView(subheading, spacedParams(dp(3)))
+        panel.addView(info, spacedParams(dp(12)))
+        panel.addView(stats, spacedParams(dp(5)))
+        panel.addView(dnd, spacedParams(dp(10)))
+        panel.addView(calls, spacedParams(dp(7)))
+        panel.addView(notifications, spacedParams(dp(7)))
         panel.addView(minimize, spacedParams(dp(10)))
-        panel.addView(close, spacedParams(dp(6)))
 
         val width = min(dp(250), resources.displayMetrics.widthPixels - dp(24))
         params = windowParams(width.coerceAtLeast(dp(190)), WindowManager.LayoutParams.WRAP_CONTENT)
         overlayView = panel
         windowManager.addView(panel, params)
         makeDraggable(heading)
+    }
+
+    private fun readQuickStats(): String {
+        val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        val memory = ActivityManager.MemoryInfo()
+        activityManager.getMemoryInfo(memory)
+        val freeRamMb = memory.availMem / (1024L * 1024L)
+        val stat = StatFs(android.os.Environment.getDataDirectory().path)
+        val freeStorageMb = (stat.availableBytes / (1024L * 1024L))
+        return "FREE RAM  ${freeRamMb} MB     FREE STORAGE  ${freeStorageMb} MB"
     }
 
     private fun toggleDnd() {
@@ -140,8 +152,8 @@ class GameOverlayService : Service() {
         textSize = 11f
         gravity = Gravity.CENTER
         setTextColor(Color.WHITE)
-        setPadding(dp(10), dp(10), dp(10), dp(10))
-        background = rounded(Color.rgb(42, 12, 10), Color.rgb(255, 74, 36), 10f)
+        setPadding(dp(10), dp(12), dp(10), dp(12))
+        background = rounded(Color.rgb(25, 28, 42), Color.rgb(255, 142, 58), 12f)
         setOnClickListener { click() }
     }
 
