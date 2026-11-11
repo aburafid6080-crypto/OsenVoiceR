@@ -8,6 +8,11 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.PixelFormat
 import android.graphics.drawable.GradientDrawable
+import android.opengl.EGL14
+import android.opengl.EGLConfig
+import android.opengl.EGLDisplay
+import android.opengl.EGLSurface
+import android.opengl.GLES20
 import android.provider.Settings
 import android.os.Build
 import android.os.IBinder
@@ -87,6 +92,7 @@ class GameOverlayService : Service() {
         val heading = label("GAME CONTROL", 20f, Color.WHITE, true)
         val subheading = label("CORE PANEL  •  LOW DISTRACTION", 9f, Color.rgb(151, 169, 196), true)
         val stats = label(readQuickStats(), 10f, Color.rgb(177, 196, 218), false)
+        val hardwareInfo = label(readHardwareInfo(), 9f, Color.rgb(133, 225, 220), true)
         val fpsInfo = label(readFpsInfo(), 10f, Color.rgb(0, 225, 215), true)
         val status = label("SYSTEM READY  •  DND STATUS CHECK", 9f, Color.rgb(255, 190, 90), true)
         panelStatus = status
@@ -106,6 +112,7 @@ class GameOverlayService : Service() {
         panel.addView(heading, spacedParams(dp(4)))
         panel.addView(subheading, spacedParams(dp(2)))
         panel.addView(stats, spacedParams(dp(16)))
+        panel.addView(hardwareInfo, spacedParams(dp(8)))
         panel.addView(fpsInfo, spacedParams(dp(7)))
         panel.addView(status, spacedParams(dp(12)))
         panel.addView(dnd, spacedParams(dp(12)))
@@ -140,6 +147,59 @@ class GameOverlayService : Service() {
         val stat = StatFs(android.os.Environment.getDataDirectory().path)
         val freeStorageMb = (stat.availableBytes / (1024L * 1024L))
         return "FREE RAM  ${freeRamMb} MB     FREE STORAGE  ${freeStorageMb} MB"
+    }
+
+    private fun readHardwareInfo(): String {
+        val chip = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            Build.SOC_MODEL.takeIf { it.isNotBlank() } ?: Build.HARDWARE
+        } else {
+            Build.HARDWARE
+        }
+        val cores = Runtime.getRuntime().availableProcessors()
+        val gpu = readGpuRenderer()
+        return "CPU / CHIP  •  ${chip.take(28)}  •  ${cores} CORES\\nGPU  •  ${gpu.take(34)}"
+    }
+
+    private fun readGpuRenderer(): String {
+        var display: EGLDisplay = EGL14.EGL_NO_DISPLAY
+        var surface: EGLSurface = EGL14.EGL_NO_SURFACE
+        var context: android.opengl.EGLContext = EGL14.EGL_NO_CONTEXT
+        try {
+            display = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY)
+            if (display == EGL14.EGL_NO_DISPLAY) return "NOT AVAILABLE"
+            val versions = IntArray(2)
+            if (!EGL14.eglInitialize(display, versions, 0, versions, 1)) return "NOT AVAILABLE"
+            val configAttrs = intArrayOf(
+                EGL14.EGL_RENDERABLE_TYPE, 4,
+                EGL14.EGL_SURFACE_TYPE, 1,
+                EGL14.EGL_RED_SIZE, 8,
+                EGL14.EGL_GREEN_SIZE, 8,
+                EGL14.EGL_BLUE_SIZE, 8,
+                EGL14.EGL_NONE
+            )
+            val configs = arrayOfNulls<EGLConfig>(1)
+            val count = IntArray(1)
+            if (!EGL14.eglChooseConfig(display, configAttrs, 0, configs, 0, 1, count, 0) || count[0] == 0) {
+                return "NOT AVAILABLE"
+            }
+            val contextAttrs = intArrayOf(0x3098, 2, EGL14.EGL_NONE)
+            context = EGL14.eglCreateContext(display, configs[0], EGL14.EGL_NO_CONTEXT, contextAttrs, 0)
+            if (context == EGL14.EGL_NO_CONTEXT) return "NOT AVAILABLE"
+            val surfaceAttrs = intArrayOf(0x3057, 1, 0x3056, 1, EGL14.EGL_NONE)
+            surface = EGL14.eglCreatePbufferSurface(display, configs[0], surfaceAttrs, 0)
+            if (surface == EGL14.EGL_NO_SURFACE) return "NOT AVAILABLE"
+            if (!EGL14.eglMakeCurrent(display, surface, surface, context)) return "NOT AVAILABLE"
+            val renderer = GLES20.glGetString(GLES20.GL_RENDERER)
+            val vendor = GLES20.glGetString(GLES20.GL_VENDOR)
+            return (renderer ?: vendor ?: "NOT AVAILABLE").replace(Regex("\\s+"), " ").trim()
+        } catch (_: Exception) {
+            return "NOT AVAILABLE"
+        } finally {
+            try { EGL14.eglMakeCurrent(display, EGL14.EGL_NO_SURFACE, EGL14.EGL_NO_SURFACE, EGL14.EGL_NO_CONTEXT) } catch (_: Exception) { }
+            try { if (surface != EGL14.EGL_NO_SURFACE) EGL14.eglDestroySurface(display, surface) } catch (_: Exception) { }
+            try { if (context != EGL14.EGL_NO_CONTEXT) EGL14.eglDestroyContext(display, context) } catch (_: Exception) { }
+            try { if (display != EGL14.EGL_NO_DISPLAY) EGL14.eglTerminate(display) } catch (_: Exception) { }
+        }
     }
 
     private fun toggleDnd() {
