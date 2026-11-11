@@ -155,7 +155,7 @@ class GameOverlayService : Service() {
                 MotionEvent.ACTION_MOVE -> {
                     params.x = startX + (event.rawX - touchX).toInt()
                     params.y = startY + (event.rawY - touchY).toInt()
-                    try { windowManager.updateViewLayout(overlayView, params) } catch (_: Exception) { }
+                    try { windowManager.updateViewLayout(view, params) } catch (_: Exception) { }
                     true
                 }
                 else -> false
