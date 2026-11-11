@@ -290,7 +290,16 @@ class GameOverlayService : Service() {
         }
     }
 
-    private fun hasUsageAccess(): Boolean {\n        val appOps = getSystemService(APP_OPS_SERVICE) as android.app.AppOpsManager\n        return appOps.checkOpNoThrow(\n            android.app.AppOpsManager.OPSTR_GET_USAGE_STATS,\n            android.os.Process.myUid(),\n            packageName\n        ) == android.app.AppOpsManager.MODE_ALLOWED\n    }\n\n    private fun readFreeRam(): String {
+    private fun hasUsageAccess(): Boolean {
+        val appOps = getSystemService(APP_OPS_SERVICE) as android.app.AppOpsManager
+        return appOps.checkOpNoThrow(
+            android.app.AppOpsManager.OPSTR_GET_USAGE_STATS,
+            android.os.Process.myUid(),
+            packageName
+        ) == android.app.AppOpsManager.MODE_ALLOWED
+    }
+
+    private fun readFreeRam(): String {
         val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
         val info = ActivityManager.MemoryInfo()
         manager.getMemoryInfo(info)
@@ -587,7 +596,7 @@ class GameOverlayService : Service() {
         dndButton = null
         ramValueView = null
         storageValueView = null
-        stopForeground(STOP_FOREGROUND_REMOVE)
+        autoCloseHandler.removeCallbacks(autoCloseCheck)\n        stopForeground(STOP_FOREGROUND_REMOVE)
         super.onDestroy()
     }
 
