@@ -62,18 +62,23 @@ class GameOverlayService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = START_NOT_STICKY
 
-    private fun showBubble() {
+    private fun showBubble(labelText: String = "OSEN") {
         if (overlayView != null) return
+        val isBoost = labelText == "BOOST"
         val bubble = TextView(this).apply {
-            text = "OC\nOSEN"
-            textSize = 12f
+            text = labelText
+            textSize = if (isBoost) 10f else 12f
             gravity = Gravity.CENTER
             setTextColor(Color.WHITE)
-            background = rounded(Color.rgb(8, 13, 25), Color.rgb(0, 220, 210), 28f)
+            background = rounded(
+                if (isBoost) Color.rgb(10, 35, 58) else Color.rgb(8, 13, 25),
+                if (isBoost) Color.rgb(255, 196, 45) else Color.rgb(0, 220, 210),
+                28f
+            )
             elevation = dp(8).toFloat()
             setOnClickListener { showPanel() }
         }
-        params = windowParams(dp(58), dp(58))
+        params = windowParams(if (isBoost) dp(76) else dp(58), if (isBoost) dp(42) else dp(58))
         overlayView = bubble
         windowManager.addView(bubble, params)
         makeDraggable(bubble)
@@ -178,12 +183,12 @@ class GameOverlayService : Service() {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER
         }
-        val back = action("‹  BACK") { minimizePanel() }.apply {
+        val back = action("‹  BACK") { minimizePanel("BACK") }.apply {
             background = rounded(Color.rgb(4, 25, 48), Color.rgb(0, 190, 255), 13f)
             textSize = 11f
             setTextColor(Color.WHITE)
         }
-        val boost = action("⚡  BOOST") { refreshBoostInfo() }.apply {
+        val boost = action("⚡  BOOST") { refreshBoostInfo(); minimizePanel("BOOST") }.apply {
             background = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
                 intArrayOf(Color.rgb(255, 196, 45), Color.rgb(170, 94, 0))
@@ -379,7 +384,7 @@ class GameOverlayService : Service() {
         panelStatus?.text = message
     }
 
-    private fun minimizePanel() {
+    private fun minimizePanel(bubbleLabel: String = "OSEN") {
         val current = overlayView
         val savedX = params.x
         val savedY = params.y
@@ -392,10 +397,26 @@ class GameOverlayService : Service() {
         ramValueView = null
         storageValueView = null
         expanded = false
-        showBubble()
+        showBubble(bubbleLabel)
         params.x = savedX
         params.y = savedY
-        overlayView?.let { try { windowManager.updateViewLayout(it, params) } catch (_: Exception) { } }
+        overlayView?.let { bubble ->
+            try { windowManager.updateViewLayout(bubble, params) } catch (_: Exception) { }
+            bubble.alpha = 0f
+            bubble.scaleX = 0.72f
+            bubble.scaleY = 0.72f
+            bubble.animate().alpha(1f).scaleX(1f).scaleY(1f).setDuration(180).start()
+            if (bubbleLabel == "BACK" && bubble is TextView) {
+                bubble.postDelayed({
+                    if (overlayView === bubble) {
+                        bubble.animate().alpha(0.65f).setDuration(100).withEndAction {
+                            bubble.text = "OSEN"
+                            bubble.animate().alpha(1f).setDuration(140).start()
+                        }.start()
+                    }
+                }, 650)
+            }
+        }
     }
 
     private fun action(text: String, click: () -> Unit) = TextView(this).apply {
