@@ -427,7 +427,7 @@ private fun GamesPage(status: androidx.compose.runtime.MutableState<String>, onL
 private fun ToolsPage(onRefresh: () -> Unit, onCleaner: () -> Unit, onPhoneSettings: () -> Unit, onDeviceInfo: () -> Unit) {
     PageTitle("GAMING TOOLS", "Quick shortcuts for your device")
     ActionButton("📱  PHONE SETTINGS", Cyan, onPhoneSettings)
-    ActionButton("▤  OPEN APP STORAGE SETTINGS", Gold, onCleaner)
+    ActionButton("▤  APP INFO", Gold, onCleaner)
     ActionButton("📊  DEVICE INFO", Purple, onDeviceInfo)
     NoteCard()
 }
