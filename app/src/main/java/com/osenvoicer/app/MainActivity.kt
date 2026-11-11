@@ -77,7 +77,7 @@ private fun findInstalledFreeFire(packageManager: PackageManager): List<Installe
                 title = title,
                 packageName = packageName,
                 versionName = info.versionName ?: "Unknown",
-                versionCode = if (Build.VERSION.SDK_INT >= 28) info.longVersionCode else @Suppress("DEPRECATION") info.versionCode.toLong()
+                versionCode = if (Build.VERSION.SDK_INT >= 28) info.longVersionCode else info.versionCode.toLong()
             )
         } catch (_: PackageManager.NameNotFoundException) {
             null
