@@ -102,7 +102,7 @@ private fun TurboPlayScreen() {
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                        Text("♛  OSEN GAMING", color = Muted, fontSize = 10.sp, fontWeight = FontWeight.Bold, letterSpacing = 3.sp)
+                        Text("✦  OSEN GAMING", color = Muted, fontSize = 10.sp, fontWeight = FontWeight.Bold, letterSpacing = 3.sp)
                         Text("OSEN TURBOPLAY", color = White, fontSize = 26.sp, fontWeight = FontWeight.Black)
                         Text("━  GAME BOOSTER  ━", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 2.sp)
                     }
@@ -180,65 +180,45 @@ private fun statsRefresh(context: Context, status: androidx.compose.runtime.Muta
 }
 
 @Composable
-private fun AnimeGamerPortrait(modifier: Modifier = Modifier) {
+private fun PremiumOsenMark(modifier: Modifier = Modifier) {
     Canvas(modifier = modifier) {
-        val sx = size.width / 200f
-        val sy = size.height / 200f
-        fun p(x: Float, y: Float) = Offset(x * sx, y * sy)
+        val cx = size.width / 2f
+        val cy = size.height / 2f
+        val r = size.minDimension * 0.47f
+        // Original OSEN crest: layered neon rings, crown and central lightning mark.
         drawCircle(
             brush = Brush.radialGradient(
-                colors = listOf(Color(0xFF7A16FF).copy(alpha = 0.52f), Color(0xFF00D9FF).copy(alpha = 0.20f), Color.Transparent),
-                center = p(100f, 100f), radius = 98f * sx
-            ),
-            radius = 98f * sx, center = p(100f, 100f)
+                listOf(Color(0xFF34106E), Color(0xFF071B3B), Color(0xFF050817)),
+                center = Offset(cx, cy), radius = r
+            ), radius = r, center = Offset(cx, cy)
         )
-        drawCircle(Color(0xFF00D9FF).copy(alpha = 0.75f), 97f * sx, p(100f, 100f), style = Stroke(width = 2f * sx))
-        val hoodie = Path().apply {
-            moveTo(34f * sx, 190f * sy)
-            cubicTo(39f * sx, 150f * sy, 65f * sx, 137f * sy, 100f * sx, 137f * sy)
-            cubicTo(137f * sx, 137f * sy, 164f * sx, 153f * sy, 169f * sx, 190f * sy)
+        drawCircle(Color(0xFF00D9FF).copy(alpha = 0.9f), r * 0.96f, Offset(cx, cy), style = Stroke(width = r * 0.025f))
+        drawCircle(Color(0xFF9C18FF).copy(alpha = 0.9f), r * 0.86f, Offset(cx, cy), style = Stroke(width = r * 0.018f))
+        val crown = Path().apply {
+            moveTo(cx - r * 0.48f, cy - r * 0.26f)
+            lineTo(cx - r * 0.38f, cy - r * 0.52f)
+            lineTo(cx - r * 0.12f, cy - r * 0.34f)
+            lineTo(cx, cy - r * 0.62f)
+            lineTo(cx + r * 0.14f, cy - r * 0.34f)
+            lineTo(cx + r * 0.39f, cy - r * 0.52f)
+            lineTo(cx + r * 0.49f, cy - r * 0.26f)
             close()
         }
-        drawPath(hoodie, Color(0xFF17102F))
-        drawPath(hoodie, Color(0xFF8C24FF), style = Stroke(width = 3f * sx))
-        drawRoundRect(Color(0xFF272044), p(83f, 124f), Size(34f * sx, 30f * sy), androidx.compose.ui.geometry.CornerRadius(8f * sx))
-        drawOval(Color(0xFFE9B18B), p(62f, 47f), Size(76f * sx, 91f * sy))
-        val hair = Path().apply {
-            moveTo(57f * sx, 78f * sy)
-            lineTo(38f * sx, 47f * sy)
-            lineTo(62f * sx, 55f * sy)
-            lineTo(55f * sx, 23f * sy)
-            lineTo(82f * sx, 43f * sy)
-            lineTo(91f * sx, 8f * sy)
-            lineTo(108f * sx, 39f * sy)
-            lineTo(135f * sx, 19f * sy)
-            lineTo(128f * sx, 52f * sy)
-            lineTo(157f * sx, 43f * sy)
-            lineTo(139f * sx, 83f * sy)
-            lineTo(130f * sx, 70f * sy)
-            lineTo(67f * sx, 82f * sy)
+        drawPath(crown, Brush.horizontalGradient(listOf(Color(0xFFFFC83D), Color(0xFFFFE88A), Color(0xFFFF9D18))))
+        drawPath(crown, Color(0xFFFFE7A0), style = Stroke(width = r * 0.025f))
+        val bolt = Path().apply {
+            moveTo(cx + r * 0.10f, cy - r * 0.22f)
+            lineTo(cx - r * 0.20f, cy + r * 0.12f)
+            lineTo(cx - r * 0.015f, cy + r * 0.12f)
+            lineTo(cx - r * 0.12f, cy + r * 0.48f)
+            lineTo(cx + r * 0.25f, cy + r * 0.02f)
+            lineTo(cx + r * 0.045f, cy + r * 0.02f)
             close()
         }
-        drawPath(hair, Color(0xFFE9EEFF))
-        drawPath(hair, Color(0xFF8E58FF), style = Stroke(width = 2.5f * sx))
-        drawLine(Color(0xFF9C18FF), p(72f, 42f), p(93f, 20f), 3f * sx, cap = StrokeCap.Round)
-        drawLine(Color(0xFF00D9FF), p(103f, 40f), p(132f, 29f), 3f * sx, cap = StrokeCap.Round)
-        drawLine(Color(0xFF7B2BFF), p(72f, 91f), p(91f, 94f), 5f * sx, cap = StrokeCap.Round)
-        drawLine(Color(0xFF7B2BFF), p(109f, 94f), p(128f, 91f), 5f * sx, cap = StrokeCap.Round)
-        val mask = Path().apply {
-            moveTo(61f * sx, 101f * sy)
-            lineTo(100f * sx, 111f * sy)
-            lineTo(139f * sx, 101f * sy)
-            lineTo(130f * sx, 132f * sy)
-            lineTo(100f * sx, 145f * sy)
-            lineTo(70f * sx, 132f * sy)
-            close()
-        }
-        drawPath(mask, Color(0xFF080916))
-        drawPath(mask, Color(0xFF00D9FF), style = Stroke(width = 2f * sx))
-        drawLine(Color(0xFF9C18FF), p(81f, 123f), p(119f, 123f), 2f * sx)
-        drawLine(Color(0xFF00D9FF), p(45f, 177f), p(72f, 158f), 4f * sx, cap = StrokeCap.Round)
-        drawLine(Color(0xFFB51CFF), p(128f, 158f), p(157f, 179f), 4f * sx, cap = StrokeCap.Round)
+        drawPath(bolt, Brush.linearGradient(listOf(Color(0xFFFFFFFF), Color(0xFFB9F8FF), Color(0xFF9C18FF))))
+        drawPath(bolt, Color.White.copy(alpha = 0.9f), style = Stroke(width = r * 0.018f))
+        drawCircle(Color(0xFF00D9FF), r * 0.035f, Offset(cx - r * 0.60f, cy + r * 0.42f))
+        drawCircle(Color(0xFFE020FF), r * 0.035f, Offset(cx + r * 0.60f, cy + r * 0.42f))
     }
 }
 
@@ -298,7 +278,7 @@ private fun HeroBanner() {
                 modifier = Modifier.fillMaxWidth(0.66f).align(Alignment.CenterStart),
                 verticalArrangement = Arrangement.spacedBy(7.dp)
             ) {
-                Text("♛  OSEN TURBOPLAY", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.Black, letterSpacing = 1.8.sp)
+                Text("✦  OSEN TURBOPLAY", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.Black, letterSpacing = 1.8.sp)
                 Spacer(Modifier.height(5.dp))
                 Text("PLAY SMARTER", color = White, fontSize = 21.sp, fontWeight = FontWeight.Black)
                 Text("BE STRONGER", color = Color(0xFFE020FF), fontSize = 21.sp, fontWeight = FontWeight.Black)
@@ -307,7 +287,7 @@ private fun HeroBanner() {
                 Text("Your gaming space. Your next match starts here.", color = Muted, fontSize = 9.sp, lineHeight = 13.sp, maxLines = 2)
                 Text("🔥  READY FOR YOUR NEXT MATCH", color = Gold, fontSize = 9.sp, fontWeight = FontWeight.Black, maxLines = 1)
             }
-            AnimeGamerPortrait(
+            PremiumOsenMark(
                 modifier = Modifier.align(Alignment.CenterEnd).padding(end = 5.dp).size(154.dp)
             )
             Text("✦ LIVE", color = Gold, fontSize = 9.sp, fontWeight = FontWeight.Black, modifier = Modifier.align(Alignment.TopEnd))
