@@ -56,7 +56,7 @@ class GameOverlayService : Service() {
             textSize = 12f
             gravity = Gravity.CENTER
             setTextColor(Color.WHITE)
-            background = rounded(Color.rgb(43, 12, 83), Color.rgb(0, 217, 255), 28f)
+            background = rounded(Color.rgb(12, 11, 10), Color.rgb(212, 166, 65), 28f)
             elevation = dp(8).toFloat()
             setOnClickListener { showPanel() }
         }
@@ -74,13 +74,13 @@ class GameOverlayService : Service() {
         val panel = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(dp(14), dp(12), dp(14), dp(12))
-            background = rounded(Color.rgb(13, 10, 31), Color.rgb(0, 217, 255), 18f)
+            background = rounded(Color.rgb(12, 11, 10), Color.rgb(212, 166, 65), 18f)
             elevation = dp(10).toFloat()
         }
-        val heading = label("OSEN TURBOPLAY", 15f, Color.rgb(0, 217, 255), true)
+        val heading = label("OSEN TURBOPLAY", 15f, Color.rgb(235, 190, 85), true)
         val subheading = label("GAME SESSION PANEL", 10f, Color.LTGRAY, true)
-        val info = label("LOW-LAG MODE\nHides the panel to reduce OSEN overlay activity. Android manages game performance.", 12f, Color.WHITE, false)
-        val minimize = action("LOW-LAG MODE") { minimizePanel() }
+        val info = label("LOW-LAG MODE\nStops the OSEN overlay and its foreground service to reduce extra background work. Android manages game performance.", 12f, Color.WHITE, false)
+        val minimize = action("LOW-LAG MODE") { stopSelf() }
         val close = action("CLOSE PANEL") { stopSelf() }
         panel.addView(heading)
         panel.addView(subheading, spacedParams(dp(4)))
@@ -111,7 +111,7 @@ class GameOverlayService : Service() {
         gravity = Gravity.CENTER
         setTextColor(Color.WHITE)
         setPadding(dp(10), dp(10), dp(10), dp(10))
-        background = rounded(Color.rgb(48, 18, 89), Color.rgb(156, 24, 255), 10f)
+        background = rounded(Color.rgb(35, 29, 18), Color.rgb(212, 166, 65), 10f)
         setOnClickListener { click() }
     }
 
