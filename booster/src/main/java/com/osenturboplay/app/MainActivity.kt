@@ -733,7 +733,7 @@ private fun toggleDndMode(context: Context): String {
 
 private fun openCallBlockingSettings(context: Context) {
     // Android/Phone-app call blocking options vary by device and carrier.
-    safeOpen(context, Intent(Settings.ACTION_CALL_SETTINGS))
+    safeOpen(context, Intent("android.intent.action.CALL_SETTINGS"))
 }
 
 private fun openNotificationControls(context: Context) {
