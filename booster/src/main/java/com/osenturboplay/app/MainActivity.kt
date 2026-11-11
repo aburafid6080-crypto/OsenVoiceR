@@ -135,7 +135,6 @@ private fun TurboPlayScreen() {
                                     stats.value = readDeviceStats(context)
                                     status.value = "Device information refreshed"
                                 },
-                                onBooster = { openGameSettings(context, status) },
                                 onCleaner = { openAppSettings(context) },
                                 onDevice = { openDeviceSettings(context) }
                             )
@@ -424,10 +423,9 @@ private fun GamesPage(status: androidx.compose.runtime.MutableState<String>, onL
 }
 
 @Composable
-private fun ToolsPage(onRefresh: () -> Unit, onBooster: () -> Unit, onCleaner: () -> Unit, onDevice: () -> Unit) {
+private fun ToolsPage(onRefresh: () -> Unit, onCleaner: () -> Unit, onDevice: () -> Unit) {
     PageTitle("GAMING TOOLS", "Quick shortcuts for your device")
     ActionButton("📱  PHONE SETTINGS", Cyan) { onDevice() }
-    ActionButton("⚡  OPEN ANDROID GAME SETTINGS", Green, onBooster)
     ActionButton("▤  OPEN APP STORAGE SETTINGS", Gold, onCleaner)
     ActionButton("📱  DEVICE SETTINGS", Purple, onDevice)
     NoteCard()
@@ -667,31 +665,6 @@ private fun openAppSettings(context: Context) {
 private fun openDeviceSettings(context: Context) {
     // "Phone Settings" should open the main Android Settings screen, not Device Info.
     safeOpen(context, Intent(Settings.ACTION_SETTINGS))
-}
-
-private fun openGameSettings(context: Context, status: androidx.compose.runtime.MutableState<String>) {
-    // Game Settings is optional and manufacturer-specific. Check whether Android
-    // can resolve it before launching; always provide a working Settings fallback.
-    val gameSettingsIntent = Intent("android.settings.GAME_SETTINGS")
-        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    val settingsIntent = Intent(Settings.ACTION_SETTINGS)
-        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    try {
-        val canOpenGameSettings = gameSettingsIntent.resolveActivity(context.packageManager) != null
-        context.startActivity(if (canOpenGameSettings) gameSettingsIntent else settingsIntent)
-        status.value = if (canOpenGameSettings) {
-            "Opened Android Game Settings"
-        } else {
-            "No separate Game Settings on this phone; opened Phone Settings"
-        }
-    } catch (_: Exception) {
-        try {
-            context.startActivity(settingsIntent)
-            status.value = "Opened Phone Settings"
-        } catch (_: Exception) {
-            status.value = "Could not open Android Settings"
-        }
-    }
 }
 
 private fun safeOpen(context: Context, intent: Intent) {
