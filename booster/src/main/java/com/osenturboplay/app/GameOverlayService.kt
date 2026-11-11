@@ -82,47 +82,143 @@ class GameOverlayService : Service() {
         try { windowManager.removeView(old) } catch (_: Exception) { }
         expanded = true
 
-        val panel = LinearLayout(this).apply {
+        val bg = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(16), dp(15), dp(16), dp(15))
-            background = rounded(Color.rgb(8, 13, 25), Color.rgb(0, 220, 210), 24f)
-            elevation = dp(14).toFloat()
+            setPadding(dp(15), dp(15), dp(15), dp(15))
+            background = GradientDrawable(
+                GradientDrawable.Orientation.TL_BR,
+                intArrayOf(Color.rgb(7, 13, 29), Color.rgb(10, 24, 43), Color.rgb(8, 10, 24))
+            ).apply {
+                cornerRadius = dp(25).toFloat()
+                setStroke(dp(1), Color.rgb(0, 214, 204))
+            }
+            elevation = dp(18).toFloat()
         }
-        val eyebrow = label("OSEN  //  TURBOPLAY", 10f, Color.rgb(0, 225, 215), true)
-        val heading = label("GAME CONTROL", 20f, Color.WHITE, true)
-        val subheading = label("CORE PANEL  •  LOW DISTRACTION", 9f, Color.rgb(151, 169, 196), true)
-        val stats = label(readQuickStats(), 10f, Color.rgb(177, 196, 218), false)
-        val hardwareInfo = label(readHardwareInfo(), 9f, Color.rgb(133, 225, 220), true)
-        val fpsInfo = label(readFpsInfo(), 10f, Color.rgb(0, 225, 215), true)
-        val status = label("SYSTEM READY  •  DND STATUS CHECK", 9f, Color.rgb(255, 190, 90), true)
+
+        val top = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+        }
+        val brand = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        brand.addView(label("OSEN  /  TURBOPLAY", 10f, Color.rgb(0, 235, 220), true))
+        brand.addView(label("PERFORMANCE CENTER", 17f, Color.WHITE, true), spacedParams(dp(3)))
+        brand.addView(label("DRAGON CORE  •  GAME MODE", 8f, Color.rgb(151, 177, 202), true), spacedParams(dp(2)))
+        val live = label("● READY", 9f, Color.rgb(104, 255, 190), true).apply {
+            gravity = Gravity.CENTER
+            setPadding(dp(9), dp(7), dp(9), dp(7))
+            background = rounded(Color.rgb(12, 49, 48), Color.rgb(35, 190, 157), 18f)
+        }
+        top.addView(brand, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+        top.addView(live)
+
+        val fpsCard = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(dp(14), dp(12), dp(14), dp(12))
+            background = GradientDrawable(
+                GradientDrawable.Orientation.LEFT_RIGHT,
+                intArrayOf(Color.rgb(21, 47, 67), Color.rgb(22, 26, 55))
+            ).apply {
+                cornerRadius = dp(18).toFloat()
+                setStroke(dp(1), Color.rgb(0, 205, 210))
+            }
+        }
+        val fpsLeft = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        fpsLeft.addView(label("FPS TARGET", 9f, Color.rgb(138, 218, 226), true))
+        fpsLeft.addView(label("60", 32f, Color.WHITE, true), spacedParams(dp(1)))
+        fpsLeft.addView(label("LIVE FPS NOT MEASURED", 8f, Color.rgb(171, 190, 210), true), spacedParams(dp(1)))
+        fpsCard.addView(fpsLeft, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+        fpsCard.addView(label(readDisplayRate(), 10f, Color.rgb(95, 255, 230), true).apply {
+            gravity = Gravity.CENTER
+            setPadding(dp(10), dp(9), dp(10), dp(9))
+            background = rounded(Color.rgb(7, 31, 45), Color.rgb(0, 180, 190), 13f)
+        })
+
+        val resourceTitle = label("DEVICE RESOURCES", 9f, Color.rgb(130, 159, 189), true)
+        val resources = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
+        resources.addView(infoCard("MEMORY", readFreeRam(), "FREE RAM"), LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply { marginEnd = dp(5) })
+        resources.addView(infoCard("STORAGE", readFreeStorage(), "AVAILABLE"), LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply { marginStart = dp(5) })
+
+        val hardwareTitle = label("HARDWARE PROFILE", 9f, Color.rgb(130, 159, 189), true)
+        val hardware = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(dp(12), dp(10), dp(12), dp(10))
+            background = rounded(Color.rgb(12, 22, 39), Color.rgb(47, 91, 119), 15f)
+        }
+        hardware.addView(label("CPU  /  ${readCpuName()}", 10f, Color.WHITE, true))
+        hardware.addView(label("${Runtime.getRuntime().availableProcessors()} LOGICAL CORES", 8f, Color.rgb(142, 170, 197), true), spacedParams(dp(3)))
+        hardware.addView(label("GPU  /  ${readGpuRenderer().take(38)}", 9f, Color.rgb(91, 231, 219), true), spacedParams(dp(7)))
+
+        val status = label("SYSTEM READY  •  DND STATUS CHECK", 8f, Color.rgb(255, 197, 111), true)
         panelStatus = status
         val dnd = action(dndLabel()) { toggleDnd() }.apply {
-            background = rounded(Color.rgb(12, 40, 49), Color.rgb(0, 225, 215), 16f)
-            setTextColor(Color.rgb(105, 255, 239))
-            textSize = 13f
-            setPadding(dp(12), dp(16), dp(12), dp(16))
+            background = GradientDrawable(
+                GradientDrawable.Orientation.LEFT_RIGHT,
+                intArrayOf(Color.rgb(12, 76, 78), Color.rgb(15, 49, 74))
+            ).apply {
+                cornerRadius = dp(15).toFloat()
+                setStroke(dp(1), Color.rgb(0, 228, 211))
+            }
+            setTextColor(Color.WHITE)
+            textSize = 12f
+            setPadding(dp(12), dp(14), dp(12), dp(14))
         }
         dndButton = dnd
-        val minimize = action("MINIMIZE  •  KEEP GAME RUNNING") { minimizePanel() }.apply {
-            background = rounded(Color.rgb(23, 29, 45), Color.rgb(93, 115, 150), 14f)
-            textSize = 10f
+        val minimize = action("MINIMIZE PANEL  ↓") { minimizePanel() }.apply {
+            background = rounded(Color.rgb(17, 25, 42), Color.rgb(54, 77, 103), 13f)
+            textSize = 9f
+            setTextColor(Color.rgb(178, 198, 218))
         }
 
-        panel.addView(eyebrow)
-        panel.addView(heading, spacedParams(dp(4)))
-        panel.addView(subheading, spacedParams(dp(2)))
-        panel.addView(stats, spacedParams(dp(16)))
-        panel.addView(hardwareInfo, spacedParams(dp(8)))
-        panel.addView(fpsInfo, spacedParams(dp(7)))
-        panel.addView(status, spacedParams(dp(12)))
-        panel.addView(dnd, spacedParams(dp(12)))
-        panel.addView(minimize, spacedParams(dp(8)))
+        bg.addView(top)
+        bg.addView(fpsCard, spacedParams(dp(14)))
+        bg.addView(resourceTitle, spacedParams(dp(14)))
+        bg.addView(resources, spacedParams(dp(7)))
+        bg.addView(hardwareTitle, spacedParams(dp(13)))
+        bg.addView(hardware, spacedParams(dp(7)))
+        bg.addView(status, spacedParams(dp(12)))
+        bg.addView(dnd, spacedParams(dp(6)))
+        bg.addView(minimize, spacedParams(dp(7)))
 
-        val width = min(dp(270), resources.displayMetrics.widthPixels - dp(28))
-        params = windowParams(width.coerceAtLeast(dp(200)), WindowManager.LayoutParams.WRAP_CONTENT)
-        overlayView = panel
-        windowManager.addView(panel, params)
-        makeDraggable(eyebrow)
+        val width = min(dp(310), resources.displayMetrics.widthPixels - dp(24))
+        params = windowParams(width.coerceAtLeast(dp(220)), WindowManager.LayoutParams.WRAP_CONTENT)
+        overlayView = bg
+        windowManager.addView(bg, params)
+        makeDraggable(brand)
+    }
+
+    private fun infoCard(title: String, value: String, footer: String): View {
+        return LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(dp(11), dp(10), dp(11), dp(10))
+            background = rounded(Color.rgb(13, 23, 42), Color.rgb(46, 78, 110), 15f)
+            addView(label(title, 8f, Color.rgb(137, 166, 196), true))
+            addView(label(value, 16f, Color.WHITE, true), spacedParams(dp(5)))
+            addView(label(footer, 7f, Color.rgb(86, 216, 206), true), spacedParams(dp(2)))
+        }
+    }
+
+    private fun readFreeRam(): String {
+        val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        val info = ActivityManager.MemoryInfo()
+        manager.getMemoryInfo(info)
+        return "${info.availMem / (1024L * 1024L)} MB"
+    }
+
+    private fun readFreeStorage(): String {
+        val stat = StatFs(android.os.Environment.getDataDirectory().path)
+        return "${stat.availableBytes / (1024L * 1024L)} MB"
+    }
+
+    private fun readCpuName(): String {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            Build.SOC_MODEL.takeIf { it.isNotBlank() } ?: Build.HARDWARE
+        } else Build.HARDWARE
+    }
+
+    private fun readDisplayRate(): String {
+        val hz = try { windowManager.defaultDisplay.refreshRate.toInt() } catch (_: Exception) { 0 }
+        return if (hz > 0) "DISPLAY\\n${hz} Hz" else "DISPLAY\\n—"
     }
 
     private fun dndLabel(): String {
