@@ -1,4 +1,5 @@
 name: Build Osen TurboPlay APK
+# Rebuild after TurboPlay layout and inset fixes
 
 on:
   workflow_dispatch:
