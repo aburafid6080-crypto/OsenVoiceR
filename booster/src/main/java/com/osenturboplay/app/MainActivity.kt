@@ -81,7 +81,7 @@ private val Gold = Color(0xFFFFB52E)
 private val White = Color(0xFFF8F5FF)
 private val Muted = Color(0xFFB8B0CC)
 
-class MainActivity : ComponentActivity() {
+class TurboPlayActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent { TurboPlayScreen() }
