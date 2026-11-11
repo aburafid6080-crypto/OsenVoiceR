@@ -515,19 +515,19 @@ private fun OsenVoiceR() {
  */
 private fun applyVoiceEffect(input: ByteArray, effect: VoiceEffect): ByteArray {
     val usableSize = input.size - (input.size % 2)
-    if (usableSize < 2 || effect == VoiceEffect.NORMAL) {
-        return input.copyOf(usableSize)
-    }
+    if (usableSize < 2) return ByteArray(0)
 
     val samples = ShortArray(usableSize / 2) { index ->
         val low = input[index * 2].toInt() and 0xFF
         val high = input[index * 2 + 1].toInt()
         ((high shl 8) or low).toShort()
     }
+    if (effect == VoiceEffect.NORMAL) return input.copyOf(usableSize)
 
     fun clamp(value: Double): Short =
-        value.toInt().coerceIn(Short.MIN_VALUE.toInt(), Short.MAX_VALUE.toInt()).toShort()
+        value.coerceIn(-32700.0, 32700.0).toInt().toShort()
 
+    // Linear interpolation avoids abrupt sample jumps during pitch changes.
     fun resample(rate: Double): ShortArray {
         val outputSize = (samples.size / rate).toInt().coerceAtLeast(1)
         return ShortArray(outputSize) { i ->
@@ -541,40 +541,43 @@ private fun applyVoiceEffect(input: ByteArray, effect: VoiceEffect): ByteArray {
 
     val processed: ShortArray = when (effect) {
         VoiceEffect.NORMAL -> samples
-        VoiceEffect.DEEP -> resample(0.82)
-        VoiceEffect.CHIPMUNK -> resample(1.28)
-        VoiceEffect.PITCH -> resample(1.12)
+        VoiceEffect.DEEP -> resample(0.88)
+        VoiceEffect.CHIPMUNK -> resample(1.20)
+        VoiceEffect.PITCH -> resample(1.08)
         VoiceEffect.MONSTER -> {
-            val lowered = resample(0.68)
-            ShortArray(lowered.size) { i -> clamp(lowered[i] * 1.12) }
+            val lowered = resample(0.76)
+            ShortArray(lowered.size) { i -> clamp(lowered[i] * 1.04) }
         }
         VoiceEffect.ROBOT -> {
-            val modulationHz = 38.0
+            // Ring modulation with a little dry signal keeps speech more intelligible.
+            val modulationHz = 32.0
             ShortArray(samples.size) { i ->
-                val carrier = kotlin.math.sin(2.0 * Math.PI * modulationHz * i / SAMPLE_RATE)
-                clamp(samples[i] * carrier * 1.35)
+                val carrier = 0.68 + 0.32 * kotlin.math.sin(2.0 * Math.PI * modulationHz * i / SAMPLE_RATE)
+                clamp(samples[i] * carrier)
             }
         }
         VoiceEffect.ECHO -> {
-            val delay = (SAMPLE_RATE * 0.24).toInt()
+            val delay = (SAMPLE_RATE * 0.22).toInt()
             val output = ShortArray(samples.size + delay * 2)
             for (i in samples.indices) {
-                output[i] = samples[i]
-                output[i + delay] = clamp(output[i + delay] + samples[i] * 0.48)
-                output[i + delay * 2] = clamp(output[i + delay * 2] + samples[i] * 0.22)
+                output[i] = clamp(output[i].toDouble() + samples[i] * 0.82)
+                output[i + delay] = clamp(output[i + delay].toDouble() + samples[i] * 0.34)
+                output[i + delay * 2] = clamp(output[i + delay * 2].toDouble() + samples[i] * 0.16)
             }
             output
         }
         VoiceEffect.REVERB -> {
-            val delay1 = (SAMPLE_RATE * 0.055).toInt()
-            val delay2 = (SAMPLE_RATE * 0.091).toInt()
-            val output = ShortArray(samples.size + delay2)
+            val delay1 = (SAMPLE_RATE * 0.043).toInt()
+            val delay2 = (SAMPLE_RATE * 0.071).toInt()
+            val output = ShortArray(samples.size + delay2 * 3)
             for (i in samples.indices) {
-                output[i] = clamp(
-                    samples[i] +
-                        (if (i >= delay1) output[i - delay1] * 0.24 else 0.0) +
-                        (if (i >= delay2) output[i - delay2] * 0.16 else 0.0)
-                )
+                output[i] = clamp(output[i].toDouble() + samples[i] * 0.78)
+                if (i + delay1 < output.size) {
+                    output[i + delay1] = clamp(output[i + delay1].toDouble() + samples[i] * 0.22)
+                }
+                if (i + delay2 < output.size) {
+                    output[i + delay2] = clamp(output[i + delay2].toDouble() + samples[i] * 0.13)
+                }
             }
             output
         }
@@ -583,21 +586,29 @@ private fun applyVoiceEffect(input: ByteArray, effect: VoiceEffect): ByteArray {
             var previousOutput = 0.0
             ShortArray(samples.size) { i ->
                 val current = samples[i].toDouble()
-                val highPassed = 0.88 * (previousOutput + current - previousInput)
+                val highPassed = 0.94 * (previousOutput + current - previousInput)
                 previousInput = current
                 previousOutput = highPassed
-                // Gentle saturation gives a narrow-band, radio-like character.
-                clamp(kotlin.math.tanh(highPassed / 9000.0) * 12500.0)
+                clamp(kotlin.math.tanh(highPassed / 15000.0) * 14500.0)
             }
         }
     }
 
+    // Gentle edge fades prevent clicks; a soft limiter reduces harsh clipping.
     val output = ByteArray(processed.size * 2)
+    val fadeSamples = (SAMPLE_RATE * 0.006).toInt().coerceAtMost(processed.size / 2)
+    var peak = 1.0
+    for (sample in processed) peak = maxOf(peak, kotlin.math.abs(sample.toInt()).toDouble() / 28500.0)
+    val gain = (1.0 / peak).coerceIn(0.72, 1.0)
     for (i in processed.indices) {
-        val value = processed[i].toInt()
-        output[i * 2] = (value and 0xFF).toByte()
-        output[i * 2 + 1] = ((value shr 8) and 0xFF).toByte()
+        var value = processed[i].toDouble() * gain
+        if (fadeSamples > 0 && i < fadeSamples) value *= i.toDouble() / fadeSamples
+        if (fadeSamples > 0 && i >= processed.size - fadeSamples) {
+            value *= (processed.size - 1 - i).toDouble() / fadeSamples
+        }
+        val limited = clamp(kotlin.math.tanh(value / 32700.0) * 32700.0).toInt()
+        output[i * 2] = (limited and 0xFF).toByte()
+        output[i * 2 + 1] = ((limited shr 8) and 0xFF).toByte()
     }
     return output
 }
-
