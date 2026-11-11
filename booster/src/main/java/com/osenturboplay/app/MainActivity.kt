@@ -1,6 +1,7 @@
 package com.osenturboplay.app
 
 import android.app.ActivityManager
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -137,7 +138,10 @@ private fun TurboPlayScreen() {
                                 },
                                 onCleaner = { openAppSettings(context) },
                                 onPhoneSettings = { openDeviceSettings(context) },
-                                onDeviceInfo = { selectedTab.value = "Stats" }
+                                onDeviceInfo = { selectedTab.value = "Stats" },
+                                onDnd = { status.value = toggleDndMode(context) },
+                                onCallBlock = { openCallBlockingSettings(context); status.value = "Opened Android call settings. Configure blocked numbers there if supported." },
+                                onNotificationBlock = { openNotificationControls(context); status.value = "Opened Android notification controls." }
                             )
                             else -> AboutPage()
                         }
@@ -424,11 +428,24 @@ private fun GamesPage(status: androidx.compose.runtime.MutableState<String>, onL
 }
 
 @Composable
-private fun ToolsPage(onRefresh: () -> Unit, onCleaner: () -> Unit, onPhoneSettings: () -> Unit, onDeviceInfo: () -> Unit) {
+private fun ToolsPage(
+    onRefresh: () -> Unit,
+    onCleaner: () -> Unit,
+    onPhoneSettings: () -> Unit,
+    onDeviceInfo: () -> Unit,
+    onDnd: () -> Unit,
+    onCallBlock: () -> Unit,
+    onNotificationBlock: () -> Unit
+) {
     PageTitle("GAMING TOOLS", "Quick shortcuts for your device")
+    ActionButton("🌙  DO NOT DISTURB MODE", Gold, onDnd)
+    ActionButton("📵  CALL BLOCK SETTINGS", Color(0xFFFF7043), onCallBlock)
+    ActionButton("🔕  NOTIFICATION CONTROLS", Cyan, onNotificationBlock)
     ActionButton("📱  PHONE SETTINGS", Cyan, onPhoneSettings)
     ActionButton("▤  APP INFO", Gold, onCleaner)
     ActionButton("📊  DEVICE INFO", Purple, onDeviceInfo)
+    ActionButton("↻  REFRESH RAM & STORAGE", Green, onRefresh)
+    Text("DND can silence calls and alerts after Android permission is granted. Call blocking and notification controls are managed by Android and your Phone app.", color = Muted, fontSize = 11.sp, lineHeight = 16.sp)
     NoteCard()
 }
 
@@ -691,6 +708,41 @@ private fun openAppSettings(context: Context) {
 private fun openDeviceSettings(context: Context) {
     // "Phone Settings" should open the main Android Settings screen, not Device Info.
     safeOpen(context, Intent(Settings.ACTION_SETTINGS))
+}
+
+private fun toggleDndMode(context: Context): String {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+        return "Do Not Disturb requires Android 6.0 or newer."
+    }
+    val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    if (!manager.isNotificationPolicyAccessGranted) {
+        safeOpen(context, Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS))
+        return "Allow OSEN TURBOPLAY Do Not Disturb access, then tap DND MODE again."
+    }
+    return try {
+        val turningOff = manager.currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_NONE
+        manager.setInterruptionFilter(
+            if (turningOff) NotificationManager.INTERRUPTION_FILTER_ALL
+            else NotificationManager.INTERRUPTION_FILTER_NONE
+        )
+        if (turningOff) "Do Not Disturb turned OFF." else "Do Not Disturb turned ON."
+    } catch (_: SecurityException) {
+        "Android did not allow changing Do Not Disturb mode."
+    }
+}
+
+private fun openCallBlockingSettings(context: Context) {
+    // Android/Phone-app call blocking options vary by device and carrier.
+    safeOpen(context, Intent(Settings.ACTION_CALL_SETTINGS))
+}
+
+private fun openNotificationControls(context: Context) {
+    val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        Intent("android.settings.ALL_APPS_NOTIFICATION_SETTINGS")
+    } else {
+        Intent(Settings.ACTION_SETTINGS)
+    }
+    safeOpen(context, intent)
 }
 
 private fun safeOpen(context: Context, intent: Intent) {
