@@ -183,12 +183,12 @@ class GameOverlayService : Service() {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER
         }
-        val back = action("‹  BACK") { minimizePanel("BACK") }.apply {
+        val back = action("‹  BACK", {}, "BACK").apply {
             background = rounded(Color.rgb(4, 25, 48), Color.rgb(0, 190, 255), 13f)
             textSize = 11f
             setTextColor(Color.WHITE)
         }
-        val boost = action("⚡  BOOST") { refreshBoostInfo(); minimizePanel("BOOST") }.apply {
+        val boost = action("⚡  BOOST", {}, "BOOST").apply {
             background = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
                 intArrayOf(Color.rgb(255, 196, 45), Color.rgb(170, 94, 0))
@@ -419,7 +419,7 @@ class GameOverlayService : Service() {
         }
     }
 
-    private fun action(text: String, click: () -> Unit) = TextView(this).apply {
+    private fun action(text: String, click: () -> Unit, popupText: String = text) = TextView(this).apply {
         this.text = text
         textSize = 11f
         gravity = Gravity.CENTER
@@ -430,7 +430,7 @@ class GameOverlayService : Service() {
             animate().scaleX(0.97f).scaleY(0.97f).setDuration(65).withEndAction {
                 animate().scaleX(1f).scaleY(1f).setDuration(90).start()
             }.start()
-            Toast.makeText(context, text.toString(), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, popupText, Toast.LENGTH_SHORT).show()
             click()
         }
     }
