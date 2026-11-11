@@ -3,16 +3,7 @@
         <package android:name="com.dts.freefireth" />
         <package android:name="com.dts.freefiremax" />
     </queries>
-    <application
-        android:theme="@android:style/Theme.Material.NoActionBar"
-        android:label="OSEN TURBOPLAY"
-        android:allowBackup="false"
-        android:supportsRtl="true">
-        <activity android:name=".MainActivity" android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+    <application>
+        <activity android:name=".TurboPlayActivity" android:exported="false" />
     </application>
 </manifest>
