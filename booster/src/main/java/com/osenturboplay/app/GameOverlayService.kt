@@ -187,6 +187,9 @@ class GameOverlayService : Service() {
             background = rounded(Color.rgb(4, 25, 48), Color.rgb(0, 190, 255), 13f)
             textSize = 11f
             setTextColor(Color.WHITE)
+            isClickable = true
+            isFocusable = true
+            setOnClickListener { showActionPopup("BACK") }
         }
         val boost = action("⚡  BOOST", "BOOST").apply {
             background = GradientDrawable(
@@ -198,6 +201,9 @@ class GameOverlayService : Service() {
             }
             textSize = 11f
             setTextColor(Color.WHITE)
+            isClickable = true
+            isFocusable = true
+            setOnClickListener { showActionPopup("BOOST") }
         }
         bottomActions.addView(back, LinearLayout.LayoutParams(0, dp(46), 1f).apply { marginEnd = dp(5) })
         bottomActions.addView(boost, LinearLayout.LayoutParams(0, dp(46), 1f).apply { marginStart = dp(5) })
@@ -382,6 +388,11 @@ class GameOverlayService : Service() {
 
     private fun showPanelStatus(message: String) {
         panelStatus?.text = message
+    }
+
+    private fun showActionPopup(buttonName: String) {
+        Toast.makeText(this, "$buttonName BUTTON PRESSED", Toast.LENGTH_SHORT).show()
+        showPanelStatus("$buttonName BUTTON PRESSED")
     }
 
     private fun minimizePanel(bubbleLabel: String = "OSEN") {
