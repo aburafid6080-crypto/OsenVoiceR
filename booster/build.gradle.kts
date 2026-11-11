@@ -1,5 +1,5 @@
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
 }
@@ -7,11 +7,8 @@ android {
     namespace = "com.osenturboplay.app"
     compileSdk = 35
     defaultConfig {
-        applicationId = "com.osenturboplay.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
     }
     buildFeatures { compose = true }
     compileOptions {
