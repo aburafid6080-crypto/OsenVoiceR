@@ -140,8 +140,8 @@ private fun TurboPlayScreen() {
                                 onPhoneSettings = { openDeviceSettings(context) },
                                 onDeviceInfo = { selectedTab.value = "Stats" },
                                 onDnd = { status.value = toggleDndMode(context) },
-                                onCallBlock = { openCallBlockingSettings(context); status.value = "Opened Android call settings. Configure blocked numbers there if supported." },
-                                onNotificationBlock = { openNotificationControls(context); status.value = "Opened Android notification controls." }
+                                onCallBlock = { status.value = enableGamingQuietMode(context) },
+                                onNotificationBlock = { status.value = enableGamingQuietMode(context) }
                             )
                             else -> AboutPage()
                         }
@@ -439,13 +439,13 @@ private fun ToolsPage(
 ) {
     PageTitle("GAMING TOOLS", "Quick shortcuts for your device")
     ActionButton("🌙  DO NOT DISTURB MODE", Gold, onDnd)
-    ActionButton("📵  CALL BLOCK SETTINGS", Color(0xFFFF7043), onCallBlock)
-    ActionButton("🔕  NOTIFICATION CONTROLS", Cyan, onNotificationBlock)
+    ActionButton("📵  SILENCE CALLS", Color(0xFFFF7043), onCallBlock)
+    ActionButton("🔕  SILENCE NOTIFICATIONS", Cyan, onNotificationBlock)
     ActionButton("📱  PHONE SETTINGS", Cyan, onPhoneSettings)
     ActionButton("▤  APP INFO", Gold, onCleaner)
     ActionButton("📊  DEVICE INFO", Purple, onDeviceInfo)
     ActionButton("↻  REFRESH RAM & STORAGE", Green, onRefresh)
-    Text("DND can silence calls and alerts after Android permission is granted. Call blocking and notification controls are managed by Android and your Phone app.", color = Muted, fontSize = 11.sp, lineHeight = 16.sp)
+    Text("Both controls enable Android Do Not Disturb to silence calls and notifications together. Android requires one-time DND access. This silences interruptions; it does not reject callers or permanently block numbers.", color = Muted, fontSize = 11.sp, lineHeight = 16.sp)
     NoteCard()
 }
 
@@ -728,6 +728,25 @@ private fun toggleDndMode(context: Context): String {
         if (turningOff) "Do Not Disturb turned OFF." else "Do Not Disturb turned ON."
     } catch (_: SecurityException) {
         "Android did not allow changing Do Not Disturb mode."
+    }
+}
+
+private fun enableGamingQuietMode(context: Context): String {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+        return "Gaming Quiet Mode requires Android 6.0 or newer."
+    }
+    val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    if (!manager.isNotificationPolicyAccessGranted) {
+        safeOpen(context, Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS))
+        return "Allow OSEN TURBOPLAY Do Not Disturb access once. Return to the app and tap again."
+    }
+    return try {
+        manager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
+        "GAMING QUIET MODE ON: calls and notifications silenced by Android."
+    } catch (_: SecurityException) {
+        "Android denied Do Not Disturb access. Check OSEN permission in system settings."
+    } catch (_: Exception) {
+        "Could not enable Gaming Quiet Mode on this device."
     }
 }
 
