@@ -166,7 +166,7 @@ class GameOverlayService : Service() {
 
         val status = label("SYSTEM READY  •  DND STATUS CHECK", 8f, Color.rgb(255, 204, 112), true)
         panelStatus = status
-        val dnd = action(dndLabel()) { toggleDnd() }.apply {
+        val dnd = action(dndLabel(), dndLabel()) { toggleDnd() }.apply {
             background = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
                 intArrayOf(Color.rgb(0, 116, 190), Color.rgb(3, 37, 72))
@@ -419,7 +419,7 @@ class GameOverlayService : Service() {
         }
     }
 
-    private fun action(text: String, popupText: String = text) = TextView(this).apply {
+    private fun action(text: String, popupText: String = text, onClick: (() -> Unit)? = null) = TextView(this).apply {
         this.text = text
         textSize = 11f
         gravity = Gravity.CENTER
@@ -431,6 +431,7 @@ class GameOverlayService : Service() {
                 animate().scaleX(1f).scaleY(1f).setDuration(90).start()
             }.start()
             Toast.makeText(context, popupText, Toast.LENGTH_SHORT).show()
+            onClick?.invoke()
         }
     }
 
