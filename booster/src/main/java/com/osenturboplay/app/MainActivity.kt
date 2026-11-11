@@ -331,7 +331,17 @@ private fun HomePage(context: Context, stats: DeviceStats, status: androidx.comp
         Card(modifier = Modifier.fillMaxWidth().border(1.5.dp, Brush.linearGradient(listOf(Cyan, Purple, Violet)), RoundedCornerShape(23.dp)), shape = RoundedCornerShape(23.dp), colors = CardDefaults.cardColors(containerColor = Panel)) {
             Column(modifier = Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text("🚀  YOUR NEXT MATCH STARTS HERE", color = White, fontSize = 17.sp, fontWeight = FontWeight.Black)
-                Text("Launch Free Fire and jump straight into the action!", color = Muted, fontSize = 12.sp)
+                Text("Prepare your phone, then launch your game.", color = Muted, fontSize = 12.sp)
+                PremiumActionButton(
+                    label = "⚡  START BOOST",
+                    onClick = {
+                        onRefresh()
+                        status.value = "Safe preparation complete • Android manages game performance"
+                    },
+                    modifier = Modifier.fillMaxWidth().height(52.dp),
+                    start = Cyan,
+                    end = Violet
+                )
                 PremiumActionButton(label = "▶  PLAY FREE FIRE  🔥", onClick = { status.value = launchFreeFire(context) }, modifier = Modifier.fillMaxWidth().height(52.dp))
                 Text("⚡  Free Fire & Free Fire MAX supported when installed", color = Cyan, fontSize = 10.sp)
             }
