@@ -132,9 +132,9 @@ class GameOverlayService : Service() {
             }
         }
         val fpsInfo = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-        fpsInfo.addView(label("FPS TARGET", 8f, muted, true))
-        fpsInfo.addView(label("60 FPS", 28f, brightGold, true), spacedParams(dp(1)))
-        fpsInfo.addView(label("LIVE FPS • NOT MEASURED", 7f, Color.rgb(185, 177, 159), true), spacedParams(dp(1)))
+        fpsInfo.addView(label("PERFORMANCE TARGET", 8f, muted, true))
+        fpsInfo.addView(label("UP TO 60 FPS", 27f, brightGold, true), spacedParams(dp(1)))
+        fpsInfo.addView(label("GAME FPS • NOT EXPOSED BY ANDROID", 7f, Color.rgb(130, 180, 210), true), spacedParams(dp(1)))
         fpsCard.addView(fpsInfo, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
         fpsCard.addView(label(readDisplayRate(), 9f, brightGold, true).apply {
             gravity = Gravity.CENTER
