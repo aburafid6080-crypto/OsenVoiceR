@@ -237,7 +237,7 @@ class GameOverlayService : Service() {
             setTextColor(Color.WHITE)
             isClickable = true
             isFocusable = true
-            setOnClickListener { minimizePanel() }
+            setOnClickListener { animateButtonPress(this) { minimizePanel() } }
         }
         val boost = action("⚡  BOOST", "BOOST").apply {
             background = GradientDrawable(
@@ -252,7 +252,7 @@ class GameOverlayService : Service() {
             setTextColor(Color.WHITE)
             isClickable = true
             isFocusable = true
-            setOnClickListener { showActionPopup("BOOST") }
+            setOnClickListener { animateButtonPress(this) { showActionPopup("BOOST") } }
         }
         bottomActions.addView(back, LinearLayout.LayoutParams(0, dp(39), 1f).apply { marginEnd = dp(5) })
         bottomActions.addView(boost, LinearLayout.LayoutParams(0, dp(39), 1f).apply { marginStart = dp(5) })
@@ -495,6 +495,15 @@ class GameOverlayService : Service() {
                 }, 650)
             }
         }
+    }
+
+    private fun animateButtonPress(view: View, onFinished: () -> Unit) {
+        view.animate().cancel()
+        view.animate().scaleX(0.94f).scaleY(0.94f).alpha(0.82f).setDuration(75)
+            .withEndAction {
+                view.animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration(105)
+                    .withEndAction { onFinished() }.start()
+            }.start()
     }
 
     private fun action(text: String, popupText: String = text, onClick: (() -> Unit)? = null) = TextView(this).apply {
