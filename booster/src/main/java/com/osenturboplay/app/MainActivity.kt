@@ -141,7 +141,7 @@ private fun TurboPlayScreen() {
                         verticalArrangement = Arrangement.spacedBy(14.dp)
                     ) {
                         when (tab) {
-                            "Home" -> HomePage(context, stats.value, status, isBoosting = boostAnimation.value, onStartBoost = { stats.value = readDeviceStats(context); boostAnimation.value = true; status.value = "BOOST animation complete • No system performance settings changed" })
+                            "Home" -> HomePage(context, stats.value, status, onRefresh = { stats.value = readDeviceStats(context); status.value = "Device information refreshed" }, isBoosting = boostAnimation.value, onStartBoost = { stats.value = readDeviceStats(context); boostAnimation.value = true; status.value = "BOOST animation complete • No system performance settings changed" })
                             "Stats" -> StatsPage(stats.value) {
                                 stats.value = readDeviceStats(context)
                                 status.value = "Device information refreshed"
@@ -341,7 +341,7 @@ private fun HeroBanner() {
 }
 
 @Composable
-private fun HomePage(context: Context, stats: DeviceStats, status: androidx.compose.runtime.MutableState<String>, isBoosting: Boolean, onStartBoost: () -> Unit) {
+private fun HomePage(context: Context, stats: DeviceStats, status: androidx.compose.runtime.MutableState<String>, onRefresh: () -> Unit, isBoosting: Boolean, onStartBoost: () -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
         HeroBanner()
 
