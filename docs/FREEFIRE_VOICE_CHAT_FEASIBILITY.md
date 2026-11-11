@@ -34,3 +34,9 @@ A real test requires the Moto G85 5G, Android 16, Free Fire, and any proposed ex
 
 ## Current decision
 Do not add a fake "Free Fire live voice" switch to the app. The next meaningful validation is a real-device check of whether the phone exposes a compatible external USB audio input and whether Free Fire actually selects it. A separate loopback-capable audio path would still be needed to feed OSEN's processed output into that input.
+
+
+## Cross-device compatibility requirement
+The product goal is broad Android-device support, not only the Moto G85 5G. "Works on every phone" cannot be guaranteed: Android versions, audio HAL implementations, microphone routing, vendor restrictions, and game voice-chat behavior differ by device.
+A realistic release target must define a tested compatibility matrix (Android version, manufacturer/model, and Free Fire version) and clearly label untested devices. Do not advertise universal compatibility without evidence.
+The no-accessory requirement is retained: any proposed method must use only the phone's built-in microphone and internal software. Under standard Android app sandbox rules, this still does not grant one app the ability to replace another app's microphone input. Therefore, a phone-only app cannot honestly promise that OSEN's processed voice will be heard by Free Fire teammates across all Android phones.
