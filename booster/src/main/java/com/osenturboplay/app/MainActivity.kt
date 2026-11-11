@@ -357,7 +357,7 @@ private fun HomePage(context: Context, stats: DeviceStats, status: androidx.comp
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             ToolTile("🚀", "GAME LAUNCHER", "Open games", Purple, Modifier.weight(1f)) { status.value = launchFreeFire(context) }
             ToolTile("⟳", "REFRESH", "Update info", Cyan, Modifier.weight(1f), onRefresh)
-            ToolTile("⚡", "BOOSTER", "Game settings", Green, Modifier.weight(1f)) { openGameSettings(context, status) }
+            ToolTile("⚡", "BOOSTER", "Performance info", Green, Modifier.weight(1f)) { status.value = "Android manages game performance automatically" }
             ToolTile("▤", "CLEANER", "App storage", Gold, Modifier.weight(1f)) { openAppSettings(context) }
         }
         NoteCard()
