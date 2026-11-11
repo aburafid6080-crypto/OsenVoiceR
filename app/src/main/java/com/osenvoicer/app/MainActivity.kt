@@ -27,6 +27,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+private val Gold = Color(0xFFD6AD55)
+private val Black = Color(0xFF090909)
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,25 +46,25 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun CombinedHome(onBooster: () -> Unit, onVoice: () -> Unit) {
-    Surface(modifier = Modifier.fillMaxSize(), color = Color(0xFF070416)) {
+    Surface(modifier = Modifier.fillMaxSize(), color = Black) {
         Column(
             modifier = Modifier.fillMaxSize()
-                .background(Brush.verticalGradient(listOf(Color(0xFF180A35), Color(0xFF070416), Color(0xFF061A2A))))
+                .background(Brush.verticalGradient(listOf(Color(0xFF242016), Black, Color(0xFF080808))))
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("OSEN", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-            Text("TURBOPLAY", color = Color(0xFF00D9FF), fontSize = 32.sp, fontWeight = FontWeight.Black)
-            Text("+ VOICE R", color = Color(0xFFC04BFF), fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Text("OSEN", color = Gold, fontSize = 18.sp, fontWeight = FontWeight.Bold, letterSpacing = 4.sp)
+            Text("BOOSTVOX", color = Color.White, fontSize = 34.sp, fontWeight = FontWeight.Black, letterSpacing = 1.sp)
+            Text("RX", color = Gold, fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 5.sp)
             Spacer(Modifier.height(12.dp))
-            Text("Your gaming and voice tools in one app", color = Color(0xFFD9D1EA), fontSize = 13.sp)
+            Text("GAME BOOSTER  ×  VOICE TOOLS", color = Color(0xFFE2D6B9), fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
             Spacer(Modifier.height(34.dp))
             Button(
                 onClick = onBooster,
                 modifier = Modifier.fillMaxWidth().height(62.dp),
                 shape = RoundedCornerShape(18.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6420C8))
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9B762F), contentColor = Color.White)
             ) {
                 Text("🎮  OPEN GAME BOOSTER", fontSize = 16.sp, fontWeight = FontWeight.Bold)
             }
@@ -70,14 +73,14 @@ private fun CombinedHome(onBooster: () -> Unit, onVoice: () -> Unit) {
                 onClick = onVoice,
                 modifier = Modifier.fillMaxWidth().height(62.dp),
                 shape = RoundedCornerShape(18.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF176A9A))
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF29251C), contentColor = Gold)
             ) {
                 Text("🎙  OPEN VOICE TOOLS", fontSize = 16.sp, fontWeight = FontWeight.Bold)
             }
             Spacer(Modifier.height(26.dp))
             Text(
                 "Voice effects are for recording and playback. Direct live voice routing into Free Fire is not supported.",
-                color = Color(0xFFFFC6E9), fontSize = 11.sp, lineHeight = 16.sp
+                color = Color(0xFFD8CBAE), fontSize = 11.sp, lineHeight = 16.sp
             )
         }
     }
