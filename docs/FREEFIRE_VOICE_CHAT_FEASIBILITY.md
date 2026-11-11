@@ -40,3 +40,15 @@ Do not add a fake "Free Fire live voice" switch to the app. The next meaningful 
 The product goal is broad Android-device support, not only the Moto G85 5G. "Works on every phone" cannot be guaranteed: Android versions, audio HAL implementations, microphone routing, vendor restrictions, and game voice-chat behavior differ by device.
 A realistic release target must define a tested compatibility matrix (Android version, manufacturer/model, and Free Fire version) and clearly label untested devices. Do not advertise universal compatibility without evidence.
 The no-accessory requirement is retained: any proposed method must use only the phone's built-in microphone and internal software. Under standard Android app sandbox rules, this still does not grant one app the ability to replace another app's microphone input. Therefore, a phone-only app cannot honestly promise that OSEN's processed voice will be heard by Free Fire teammates across all Android phones.
+
+
+## Official Android API verification (2026-11-11)
+- Android's input-sharing documentation says two ordinary apps cannot capture the microphone concurrently; when a privacy-sensitive source such as `VOICE_COMMUNICATION` is active, the ordinary competing app is silenced.
+- Android's Playback Capture API captures eligible *playback output* from another app after MediaProjection consent and only when the source app's usage and capture policy permit it. It does not provide a microphone-input replacement path into a game.
+- Therefore, a phone-only, unrooted, ordinary third-party app cannot implement the requested universal Free Fire voice-chat injection using public Android APIs. A live DSP engine inside OSEN could process the phone microphone while OSEN owns the input, but Free Fire would not thereby receive that processed stream.
+- Decision: do not modify the production app or add a misleading "Free Fire" toggle. Do not create an APK claiming this feature. The requested all-phone / built-in-mic-only outcome is not achievable through supported public Android APIs as currently specified.
+
+### Official references
+- Android audio input sharing: https://developer.android.com/media/platform/sharing-audio-input
+- Android playback capture: https://developer.android.com/media/platform/av-capture
+- Android concurrent capture policy: https://source.android.com/docs/core/audio/concurrent
