@@ -8,6 +8,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.PixelFormat
 import android.graphics.drawable.GradientDrawable
+import android.provider.Settings
 import android.os.Build
 import android.os.IBinder
 import android.view.Gravity
@@ -79,12 +80,18 @@ class GameOverlayService : Service() {
         }
         val heading = label("🐉 OSEN TURBOPLAY", 15f, Color.rgb(255, 112, 55), true)
         val subheading = label("DRAGON FIRE EDITION", 10f, Color.rgb(255, 74, 36), true)
-        val info = label("DRAGON FIRE MODE\nA bold red-and-black look with lightweight controls. Android manages game performance.", 12f, Color.WHITE, false)
+        val info = label("IN-GAME QUICK CONTROLS\nControl calls and notifications without leaving Free Fire after one-time Android permission.", 12f, Color.WHITE, false)
+        val dnd = action("🌙  DND ON / OFF") { toggleDnd() }
+        val calls = action("📵  SILENCE CALLS") { enableDnd("Calls silenced by Android DND.") }
+        val notifications = action("🔕  SILENCE NOTIFICATIONS") { enableDnd("Notifications silenced by Android DND.") }
         val minimize = action("LOW-LAG MODE") { minimizePanel() }
         val close = action("CLOSE PANEL") { minimizePanel() }
         panel.addView(heading)
         panel.addView(subheading, spacedParams(dp(4)))
-        panel.addView(info, spacedParams(dp(12)))
+        panel.addView(info, spacedParams(dp(10)))
+        panel.addView(dnd, spacedParams(dp(8)))
+        panel.addView(calls, spacedParams(dp(6)))
+        panel.addView(notifications, spacedParams(dp(6)))
         panel.addView(minimize, spacedParams(dp(10)))
         panel.addView(close, spacedParams(dp(6)))
 
@@ -93,6 +100,29 @@ class GameOverlayService : Service() {
         overlayView = panel
         windowManager.addView(panel, params)
         makeDraggable(heading)
+    }
+
+    private fun toggleDnd() {
+        val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
+        if (!manager.isNotificationPolicyAccessGranted) {
+            try { startActivity(Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } catch (_: Exception) { }
+            return
+        }
+        try {
+            val isOff = manager.currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_NONE
+            manager.setInterruptionFilter(if (isOff) NotificationManager.INTERRUPTION_FILTER_ALL else NotificationManager.INTERRUPTION_FILTER_NONE)
+        } catch (_: SecurityException) { }
+    }
+
+    private fun enableDnd(message: String) {
+        val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
+        if (!manager.isNotificationPolicyAccessGranted) {
+            try { startActivity(Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } catch (_: Exception) { }
+            return
+        }
+        try { manager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE) } catch (_: SecurityException) { }
     }
 
     private fun minimizePanel() {
