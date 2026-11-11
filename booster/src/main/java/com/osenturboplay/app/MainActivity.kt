@@ -21,6 +21,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -176,27 +177,44 @@ private fun statsRefresh(context: Context, status: androidx.compose.runtime.Muta
 private fun HeroBanner() {
     Card(
         modifier = Modifier.fillMaxWidth()
-            .border(1.6.dp, Brush.linearGradient(listOf(Purple, Cyan, Violet, Gold)), RoundedCornerShape(25.dp)),
-        shape = RoundedCornerShape(25.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF08091A))
+            .border(2.dp, Brush.linearGradient(listOf(Purple, Cyan, Violet, Gold)), RoundedCornerShape(26.dp)),
+        shape = RoundedCornerShape(26.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF07091B))
     ) {
-        Column(
+        Box(
             modifier = Modifier.fillMaxWidth()
-                .background(Brush.linearGradient(listOf(Color(0xFF26064D), Color(0xFF080B20), Color(0xFF06152C))))
-                .padding(17.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+                .background(
+                    Brush.linearGradient(
+                        listOf(Color(0xFF260044), Color(0xFF080B25), Color(0xFF031B35), Color(0xFF17052D))
+                    )
+                )
+                .padding(16.dp)
         ) {
-            Text("✦  OSEN TURBOPLAY  ✦", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.Black, letterSpacing = 2.sp)
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text("PLAY SMARTER", color = White, fontSize = 24.sp, fontWeight = FontWeight.Black)
-                    Text("BE STRONGER", color = Purple, fontSize = 23.sp, fontWeight = FontWeight.Black)
-                    Text("FREE FIRE  •  FREE FIRE MAX", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 0.8.sp)
+            Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("♛  OSEN TURBOPLAY", color = Cyan, fontSize = 11.sp, fontWeight = FontWeight.Black, letterSpacing = 2.sp)
+                    Spacer(Modifier.weight(1f))
+                    Text("✦  LIVE", color = Gold, fontSize = 9.sp, fontWeight = FontWeight.Black)
                 }
-                Text("⚡", color = Gold, fontSize = 62.sp, fontWeight = FontWeight.Black)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Text("PLAY SMARTER", color = White, fontSize = 25.sp, fontWeight = FontWeight.Black)
+                        Text("BE STRONGER", color = Purple, fontSize = 25.sp, fontWeight = FontWeight.Black)
+                        Text("FREE FIRE  •  FREE FIRE MAX", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 0.7.sp)
+                    }
+                    Box(
+                        modifier = Modifier.size(112.dp)
+                            .background(Brush.radialGradient(listOf(Purple.copy(alpha = 0.65f), Cyan.copy(alpha = 0.18f), Color.Transparent)), CircleShape)
+                            .border(1.dp, Cyan.copy(alpha = 0.45f), CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("⚔", color = White, fontSize = 60.sp, fontWeight = FontWeight.Black)
+                        Text("⚡", color = Gold, fontSize = 31.sp, modifier = Modifier.align(Alignment.BottomEnd).padding(3.dp))
+                    }
+                }
+                Text("Your gaming space. Your next match starts here.", color = Muted, fontSize = 12.sp)
+                Text("🔥  READY FOR YOUR NEXT MATCH", color = Gold, fontSize = 12.sp, fontWeight = FontWeight.Black)
             }
-            Text("Your gaming space. Your next match starts here.", color = Muted, fontSize = 12.sp)
-            Text("🔥  READY FOR YOUR NEXT MATCH", color = Gold, fontSize = 12.sp, fontWeight = FontWeight.Black)
         }
     }
 }
@@ -360,24 +378,24 @@ private fun NoteCard() {
 private fun NeonCircle(symbol: String, color: Color, label: String, onClick: () -> Unit) {
     Column(
         modifier = Modifier
-            .width(64.dp)
-            .height(68.dp)
+            .width(76.dp)
+            .height(82.dp)
             .clickable(onClick = onClick)
             .background(
-                Brush.linearGradient(listOf(color.copy(alpha = 0.32f), Color(0xFF100B24), Color(0xFF080615))),
-                RoundedCornerShape(18.dp)
+                Brush.linearGradient(listOf(color.copy(alpha = 0.42f), Color(0xFF100B24), Color(0xFF080615))),
+                RoundedCornerShape(22.dp)
             )
             .border(
-                width = 1.5.dp,
-                brush = Brush.linearGradient(listOf(Color.White.copy(alpha = 0.75f), color, Cyan.copy(alpha = 0.8f))),
-                shape = RoundedCornerShape(18.dp)
+                width = 1.8.dp,
+                brush = Brush.linearGradient(listOf(Color.White.copy(alpha = 0.8f), color, Cyan.copy(alpha = 0.85f))),
+                shape = RoundedCornerShape(22.dp)
             )
-            .padding(vertical = 7.dp, horizontal = 3.dp),
+            .padding(vertical = 8.dp, horizontal = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(3.dp)
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        Text(symbol, color = White, fontSize = 25.sp, fontWeight = FontWeight.Black)
-        Text(label, color = color, fontSize = 7.sp, fontWeight = FontWeight.Black, letterSpacing = 0.45.sp)
+        Text(symbol, color = White, fontSize = 30.sp, fontWeight = FontWeight.Black)
+        Text(label, color = color, fontSize = 8.sp, fontWeight = FontWeight.Black, letterSpacing = 0.5.sp)
     }
 }
 
