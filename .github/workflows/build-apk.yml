@@ -50,11 +50,11 @@ jobs:
           gradle-version: '8.9'
 
       - name: Build TurboPlay Debug APK
-        run: gradle :booster:assembleDebug
+        run: gradle :app:assembleDebug
 
       - name: Upload TurboPlay APK
         uses: actions/upload-artifact@v4
         with:
-          name: Osen-TurboPlay-APK
-          path: booster/build/outputs/apk/debug/*.apk
+          name: OSEN-COMBINED-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
