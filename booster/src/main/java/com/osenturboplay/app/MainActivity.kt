@@ -35,6 +35,9 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.offset
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -57,9 +60,11 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -293,9 +298,7 @@ private fun HomePage(context: Context, stats: DeviceStats, status: androidx.comp
             Column(modifier = Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text("🚀  YOUR NEXT MATCH STARTS HERE", color = White, fontSize = 17.sp, fontWeight = FontWeight.Black)
                 Text("Launch Free Fire and jump straight into the action!", color = Muted, fontSize = 12.sp)
-                Button(onClick = { status.value = launchFreeFire(context) }, modifier = Modifier.fillMaxWidth().height(48.dp), colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8E13F8)), shape = RoundedCornerShape(17.dp)) {
-                    Text("▶  PLAY FREE FIRE  🔥", color = White, fontSize = 15.sp, fontWeight = FontWeight.Black)
-                }
+                PremiumActionButton(label = "▶  PLAY FREE FIRE  🔥", onClick = { status.value = launchFreeFire(context) }, modifier = Modifier.fillMaxWidth().height(52.dp))
                 Text("⚡  Free Fire & Free Fire MAX supported when installed", color = Cyan, fontSize = 10.sp)
             }
         }
@@ -424,8 +427,37 @@ private fun InfoCard(title: String, value: String) {
 
 @Composable
 private fun ActionButton(label: String, color: Color, onClick: () -> Unit) {
-    Button(onClick = onClick, modifier = Modifier.fillMaxWidth().height(52.dp), colors = ButtonDefaults.buttonColors(containerColor = color), shape = RoundedCornerShape(14.dp)) {
-        Text(label, color = White, fontWeight = FontWeight.ExtraBold)
+    PremiumActionButton(label, onClick, Modifier.fillMaxWidth().height(54.dp), color, Violet)
+}
+
+@Composable
+private fun PremiumActionButton(label: String, onClick: () -> Unit, modifier: Modifier = Modifier, start: Color = Purple, end: Color = Cyan) {
+    val shape = RoundedCornerShape(16.dp)
+    Box(
+        modifier = modifier.shadow(12.dp, shape).clip(shape)
+            .background(Brush.horizontalGradient(listOf(start, Purple, end)))
+            .border(1.4.dp, Brush.horizontalGradient(listOf(Color.White, start, end)), shape)
+            .clickable(onClick = onClick).padding(horizontal = 12.dp, vertical = 8.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(label, color = White, fontSize = 14.sp, fontWeight = FontWeight.Black,
+            textAlign = TextAlign.Center,
+            style = TextStyle(shadow = Shadow(Color(0xFF16002F), Offset(2f, 3f), 5f)))
+    }
+}
+
+@Composable
+private fun ThreeDMetalText(text: String, size: Int, face: Color, edge: Color, maxLines: Int = 1) {
+    Box {
+        Text(text, color = Color(0xFF16002F), fontSize = size.sp, fontWeight = FontWeight.Black,
+            letterSpacing = 0.6.sp, maxLines = maxLines,
+            modifier = Modifier.offset(x = 2.dp, y = 3.dp))
+        Text(text, color = edge, fontSize = size.sp, fontWeight = FontWeight.Black,
+            letterSpacing = 0.6.sp, maxLines = maxLines,
+            modifier = Modifier.offset(x = 1.dp, y = 1.dp))
+        Text(text, color = face, fontSize = size.sp, fontWeight = FontWeight.Black,
+            letterSpacing = 0.6.sp, maxLines = maxLines,
+            style = TextStyle(shadow = Shadow(edge, Offset(0f, 0f), 9f)))
     }
 }
 
@@ -458,8 +490,8 @@ private fun PremiumHeader(onSettings: () -> Unit, onBoost: () -> Unit) {
             }
         }
         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(0.dp)) {
-            Text("OSEN", color = White, fontSize = 19.sp, fontWeight = FontWeight.Black, letterSpacing = 1.2.sp)
-            Text("TURBOPLAY", color = Gold, fontSize = 17.sp, fontWeight = FontWeight.Black, letterSpacing = 0.2.sp, maxLines = 1)
+            ThreeDMetalText("OSEN", 19, White, Gold)
+            ThreeDMetalText("TURBOPLAY", 17, Gold, Purple, maxLines = 1)
             Text("━  GAME BOOSTER  ━", color = Cyan, fontSize = 8.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.1.sp, maxLines = 1)
         }
         NeonCircle("⚙", Violet, "SETTINGS", onSettings)
