@@ -146,19 +146,53 @@ private fun TurboPlayScreen() {
 
                 Text(status.value, color = Cyan, fontSize = 9.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp), maxLines = 1)
                 Row(
-                    modifier = Modifier.fillMaxWidth().shadow(16.dp, RoundedCornerShape(18.dp), clip = false).background(Brush.verticalGradient(listOf(Color(0xFF241044), Color(0xFF100B20), Color(0xFF070615))), RoundedCornerShape(18.dp))
-                        .border(1.dp, Purple.copy(alpha = 0.45f), RoundedCornerShape(18.dp)).padding(vertical = 10.dp),
+                    modifier = Modifier.fillMaxWidth()
+                        .shadow(20.dp, RoundedCornerShape(22.dp), clip = false)
+                        .background(
+                            Brush.verticalGradient(listOf(Color(0xFF251044), Color(0xFF100B20), Color(0xFF070615))),
+                            RoundedCornerShape(22.dp)
+                        )
+                        .border(1.5.dp, Brush.horizontalGradient(listOf(Purple, Cyan, Violet)), RoundedCornerShape(22.dp))
+                        .padding(horizontal = 7.dp, vertical = 7.dp),
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     listOf("⌂" to "Home", "▥" to "Stats", "🎮" to "Games", "◇" to "Tools", "♛" to "About").forEach { item ->
+                        val isSelected = selectedTab.value == item.second
+                        val accent = if (item.second == "Stats") Cyan else Purple
                         Column(
-                            modifier = Modifier.clickable { selectedTab.value = item.second }.padding(horizontal = 5.dp, vertical = 4.dp),
+                            modifier = Modifier.weight(1f).height(62.dp)
+                                .shadow(if (isSelected) 13.dp else 0.dp, RoundedCornerShape(15.dp), clip = false)
+                                .clip(RoundedCornerShape(15.dp))
+                                .background(
+                                    if (isSelected) Brush.verticalGradient(listOf(Color(0xFF5B12A5), Color(0xFF210B49), Color(0xFF100B25)))
+                                    else Brush.verticalGradient(listOf(Color.Transparent, Color.Transparent))
+                                )
+                                .border(
+                                    if (isSelected) 1.4.dp else 0.dp,
+                                    if (isSelected) Brush.verticalGradient(listOf(Color(0xFFFF75FF), Cyan, Purple))
+                                    else Brush.verticalGradient(listOf(Color.Transparent, Color.Transparent)),
+                                    RoundedCornerShape(15.dp)
+                                )
+                                .clickable { selectedTab.value = item.second }
+                                .padding(vertical = 6.dp),
                             horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                            verticalArrangement = Arrangement.Center
                         ) {
-                            Text(item.first, color = if (selectedTab.value == item.second) Purple else Muted, fontSize = 22.sp, fontWeight = FontWeight.Bold)
-                            Text(item.second, color = if (selectedTab.value == item.second) White else Muted, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                            Text(
+                                item.first,
+                                color = if (isSelected) Color.White else Muted,
+                                fontSize = 23.sp,
+                                fontWeight = FontWeight.Black,
+                                style = TextStyle(shadow = Shadow(if (isSelected) accent else Purple.copy(alpha = 0.55f), Offset(0f, 0f), if (isSelected) 13f else 5f))
+                            )
+                            Text(
+                                item.second,
+                                color = if (isSelected) White else Muted,
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Black,
+                                style = TextStyle(shadow = Shadow(if (isSelected) Purple else Color.Black, Offset(1f, 2f), 4f))
+                            )
                         }
                     }
                 }
@@ -448,16 +482,20 @@ private fun PremiumActionButton(label: String, onClick: () -> Unit, modifier: Mo
 
 @Composable
 private fun ThreeDMetalText(text: String, size: Int, face: Color, edge: Color, maxLines: Int = 1) {
+    // Two crisp layers create a 3D embossed look without the doubled/ghosted lettering.
     Box {
-        Text(text, color = Color(0xFF16002F), fontSize = size.sp, fontWeight = FontWeight.Black,
-            letterSpacing = 0.6.sp, maxLines = maxLines,
-            modifier = Modifier.offset(x = 2.dp, y = 3.dp))
-        Text(text, color = edge, fontSize = size.sp, fontWeight = FontWeight.Black,
-            letterSpacing = 0.6.sp, maxLines = maxLines,
-            modifier = Modifier.offset(x = 1.dp, y = 1.dp))
-        Text(text, color = face, fontSize = size.sp, fontWeight = FontWeight.Black,
-            letterSpacing = 0.6.sp, maxLines = maxLines,
-            style = TextStyle(shadow = Shadow(edge, Offset(0f, 0f), 9f)))
+        Text(
+            text, color = Color(0xFF16002F), fontSize = size.sp,
+            fontWeight = FontWeight.Black, letterSpacing = 0.6.sp,
+            maxLines = maxLines,
+            modifier = Modifier.offset(x = 1.5.dp, y = 2.5.dp)
+        )
+        Text(
+            text, color = face, fontSize = size.sp,
+            fontWeight = FontWeight.Black, letterSpacing = 0.6.sp,
+            maxLines = maxLines,
+            style = TextStyle(shadow = Shadow(edge.copy(alpha = 0.95f), Offset(0f, 0f), 7f))
+        )
     }
 }
 
