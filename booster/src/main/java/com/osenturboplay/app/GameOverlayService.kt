@@ -80,7 +80,7 @@ class GameOverlayService : Service() {
         val heading = label("OSEN TURBOPLAY", 15f, Color.rgb(0, 217, 255), true)
         val subheading = label("GAME SESSION PANEL", 10f, Color.LTGRAY, true)
         val info = label("Quick panel connected.\nAndroid manages game performance.", 12f, Color.WHITE, false)
-        val minimize = action("MINIMIZE") { showBubble() }
+        val minimize = action("MINIMIZE") { minimizePanel() }
         val close = action("CLOSE PANEL") { stopSelf() }
         panel.addView(heading)
         panel.addView(subheading, spacedParams(dp(4)))
@@ -93,6 +93,16 @@ class GameOverlayService : Service() {
         overlayView = panel
         windowManager.addView(panel, params)
         makeDraggable(heading)
+    }
+
+    private fun minimizePanel() {
+        val current = overlayView
+        if (current != null) {
+            try { windowManager.removeView(current) } catch (_: Exception) { }
+        }
+        overlayView = null
+        expanded = false
+        showBubble()
     }
 
     private fun action(text: String, click: () -> Unit) = TextView(this).apply {
