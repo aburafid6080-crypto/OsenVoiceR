@@ -99,6 +99,7 @@ class GameOverlayService : Service() {
 
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
         showBubble()
+        autoCloseHandler.postDelayed(autoCloseCheck, 1500)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = START_NOT_STICKY
