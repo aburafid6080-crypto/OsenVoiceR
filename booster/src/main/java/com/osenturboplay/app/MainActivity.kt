@@ -121,7 +121,7 @@ private fun TurboPlayScreen() {
                         verticalArrangement = Arrangement.spacedBy(14.dp)
                     ) {
                         when (tab) {
-                            "Home" -> HomePage(context, stats.value, status)
+                            "Home" -> HomePage(context, stats.value, status) { stats.value = readDeviceStats(context); status.value = "Device information refreshed" }
                             "Stats" -> StatsPage(stats.value) {
                                 stats.value = readDeviceStats(context)
                                 status.value = "Device information refreshed"
@@ -171,7 +171,7 @@ private fun statsRefresh(context: Context, status: androidx.compose.runtime.Muta
 }
 
 @Composable
-private fun HomePage(context: Context, stats: DeviceStats, status: androidx.compose.runtime.MutableState<String>) {
+private fun HomePage(context: Context, stats: DeviceStats, status: androidx.compose.runtime.MutableState<String>, onRefresh: () -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Card(modifier = Modifier.fillMaxWidth().border(1.5.dp, Brush.linearGradient(listOf(Purple, Cyan, Violet)), RoundedCornerShape(24.dp)), shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = Color(0xFF090719))) {
             Column(modifier = Modifier.fillMaxWidth().background(Brush.linearGradient(listOf(Color(0xFF241044), Color(0xFF080D22), Color(0xFF10102A)))).padding(17.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
@@ -210,7 +210,7 @@ private fun HomePage(context: Context, stats: DeviceStats, status: androidx.comp
                 Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
                     Text("DEVICE INFORMATION", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.Black, letterSpacing = 1.sp)
                     Text(stats.deviceName, color = White, fontSize = 14.sp, fontWeight = FontWeight.Bold)
-                    Text("Android \${Build.VERSION.RELEASE}  •  API \${Build.VERSION.SDK_INT}", color = Muted, fontSize = 11.sp)
+                    Text("Android ${Build.VERSION.RELEASE}  •  API ${Build.VERSION.SDK_INT}", color = Muted, fontSize = 11.sp)
                 }
                 Text("VIEW DETAILS  ➜", color = Cyan, fontSize = 9.sp, fontWeight = FontWeight.Black)
             }
@@ -218,7 +218,7 @@ private fun HomePage(context: Context, stats: DeviceStats, status: androidx.comp
         Text("🎮  GAMING TOOLS", color = Purple, fontSize = 19.sp, fontWeight = FontWeight.Black)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             ToolTile("🚀", "GAME LAUNCHER", "Open games", Purple, Modifier.weight(1f)) { status.value = launchFreeFire(context) }
-            ToolTile("⟳", "REFRESH", "Update info", Cyan, Modifier.weight(1f)) { status.value = "Device information refreshed" }
+            ToolTile("⟳", "REFRESH", "Update info", Cyan, Modifier.weight(1f), onRefresh)
             ToolTile("⚡", "BOOSTER", "Game settings", Green, Modifier.weight(1f)) { openGameSettings(context, status) }
             ToolTile("▤", "CLEANER", "App storage", Gold, Modifier.weight(1f)) { openAppSettings(context) }
         }
