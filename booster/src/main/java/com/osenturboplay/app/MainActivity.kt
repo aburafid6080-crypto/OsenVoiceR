@@ -141,7 +141,7 @@ private fun TurboPlayScreen() {
                         verticalArrangement = Arrangement.spacedBy(14.dp)
                     ) {
                         when (tab) {
-                            "Home" -> HomePage(context, stats.value, status) { stats.value = readDeviceStats(context); status.value = "Device information refreshed" }
+                            "Home" -> HomePage(context, stats.value, status, isBoosting = boostAnimation.value, onStartBoost = { stats.value = readDeviceStats(context); boostAnimation.value = true; status.value = "BOOST animation complete • No system performance settings changed" })
                             "Stats" -> StatsPage(stats.value) {
                                 stats.value = readDeviceStats(context)
                                 status.value = "Device information refreshed"
@@ -341,7 +341,7 @@ private fun HeroBanner() {
 }
 
 @Composable
-private fun HomePage(context: Context, stats: DeviceStats, status: androidx.compose.runtime.MutableState<String>, onRefresh: () -> Unit) {
+private fun HomePage(context: Context, stats: DeviceStats, status: androidx.compose.runtime.MutableState<String>, isBoosting: Boolean, onStartBoost: () -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
         HeroBanner()
 
@@ -350,14 +350,12 @@ private fun HomePage(context: Context, stats: DeviceStats, status: androidx.comp
                 Text("🚀  YOUR NEXT MATCH STARTS HERE", color = White, fontSize = 17.sp, fontWeight = FontWeight.Black)
                 Text("Prepare your phone, then launch your game.", color = Muted, fontSize = 12.sp)
                 PremiumActionButton(
-                    label = "⚡  START BOOST",
-                    onClick = {
-                        onRefresh()
-                        status.value = "Safe preparation complete • Android manages game performance"
-                    },
+                    label = if (isBoosting) "✓  BOOSTED" else "⚡  START BOOST",
+                    onClick = onStartBoost,
                     modifier = Modifier.fillMaxWidth().height(52.dp),
                     start = Cyan,
-                    end = Violet
+                    end = Violet,
+                    isBoosting = isBoosting
                 )
                 PremiumActionButton(label = "▶  PLAY FREE FIRE  🔥", onClick = { status.value = launchFreeFire(context) }, modifier = Modifier.fillMaxWidth().height(52.dp))
                 Text("⚡  Free Fire & Free Fire MAX supported when installed", color = Cyan, fontSize = 10.sp)
@@ -491,10 +489,15 @@ private fun ActionButton(label: String, color: Color, onClick: () -> Unit) {
 }
 
 @Composable
-private fun PremiumActionButton(label: String, onClick: () -> Unit, modifier: Modifier = Modifier, start: Color = Purple, end: Color = Cyan) {
+private fun PremiumActionButton(label: String, onClick: () -> Unit, modifier: Modifier = Modifier, start: Color = Purple, end: Color = Cyan, isBoosting: Boolean = false) {
     val shape = RoundedCornerShape(16.dp)
+    val pulseScale = animateFloatAsState(
+        targetValue = if (isBoosting) 1.025f else 1f,
+        animationSpec = tween(durationMillis = 260),
+        label = "start_boost_pulse"
+    )
     Box(
-        modifier = modifier.shadow(12.dp, shape).clip(shape)
+        modifier = modifier.graphicsLayer { scaleX = pulseScale.value; scaleY = pulseScale.value }.shadow(12.dp, shape).clip(shape)
             .background(Brush.horizontalGradient(listOf(start, Purple, end)))
             .border(1.4.dp, Brush.horizontalGradient(listOf(Color.White, start, end)), shape)
             .clickable(onClick = onClick).padding(horizontal = 12.dp, vertical = 8.dp),
