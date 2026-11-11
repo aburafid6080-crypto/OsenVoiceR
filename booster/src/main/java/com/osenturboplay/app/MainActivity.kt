@@ -245,7 +245,7 @@ private fun AnimeGamerPortrait(modifier: Modifier = Modifier) {
 @Composable
 private fun HeroBanner() {
     Card(
-        modifier = Modifier.fillMaxWidth().height(244.dp)
+        modifier = Modifier.fillMaxWidth().height(208.dp)
             .border(2.dp, Brush.linearGradient(listOf(Purple, Cyan, Violet, Gold)), RoundedCornerShape(27.dp)),
         shape = RoundedCornerShape(27.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFF07091B))
@@ -262,20 +262,20 @@ private fun HeroBanner() {
                     .border(1.dp, Cyan.copy(alpha = 0.5f), CircleShape)
             )
             Column(
-                modifier = Modifier.fillMaxWidth(0.72f).align(Alignment.CenterStart),
+                modifier = Modifier.fillMaxWidth(0.64f).align(Alignment.CenterStart),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text("♛  OSEN TURBOPLAY", color = Cyan, fontSize = 11.sp, fontWeight = FontWeight.Black, letterSpacing = 2.sp)
                 Spacer(Modifier.height(5.dp))
-                Text("PLAY SMARTER", color = White, fontSize = 25.sp, fontWeight = FontWeight.Black)
-                Text("BE STRONGER", color = Color(0xFFE020FF), fontSize = 25.sp, fontWeight = FontWeight.Black)
-                Text("FREE FIRE  •  FREE FIRE MAX", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold)
+                Text("PLAY SMARTER", color = White, fontSize = 21.sp, fontWeight = FontWeight.Black)
+                Text("BE STRONGER", color = Color(0xFFE020FF), fontSize = 21.sp, fontWeight = FontWeight.Black)
+                Text("FREE FIRE  •  FREE FIRE MAX", color = Cyan, fontSize = 9.sp, fontWeight = FontWeight.ExtraBold)
                 Spacer(Modifier.height(7.dp))
-                Text("Your gaming space. Your next match starts here.", color = Muted, fontSize = 11.sp, lineHeight = 16.sp)
+                Text("Your gaming space. Your next match starts here.", color = Muted, fontSize = 9.sp, lineHeight = 13.sp, maxLines = 2)
                 Text("🔥  READY FOR YOUR NEXT MATCH", color = Gold, fontSize = 10.sp, fontWeight = FontWeight.Black)
             }
             AnimeGamerPortrait(
-                modifier = Modifier.align(Alignment.CenterEnd).padding(end = 1.dp).size(166.dp)
+                modifier = Modifier.align(Alignment.CenterEnd).padding(end = 5.dp).size(132.dp)
             )
             Text("✦ LIVE", color = Gold, fontSize = 9.sp, fontWeight = FontWeight.Black, modifier = Modifier.align(Alignment.TopEnd))
         }
@@ -284,14 +284,14 @@ private fun HeroBanner() {
 
 @Composable
 private fun HomePage(context: Context, stats: DeviceStats, status: androidx.compose.runtime.MutableState<String>, onRefresh: () -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
         HeroBanner()
 
         Card(modifier = Modifier.fillMaxWidth().border(1.5.dp, Brush.linearGradient(listOf(Cyan, Purple, Violet)), RoundedCornerShape(23.dp)), shape = RoundedCornerShape(23.dp), colors = CardDefaults.cardColors(containerColor = Panel)) {
-            Column(modifier = Modifier.fillMaxWidth().padding(17.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Column(modifier = Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text("🚀  YOUR NEXT MATCH STARTS HERE", color = White, fontSize = 17.sp, fontWeight = FontWeight.Black)
                 Text("Launch Free Fire and jump straight into the action!", color = Muted, fontSize = 12.sp)
-                Button(onClick = { status.value = launchFreeFire(context) }, modifier = Modifier.fillMaxWidth().height(54.dp), colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8E13F8)), shape = RoundedCornerShape(17.dp)) {
+                Button(onClick = { status.value = launchFreeFire(context) }, modifier = Modifier.fillMaxWidth().height(48.dp), colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8E13F8)), shape = RoundedCornerShape(17.dp)) {
                     Text("▶  PLAY FREE FIRE  🔥", color = White, fontSize = 15.sp, fontWeight = FontWeight.Black)
                 }
                 Text("⚡  Free Fire & Free Fire MAX supported when installed", color = Cyan, fontSize = 10.sp)
