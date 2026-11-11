@@ -687,9 +687,19 @@ private fun openGameBoostPanel(context: Context): String {
         )
         return "Allow display-over-other-apps permission, then tap BOOST again."
     }
+    val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as android.app.AppOpsManager
+    val usageAllowed = appOps.checkOpNoThrow(
+        android.app.AppOpsManager.OPSTR_GET_USAGE_STATS,
+        android.os.Process.myUid(),
+        context.packageName
+    ) == android.app.AppOpsManager.MODE_ALLOWED
+    if (!usageAllowed) {
+        safeOpen(context, Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+        return "Allow OSEN TURBOPLAY Usage Access, return here, then tap BOOST again. This lets the panel close when you leave Free Fire."
+    }
     return try {
         context.startForegroundService(Intent(context, GameOverlayService::class.java))
-        "OSEN game panel opened. Drag the floating logo to move it."
+        "OSEN game panel opened. Drag its top header to move it; it closes after you leave Free Fire."
     } catch (_: Exception) {
         "Could not open OSEN game panel. Please try again."
     }
