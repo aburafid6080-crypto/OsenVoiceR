@@ -13,12 +13,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -47,6 +53,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun CombinedHome(onBooster: () -> Unit, onVoice: () -> Unit) {
+    var showSafeGuide by remember { mutableStateOf(false) }
+
     Surface(modifier = Modifier.fillMaxSize(), color = DeepNavy) {
         Column(
             modifier = Modifier.fillMaxSize()
@@ -78,11 +86,34 @@ private fun CombinedHome(onBooster: () -> Unit, onVoice: () -> Unit) {
             ) {
                 Text("🎙  OPEN VOICE TOOLS", fontSize = 16.sp, fontWeight = FontWeight.Bold)
             }
-            Spacer(Modifier.height(26.dp))
+            Spacer(Modifier.height(12.dp))
+            TextButton(onClick = { showSafeGuide = true }) {
+                Text("🛡  SAFE GAMING GUIDE", color = Cyan, fontWeight = FontWeight.Bold)
+            }
+            Spacer(Modifier.height(14.dp))
             Text(
                 "Voice effects are for recording and playback. Direct live voice routing into Free Fire is not supported.",
                 color = Color(0xFFB8CBE5), fontSize = 11.sp, lineHeight = 16.sp
             )
         }
+    }
+
+    if (showSafeGuide) {
+        AlertDialog(
+            onDismissRequest = { showSafeGuide = false },
+            containerColor = Color(0xFF10284A),
+            title = { Text("Safe Gaming Guide", color = Color.White, fontWeight = FontWeight.Bold) },
+            text = {
+                Text(
+                    "For smoother play on a low-end phone:\n\n• Close unused apps before launching the game.\n• Keep some storage space free.\n• Use Free Fire's own graphics and FPS settings; start with Smooth graphics.\n• Avoid playing while the phone is overheating.\n• Keep Android and Free Fire updated.\n\nThis guide does not change game files or guarantee zero ban risk. The app cannot force extra RAM, unlock FPS, or control Free Fire's anti-cheat.",
+                    color = Color(0xFFD5E7FF)
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = { showSafeGuide = false }) {
+                    Text("GOT IT", color = Cyan, fontWeight = FontWeight.Bold)
+                }
+            }
+        )
     }
 }
