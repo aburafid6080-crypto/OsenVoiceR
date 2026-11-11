@@ -86,7 +86,7 @@ class GameOverlayService : Service() {
         val subheading = label("DRAGON CORE  •  IN-GAME CONTROL", 9f, Color.rgb(255, 105, 68), true)
         val info = label("QUICK CONTROL DECK", 11f, Color.WHITE, true)
         val stats = label(readQuickStats(), 10f, Color.rgb(178, 198, 214), false)
-        val fpsInfo = label(readDisplayInfo(), 10f, Color.rgb(255, 177, 92), true)
+        val fpsInfo = label(readFpsInfo(), 10f, Color.rgb(255, 177, 92), true)
         val status = label("READY  •  CONTROLS STAY IN GAME", 9f, Color.rgb(255, 177, 92), true)
         panelStatus = status
         val dnd = action("DND  •  TOGGLE") { toggleDnd() }
@@ -111,9 +111,11 @@ class GameOverlayService : Service() {
         makeDraggable(heading)
     }
 
-    private fun readDisplayInfo(): String {
+    private fun readFpsInfo(): String {
+        // 60 FPS is the selected target mode, not a measurement of Free Fire's live FPS.
         val hz = try { windowManager.defaultDisplay.refreshRate.toInt() } catch (_: Exception) { 0 }
-        return if (hz > 0) "GAME FPS  •  N/A     DISPLAY  •  " + hz + " Hz" else "GAME FPS  •  N/A     DISPLAY RATE UNAVAILABLE"
+        val display = if (hz > 0) "DISPLAY  •  " + hz + " Hz" else "DISPLAY RATE  •  UNKNOWN"
+        return "FPS TARGET  •  60     LIVE FPS  •  NOT MEASURED\n" + display
     }
 
     private fun readQuickStats(): String {
