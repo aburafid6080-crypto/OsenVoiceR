@@ -597,7 +597,8 @@ class GameOverlayService : Service() {
         dndButton = null
         ramValueView = null
         storageValueView = null
-        autoCloseHandler.removeCallbacks(autoCloseCheck)\n        stopForeground(STOP_FOREGROUND_REMOVE)
+        autoCloseHandler.removeCallbacks(autoCloseCheck)
+        stopForeground(STOP_FOREGROUND_REMOVE)
         super.onDestroy()
     }
 
@@ -605,6 +606,8 @@ class GameOverlayService : Service() {
 
     companion object {
         private const val CHANNEL_ID = "osen_game_panel"
-        private const val NOTIFICATION_ID = 2107\n        private const val FREE_FIRE_PACKAGE = "com.dts.freefireth"\n        private const val FREE_FIRE_MAX_PACKAGE = "com.dts.freefiremax"
+        private const val NOTIFICATION_ID = 2107
+        private const val FREE_FIRE_PACKAGE = "com.dts.freefireth"
+        private const val FREE_FIRE_MAX_PACKAGE = "com.dts.freefiremax"
     }
 }
