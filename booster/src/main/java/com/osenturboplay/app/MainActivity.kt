@@ -99,11 +99,21 @@ private fun TurboPlayScreen() {
     val status = remember { mutableStateOf("TurboPlay is ready") }
     val selectedTab = remember { mutableStateOf("Home") }
     val boostAnimation = remember { mutableStateOf(false) }
+    val gameLaunching = remember { mutableStateOf(false) }
 
     LaunchedEffect(boostAnimation.value) {
         if (boostAnimation.value) {
             delay(1500)
             boostAnimation.value = false
+        }
+    }
+
+    LaunchedEffect(gameLaunching.value) {
+        if (gameLaunching.value) {
+            delay(420)
+            status.value = launchFreeFire(context)
+            delay(1100)
+            gameLaunching.value = false
         }
     }
 
@@ -141,7 +151,7 @@ private fun TurboPlayScreen() {
                         verticalArrangement = Arrangement.spacedBy(14.dp)
                     ) {
                         when (tab) {
-                            "Home" -> HomePage(context, stats.value, status, onRefresh = { stats.value = readDeviceStats(context); status.value = "Device information refreshed" }, isBoosting = boostAnimation.value, onStartBoost = { stats.value = readDeviceStats(context); boostAnimation.value = true; status.value = "BOOST animation complete • No system performance settings changed" })
+                            "Home" -> HomePage(context, stats.value, status, onRefresh = { stats.value = readDeviceStats(context); status.value = "Device information refreshed" }, isBoosting = boostAnimation.value, onStartBoost = { stats.value = readDeviceStats(context); boostAnimation.value = true; status.value = "BOOST animation complete • No system performance settings changed" }, isLaunching = gameLaunching.value, onPlayGame = { if (!gameLaunching.value) gameLaunching.value = true })
                             "Stats" -> StatsPage(stats.value) {
                                 stats.value = readDeviceStats(context)
                                 status.value = "Device information refreshed"
@@ -341,7 +351,7 @@ private fun HeroBanner() {
 }
 
 @Composable
-private fun HomePage(context: Context, stats: DeviceStats, status: androidx.compose.runtime.MutableState<String>, onRefresh: () -> Unit, isBoosting: Boolean, onStartBoost: () -> Unit) {
+private fun HomePage(context: Context, stats: DeviceStats, status: androidx.compose.runtime.MutableState<String>, onRefresh: () -> Unit, isBoosting: Boolean, onStartBoost: () -> Unit, isLaunching: Boolean, onPlayGame: () -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
         HeroBanner()
 
@@ -357,7 +367,12 @@ private fun HomePage(context: Context, stats: DeviceStats, status: androidx.comp
                     end = Violet,
                     isBoosting = isBoosting
                 )
-                PremiumActionButton(label = "▶  PLAY FREE FIRE  🔥", onClick = { status.value = launchFreeFire(context) }, modifier = Modifier.fillMaxWidth().height(52.dp))
+                PremiumActionButton(
+                    label = if (isLaunching) "✓  LAUNCHING FREE FIRE..." else "▶  PLAY FREE FIRE  🔥",
+                    onClick = onPlayGame,
+                    modifier = Modifier.fillMaxWidth().height(52.dp),
+                    isLaunching = isLaunching
+                )
                 Text("⚡  Free Fire & Free Fire MAX supported when installed", color = Cyan, fontSize = 10.sp)
             }
         }
@@ -489,12 +504,12 @@ private fun ActionButton(label: String, color: Color, onClick: () -> Unit) {
 }
 
 @Composable
-private fun PremiumActionButton(label: String, onClick: () -> Unit, modifier: Modifier = Modifier, start: Color = Purple, end: Color = Cyan, isBoosting: Boolean = false) {
+private fun PremiumActionButton(label: String, onClick: () -> Unit, modifier: Modifier = Modifier, start: Color = Purple, end: Color = Cyan, isBoosting: Boolean = false, isLaunching: Boolean = false) {
     val shape = RoundedCornerShape(16.dp)
     val pulseScale = animateFloatAsState(
-        targetValue = if (isBoosting) 1.025f else 1f,
+        targetValue = if (isLaunching) 1.04f else if (isBoosting) 1.025f else 1f,
         animationSpec = tween(durationMillis = 260),
-        label = "start_boost_pulse"
+        label = "action_button_pulse"
     )
     Box(
         modifier = modifier.graphicsLayer { scaleX = pulseScale.value; scaleY = pulseScale.value }.shadow(12.dp, shape).clip(shape)
