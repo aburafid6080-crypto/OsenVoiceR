@@ -1,4 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <queries>
+        <package android:name="com.dts.freefireth" />
+        <package android:name="com.dts.freefiremax" />
+    </queries>
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <application android:theme="@android:style/Theme.Material.NoActionBar"
         android:label="Osen Voice R" android:allowBackup="false">
