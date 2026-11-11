@@ -245,37 +245,70 @@ private fun AnimeGamerPortrait(modifier: Modifier = Modifier) {
 @Composable
 private fun HeroBanner() {
     Card(
-        modifier = Modifier.fillMaxWidth().height(208.dp)
-            .border(2.dp, Brush.linearGradient(listOf(Purple, Cyan, Violet, Gold)), RoundedCornerShape(27.dp)),
-        shape = RoundedCornerShape(27.dp),
+        modifier = Modifier.fillMaxWidth().height(238.dp)
+            .border(2.dp, Brush.linearGradient(listOf(Purple, Cyan, Violet, Gold)), RoundedCornerShape(25.dp)),
+        shape = RoundedCornerShape(25.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFF07091B))
     ) {
         Box(
             modifier = Modifier.fillMaxSize()
-                .background(Brush.linearGradient(listOf(Color(0xFF250044), Color(0xFF080B25), Color(0xFF031B35), Color(0xFF17052D))))
-                .padding(15.dp)
+                .background(Brush.linearGradient(listOf(Color(0xFF18002E), Color(0xFF080B25), Color(0xFF031B35), Color(0xFF160426))))
+                .padding(13.dp)
         ) {
-            // Neon energy streaks and layered character panel recreate the requested gaming-banner layout.
+            // Layered neon energy streaks behind the character, matching the supplied gaming reference.
+            Canvas(Modifier.fillMaxSize()) {
+                val w = size.width
+                val h = size.height
+                val streak = Path().apply {
+                    moveTo(-w * 0.08f, h * 0.72f)
+                    cubicTo(w * 0.18f, h * 0.30f, w * 0.22f, h * 0.92f, w * 0.48f, h * 0.18f)
+                    cubicTo(w * 0.62f, h * 0.02f, w * 0.78f, h * 0.24f, w * 1.08f, -h * 0.08f)
+                }
+                drawPath(streak, Purple.copy(alpha = 0.42f), style = Stroke(width = 5.dp.toPx(), cap = StrokeCap.Round))
+                drawPath(streak, Cyan.copy(alpha = 0.32f), style = Stroke(width = 1.5.dp.toPx(), cap = StrokeCap.Round))
+                for (i in 0..5) {
+                    val y = h * (0.12f + i * 0.14f)
+                    drawLine(
+                        color = if (i % 2 == 0) Cyan.copy(alpha = 0.22f) else Purple.copy(alpha = 0.25f),
+                        start = Offset(w * (0.48f + i * 0.035f), y),
+                        end = Offset(w * 1.04f, y - h * 0.12f),
+                        strokeWidth = (1.2f + i % 2).dp.toPx(),
+                        cap = StrokeCap.Round
+                    )
+                }
+                drawCircle(
+                    brush = Brush.radialGradient(
+                        listOf(Purple.copy(alpha = 0.48f), Cyan.copy(alpha = 0.20f), Color.Transparent),
+                        center = Offset(w * 0.78f, h * 0.48f),
+                        radius = h * 0.60f
+                    ),
+                    radius = h * 0.60f,
+                    center = Offset(w * 0.78f, h * 0.48f)
+                )
+            }
             Box(
-                modifier = Modifier.align(Alignment.CenterEnd).size(174.dp)
-                    .background(Brush.radialGradient(listOf(Purple.copy(alpha = 0.62f), Cyan.copy(alpha = 0.22f), Color.Transparent)), CircleShape)
-                    .border(1.dp, Cyan.copy(alpha = 0.5f), CircleShape)
+                modifier = Modifier.align(Alignment.CenterEnd).padding(end = 1.dp).size(176.dp)
+                    .border(1.5.dp, Cyan.copy(alpha = 0.62f), CircleShape)
+                    .background(
+                        Brush.radialGradient(listOf(Color(0xFF38106D).copy(alpha = 0.55f), Color(0xFF042D50).copy(alpha = 0.35f), Color.Transparent)),
+                        CircleShape
+                    )
             )
             Column(
-                modifier = Modifier.fillMaxWidth(0.64f).align(Alignment.CenterStart),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                modifier = Modifier.fillMaxWidth(0.66f).align(Alignment.CenterStart),
+                verticalArrangement = Arrangement.spacedBy(7.dp)
             ) {
-                Text("♛  OSEN TURBOPLAY", color = Cyan, fontSize = 11.sp, fontWeight = FontWeight.Black, letterSpacing = 2.sp)
+                Text("♛  OSEN TURBOPLAY", color = Cyan, fontSize = 10.sp, fontWeight = FontWeight.Black, letterSpacing = 1.8.sp)
                 Spacer(Modifier.height(5.dp))
                 Text("PLAY SMARTER", color = White, fontSize = 21.sp, fontWeight = FontWeight.Black)
                 Text("BE STRONGER", color = Color(0xFFE020FF), fontSize = 21.sp, fontWeight = FontWeight.Black)
                 Text("FREE FIRE  •  FREE FIRE MAX", color = Cyan, fontSize = 9.sp, fontWeight = FontWeight.ExtraBold)
-                Spacer(Modifier.height(7.dp))
+                Spacer(Modifier.height(5.dp))
                 Text("Your gaming space. Your next match starts here.", color = Muted, fontSize = 9.sp, lineHeight = 13.sp, maxLines = 2)
-                Text("🔥  READY FOR YOUR NEXT MATCH", color = Gold, fontSize = 10.sp, fontWeight = FontWeight.Black)
+                Text("🔥  READY FOR YOUR NEXT MATCH", color = Gold, fontSize = 9.sp, fontWeight = FontWeight.Black, maxLines = 1)
             }
             AnimeGamerPortrait(
-                modifier = Modifier.align(Alignment.CenterEnd).padding(end = 5.dp).size(132.dp)
+                modifier = Modifier.align(Alignment.CenterEnd).padding(end = 5.dp).size(154.dp)
             )
             Text("✦ LIVE", color = Gold, fontSize = 9.sp, fontWeight = FontWeight.Black, modifier = Modifier.align(Alignment.TopEnd))
         }
