@@ -32,6 +32,7 @@ class GameOverlayService : Service() {
     private lateinit var params: WindowManager.LayoutParams
     private var expanded = false
     private var panelStatus: TextView? = null
+    private var dndButton: TextView? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -61,7 +62,7 @@ class GameOverlayService : Service() {
             textSize = 12f
             gravity = Gravity.CENTER
             setTextColor(Color.WHITE)
-            background = rounded(Color.rgb(12, 16, 27), Color.rgb(255, 142, 58), 28f)
+            background = rounded(Color.rgb(8, 13, 25), Color.rgb(0, 220, 210), 28f)
             elevation = dp(8).toFloat()
             setOnClickListener { showPanel() }
         }
@@ -78,37 +79,50 @@ class GameOverlayService : Service() {
 
         val panel = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(14), dp(12), dp(14), dp(12))
-            background = rounded(Color.rgb(12, 16, 27), Color.rgb(255, 142, 58), 20f)
-            elevation = dp(10).toFloat()
+            setPadding(dp(16), dp(15), dp(16), dp(15))
+            background = rounded(Color.rgb(8, 13, 25), Color.rgb(0, 220, 210), 24f)
+            elevation = dp(14).toFloat()
         }
-        val heading = label("OSEN  /  TURBOPLAY", 15f, Color.rgb(255, 177, 92), true)
-        val subheading = label("DRAGON CORE  •  IN-GAME CONTROL", 9f, Color.rgb(255, 105, 68), true)
-        val info = label("QUICK CONTROL DECK", 11f, Color.WHITE, true)
-        val stats = label(readQuickStats(), 10f, Color.rgb(178, 198, 214), false)
-        val fpsInfo = label(readFpsInfo(), 10f, Color.rgb(255, 177, 92), true)
-        val status = label("READY  •  CONTROLS STAY IN GAME", 9f, Color.rgb(255, 177, 92), true)
+        val eyebrow = label("OSEN  //  TURBOPLAY", 10f, Color.rgb(0, 225, 215), true)
+        val heading = label("GAME CONTROL", 20f, Color.WHITE, true)
+        val subheading = label("CORE PANEL  •  LOW DISTRACTION", 9f, Color.rgb(151, 169, 196), true)
+        val stats = label(readQuickStats(), 10f, Color.rgb(177, 196, 218), false)
+        val fpsInfo = label(readFpsInfo(), 10f, Color.rgb(0, 225, 215), true)
+        val status = label("SYSTEM READY  •  DND STATUS CHECK", 9f, Color.rgb(255, 190, 90), true)
         panelStatus = status
-        val dnd = action("DND  •  TOGGLE") { toggleDnd() }
-        val calls = action("CALLS  •  SILENCE") { enableDnd("Calls silenced. Android DND is ON.") }
-        val notifications = action("ALERTS  •  SILENCE") { enableDnd("Notifications silenced. Android DND is ON.") }
-        val minimize = action("HIDE PANEL  •  KEEP GAME RUNNING") { minimizePanel() }
-        panel.addView(heading)
-        panel.addView(subheading, spacedParams(dp(3)))
-        panel.addView(info, spacedParams(dp(12)))
-        panel.addView(stats, spacedParams(dp(5)))
-        panel.addView(fpsInfo, spacedParams(dp(4)))
-        panel.addView(status, spacedParams(dp(7)))
-        panel.addView(dnd, spacedParams(dp(10)))
-        panel.addView(calls, spacedParams(dp(7)))
-        panel.addView(notifications, spacedParams(dp(7)))
-        panel.addView(minimize, spacedParams(dp(10)))
+        val dnd = action(dndLabel()) { toggleDnd() }.apply {
+            background = rounded(Color.rgb(12, 40, 49), Color.rgb(0, 225, 215), 16f)
+            setTextColor(Color.rgb(105, 255, 239))
+            textSize = 13f
+            setPadding(dp(12), dp(16), dp(12), dp(16))
+        }
+        dndButton = dnd
+        val minimize = action("MINIMIZE  •  KEEP GAME RUNNING") { minimizePanel() }.apply {
+            background = rounded(Color.rgb(23, 29, 45), Color.rgb(93, 115, 150), 14f)
+            textSize = 10f
+        }
 
-        val width = min(dp(250), resources.displayMetrics.widthPixels - dp(24))
-        params = windowParams(width.coerceAtLeast(dp(190)), WindowManager.LayoutParams.WRAP_CONTENT)
+        panel.addView(eyebrow)
+        panel.addView(heading, spacedParams(dp(4)))
+        panel.addView(subheading, spacedParams(dp(2)))
+        panel.addView(stats, spacedParams(dp(16)))
+        panel.addView(fpsInfo, spacedParams(dp(7)))
+        panel.addView(status, spacedParams(dp(12)))
+        panel.addView(dnd, spacedParams(dp(12)))
+        panel.addView(minimize, spacedParams(dp(8)))
+
+        val width = min(dp(270), resources.displayMetrics.widthPixels - dp(28))
+        params = windowParams(width.coerceAtLeast(dp(200)), WindowManager.LayoutParams.WRAP_CONTENT)
         overlayView = panel
         windowManager.addView(panel, params)
-        makeDraggable(heading)
+        makeDraggable(eyebrow)
+    }
+
+    private fun dndLabel(): String {
+        val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+            manager.currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_NONE
+        ) "DO NOT DISTURB  •  ON" else "DO NOT DISTURB  •  OFF"
     }
 
     private fun readFpsInfo(): String {
@@ -131,37 +145,30 @@ class GameOverlayService : Service() {
     private fun toggleDnd() {
         val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            showPanelStatus("DND is not supported on this Android version.")
+            showPanelStatus("DND needs Android 6.0 or newer.")
             return
         }
         if (!manager.isNotificationPolicyAccessGranted) {
-            showPanelStatus("One-time setup needed: grant OSEN DND access in app settings, then return here.")
+            showPanelStatus("Allow OSEN TURBOPLAY in the DND access screen, then return and tap again.")
+            try {
+                startActivity(Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            } catch (_: Exception) {
+                showPanelStatus("Open Android Settings > Special app access > Do Not Disturb access.")
+            }
             return
         }
         try {
-            val isOff = manager.currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_NONE
-            manager.setInterruptionFilter(if (isOff) NotificationManager.INTERRUPTION_FILTER_ALL else NotificationManager.INTERRUPTION_FILTER_NONE)
-            showPanelStatus(if (isOff) "DND OFF • Calls and alerts restored." else "DND ON • Calls and alerts silenced.")
+            val turningOff = manager.currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_NONE
+            manager.setInterruptionFilter(
+                if (turningOff) NotificationManager.INTERRUPTION_FILTER_ALL
+                else NotificationManager.INTERRUPTION_FILTER_NONE
+            )
+            val result = if (turningOff) "DO NOT DISTURB OFF • interruptions restored."
+                else "DO NOT DISTURB ON • interruptions silenced."
+            showPanelStatus(result)
+            dndButton?.text = dndLabel()
         } catch (_: SecurityException) {
-            showPanelStatus("Android did not allow changing DND.")
-        }
-    }
-
-    private fun enableDnd(message: String) {
-        val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            showPanelStatus("DND is not supported on this Android version.")
-            return
-        }
-        if (!manager.isNotificationPolicyAccessGranted) {
-            showPanelStatus("One-time setup needed: grant OSEN DND access in app settings, then return here.")
-            return
-        }
-        try {
-            manager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
-            showPanelStatus(message)
-        } catch (_: SecurityException) {
-            showPanelStatus("Android did not allow changing DND.")
+            showPanelStatus("Android denied DND access. Check OSEN permission.")
         }
     }
 
@@ -176,6 +183,7 @@ class GameOverlayService : Service() {
         }
         overlayView = null
         panelStatus = null
+        dndButton = null
         expanded = false
         showBubble()
     }
@@ -186,7 +194,7 @@ class GameOverlayService : Service() {
         gravity = Gravity.CENTER
         setTextColor(Color.WHITE)
         setPadding(dp(10), dp(12), dp(10), dp(12))
-        background = rounded(Color.rgb(25, 28, 42), Color.rgb(255, 142, 58), 12f)
+        background = rounded(Color.rgb(20, 27, 43), Color.rgb(0, 205, 205), 12f)
         setOnClickListener {
             animate().scaleX(0.97f).scaleY(0.97f).setDuration(65).withEndAction {
                 animate().scaleX(1f).scaleY(1f).setDuration(90).start()
@@ -293,6 +301,7 @@ class GameOverlayService : Service() {
         }
         overlayView = null
         panelStatus = null
+        dndButton = null
         stopForeground(STOP_FOREGROUND_REMOVE)
         super.onDestroy()
     }
