@@ -408,8 +408,8 @@ private fun OsenVoiceR() {
                         if (installedFreeFire.isEmpty()) {
                             "Free Fire was not found on this phone. Install Free Fire or Free Fire MAX, then reopen OSEN Voice R."
                         } else {
-                            installedFreeFire.joinToString(separator = "\\n") {
-                                "${it.title} detected\\nVersion: ${it.versionName} (code ${it.versionCode})"
+                            installedFreeFire.joinToString(separator = "\n") {
+                                "${it.title} detected\nVersion: ${it.versionName} (code ${it.versionCode})"
                             }
                         },
                         color = Color(0xFFE8DFFF),
