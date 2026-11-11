@@ -339,8 +339,8 @@ private fun HomePage(context: Context, stats: DeviceStats, status: androidx.comp
                     label = "⚡  BOOST  •  OPEN GAME PANEL",
                     onClick = { status.value = openGameBoostPanel(context) },
                     modifier = Modifier.fillMaxWidth().height(50.dp),
-                    startColor = Color(0xFF087FC2),
-                    endColor = Color(0xFF064477)
+                    start = Color(0xFF087FC2),
+                    end = Color(0xFF064477)
                 )
                 Text("Opens OSEN floating game controls. It does not force-close apps or promise extra FPS.", color = Cyan, fontSize = 10.sp)
             }
