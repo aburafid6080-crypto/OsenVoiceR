@@ -96,12 +96,12 @@ class GameOverlayService : Service() {
         val muted = Color.rgb(130, 180, 210)
         val panel = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(14), dp(14), dp(14), dp(14))
+            setPadding(dp(11), dp(11), dp(11), dp(11))
             background = GradientDrawable(
                 GradientDrawable.Orientation.TL_BR,
                 intArrayOf(Color.rgb(2, 7, 20), Color.rgb(4, 24, 49), Color.rgb(2, 9, 23))
             ).apply {
-                cornerRadius = dp(24).toFloat()
+                cornerRadius = dp(20).toFloat()
                 setStroke(dp(2), gold)
             }
             elevation = dp(20).toFloat()
@@ -112,8 +112,8 @@ class GameOverlayService : Service() {
             gravity = Gravity.CENTER_VERTICAL
         }
         val identity = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-        identity.addView(label("✦  OSEN TURBOPLAY", 16f, brightGold, true))
-        identity.addView(label("DRAGON CORE  •  GAMING PERFORMANCE", 8f, muted, true), spacedParams(dp(3)))
+        identity.addView(label("✦  OSEN TURBOPLAY", 15f, brightGold, true))
+        identity.addView(label("PRO GAME PANEL  •  PERFORMANCE HUD", 7f, muted, true), spacedParams(dp(2)))
         val live = label("● READY", 8f, Color.rgb(120, 255, 160), true).apply {
             gravity = Gravity.CENTER
             setPadding(dp(9), dp(7), dp(9), dp(7))
@@ -129,7 +129,7 @@ class GameOverlayService : Service() {
         val fpsCard = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
-            setPadding(dp(12), dp(11), dp(12), dp(11))
+            setPadding(dp(10), dp(8), dp(10), dp(8))
             background = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
                 intArrayOf(Color.rgb(5, 37, 72), Color.rgb(3, 15, 33))
@@ -140,8 +140,8 @@ class GameOverlayService : Service() {
         }
         val fpsInfo = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         fpsInfo.addView(label("PERFORMANCE TARGET", 8f, muted, true))
-        fpsInfo.addView(label("UP TO 60 FPS", 27f, brightGold, true), spacedParams(dp(1)))
-        fpsInfo.addView(label("GAME FPS • NOT EXPOSED BY ANDROID", 7f, Color.rgb(130, 180, 210), true), spacedParams(dp(1)))
+        fpsInfo.addView(label("60 FPS TARGET", 23f, brightGold, true), spacedParams(dp(1)))
+        fpsInfo.addView(label("LIVE GAME FPS NOT MEASURED", 6f, Color.rgb(130, 180, 210), true), spacedParams(dp(1)))
         fpsCard.addView(fpsInfo, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
         fpsCard.addView(label(readDisplayRate(), 9f, brightGold, true).apply {
             gravity = Gravity.CENTER
@@ -149,12 +149,12 @@ class GameOverlayService : Service() {
             background = rounded(Color.rgb(3, 24, 48), gold, 12f)
         })
 
-        val resourcesTitle = label("DEVICE RESOURCES", 8f, gold, true)
+        val resourcesTitle = label("DEVICE STATUS", 7f, gold, true)
         val resourceRow = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
         resourceRow.addView(goldInfoCard("RAM", readFreeRam(), "AVAILABLE"), LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply { marginEnd = dp(5) })
         resourceRow.addView(goldInfoCard("STORAGE", readFreeStorage(), "FREE SPACE"), LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply { marginStart = dp(5) })
 
-        val hardwareTitle = label("HARDWARE IDENTIFICATION", 8f, gold, true)
+        val hardwareTitle = label("DEVICE HARDWARE", 7f, gold, true)
         val hardware = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(dp(11), dp(10), dp(11), dp(10))
@@ -209,17 +209,17 @@ class GameOverlayService : Service() {
         bottomActions.addView(boost, LinearLayout.LayoutParams(0, dp(46), 1f).apply { marginStart = dp(5) })
 
         panel.addView(header)
-        panel.addView(divider, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(1)).apply { topMargin = dp(11); bottomMargin = dp(11) })
+        panel.addView(divider, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(1)).apply { topMargin = dp(8); bottomMargin = dp(8) })
         panel.addView(fpsCard)
-        panel.addView(resourcesTitle, spacedParams(dp(13)))
+        panel.addView(resourcesTitle, spacedParams(dp(9)))
         panel.addView(resourceRow, spacedParams(dp(7)))
-        panel.addView(hardwareTitle, spacedParams(dp(13)))
+        panel.addView(hardwareTitle, spacedParams(dp(9)))
         panel.addView(hardware, spacedParams(dp(7)))
-        panel.addView(status, spacedParams(dp(11)))
-        panel.addView(dnd, spacedParams(dp(6)))
-        panel.addView(bottomActions, spacedParams(dp(7)))
+        panel.addView(status, spacedParams(dp(8)))
+        panel.addView(dnd, spacedParams(dp(5)))
+        panel.addView(bottomActions, spacedParams(dp(5)))
 
-        val width = min(dp(316), resources.displayMetrics.widthPixels - dp(24))
+        val width = min(dp(330), resources.displayMetrics.widthPixels - dp(24))
         params = windowParams(width.coerceAtLeast(dp(220)), WindowManager.LayoutParams.WRAP_CONTENT).apply {
             x = savedX
             y = savedY
@@ -232,7 +232,7 @@ class GameOverlayService : Service() {
     private fun goldInfoCard(title: String, value: String, footer: String): View {
         return LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(10), dp(10), dp(10), dp(10))
+            setPadding(dp(9), dp(8), dp(9), dp(8))
             background = GradientDrawable(
                 GradientDrawable.Orientation.TL_BR,
                 intArrayOf(Color.rgb(13, 43, 68), Color.rgb(8, 20, 36))
