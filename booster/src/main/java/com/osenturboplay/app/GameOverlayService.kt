@@ -189,7 +189,7 @@ class GameOverlayService : Service() {
             setTextColor(Color.WHITE)
             isClickable = true
             isFocusable = true
-            setOnClickListener { showActionPopup("BACK") }
+            setOnClickListener { minimizePanel() }
         }
         val boost = action("⚡  BOOST", "BOOST").apply {
             background = GradientDrawable(
