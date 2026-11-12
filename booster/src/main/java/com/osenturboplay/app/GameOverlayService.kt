@@ -232,25 +232,7 @@ class GameOverlayService : Service() {
             ).apply {
                 setPadding(dp(10), dp(9), dp(10), dp(9))
                 isClickable = true
-                setOnClickListener {
-                    getPanelPrefs().edit().putString("performance_profile", mode.name).apply()
-                    premiumToggle.text = mode.displayName + "  ▾"
-                    premiumOptions.visibility = View.GONE
-                    premiumOptions.removeAllViews()
-                    PerformanceProfile.values().forEach { item ->
-                        val selected = item == mode
-                        premiumOptions.addView(label(
-                            (if (selected) "✓  " else "◇  ") + item.displayName + "  •  " + item.description,
-                            8f,
-                            if (selected) Color.rgb(255, 218, 105) else Color.WHITE,
-                            true
-                        ).apply {
-                            setPadding(dp(10), dp(9), dp(10), dp(9))
-                            setOnClickListener { selectPerformanceProfile(item, premiumToggle, premiumOptions) }
-                        })
-                    }
-                    showPanelStatus("PROFILE ACTIVE: ${mode.displayName} • ${mode.description}")
-                }
+                setOnClickListener { selectPerformanceProfile(mode, premiumToggle, premiumOptions) }
             }
             premiumOptions.addView(option)
         }
@@ -908,10 +890,9 @@ class GameOverlayService : Service() {
         val displayName: String,
         val description: String
     ) {
-        PREMIUM("♛ PREMIUM", "Full panel effects"),
-        STANDARD("STANDARD", "Normal panel motion"),
-        BALANCED("BALANCED", "Reduced panel motion"),
-        LITE("LITE", "Minimal panel motion")
+        PREMIUM("♛ PREMIUM", "Full panel animations"),
+        STANDARD("STANDARD", "Normal, smooth animations"),
+        BALANCED("BALANCED", "Reduced animations for lighter panel use")
     }
 
     private fun getPerformanceProfile(): PerformanceProfile {
@@ -927,7 +908,6 @@ class GameOverlayService : Service() {
         (getSystemService(ACTIVITY_SERVICE) as ActivityManager).getMemoryInfo(memory)
         val cores = Runtime.getRuntime().availableProcessors()
         val detected = when {
-            memory.totalMem < 4L * 1024L * 1024L * 1024L || cores <= 4 -> PerformanceProfile.LITE
             memory.totalMem < 6L * 1024L * 1024L * 1024L || cores <= 6 -> PerformanceProfile.BALANCED
             else -> PerformanceProfile.STANDARD
         }
@@ -956,15 +936,14 @@ class GameOverlayService : Service() {
                 setOnClickListener { selectPerformanceProfile(item, toggle, options) }
             })
         }
-        showPanelStatus("PROFILE ACTIVE: ${mode.displayName} • ${mode.description}")
+        showPanelStatus("PROFILE ACTIVE: ${mode.displayName} • UI ANIMATIONS ONLY")
     }
 
     private fun profileAnimationScale(): Float {
         return when (getPerformanceProfile()) {
-            PerformanceProfile.PREMIUM -> 1.15f
-            PerformanceProfile.STANDARD -> 1.0f
-            PerformanceProfile.BALANCED -> 0.7f
-            PerformanceProfile.LITE -> 0f
+            PerformanceProfile.PREMIUM -> 1.0f
+            PerformanceProfile.STANDARD -> 0.8f
+            PerformanceProfile.BALANCED -> 0.5f
         }
     }
 
