@@ -441,54 +441,68 @@ class GameOverlayService : Service() {
         val dialog = AlertDialog.Builder(this)
             .setTitle("⚙ PANEL SETTINGS")
             .setView(scroll)
-            .setNeutralButton("RESET", null)
-            .setNegativeButton("CANCEL", null)
-            .setPositiveButton("SAVE", null)
             .create()
-        dialog.setOnShowListener {
-            dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
-                // Restore the safe default panel layout and persist it immediately.
-                sizeSeek.progress = 286 - 240
-                left.isChecked = true
-                transparencySeek.progress = 100 - 60
-                autoHide.isChecked = true
-                prefs.edit()
-                    .putInt("panel_size", 286)
-                    .putString("panel_position", "LEFT")
-                    .putInt("panel_transparency", 100)
-                    .putBoolean("auto_hide", true)
-                    .apply()
-                overlayView?.let { current ->
-                    val resetWidth = min(dp(286), resources.displayMetrics.widthPixels - dp(20)).coerceAtLeast(dp(210))
-                    params.width = resetWidth
-                    params.x = dp(6)
-                    current.alpha = 1f
-                    try { windowManager.updateViewLayout(current, params) } catch (_: Exception) { }
-                }
-                showPanelStatus("PANEL SETTINGS RESET TO DEFAULT")
-                showPremiumPopup("PANEL SETTINGS RESET")
-            }
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                val selectedPosition = if (right.isChecked) "RIGHT" else "LEFT"
-                prefs.edit()
-                    .putInt("panel_size", sizeSeek.progress + 240)
-                    .putString("panel_position", selectedPosition)
-                    .putInt("panel_transparency", transparencySeek.progress + 60)
-                    .putBoolean("auto_hide", autoHide.isChecked)
-                    .apply()
-                overlayView?.let { current ->
-                    val newWidth = min(dp(sizeSeek.progress + 240), resources.displayMetrics.widthPixels - dp(20)).coerceAtLeast(dp(210))
-                    params.width = newWidth
-                    params.x = if (selectedPosition == "RIGHT") {
-                        (resources.displayMetrics.widthPixels - newWidth - dp(6)).coerceAtLeast(0)
-                    } else dp(6)
-                    current.alpha = (transparencySeek.progress + 60) / 100f
-                    try { windowManager.updateViewLayout(current, params) } catch (_: Exception) { }
-                }
-                showPanelStatus("PANEL SETTINGS SAVED")
-                dialog.dismiss()
+
+        fun applyPanelSettings(widthDp: Int, position: String, opacity: Int, hide: Boolean) {
+            prefs.edit()
+                .putInt("panel_size", widthDp)
+                .putString("panel_position", position)
+                .putInt("panel_transparency", opacity)
+                .putBoolean("auto_hide", hide)
+                .apply()
+            overlayView?.let { current ->
+                val newWidth = min(dp(widthDp), resources.displayMetrics.widthPixels - dp(20)).coerceAtLeast(dp(210))
+                params.width = newWidth
+                params.x = if (position == "RIGHT") {
+                    (resources.displayMetrics.widthPixels - newWidth - dp(6)).coerceAtLeast(0)
+                } else dp(6)
+                current.alpha = opacity / 100f
+                try { windowManager.updateViewLayout(current, params) } catch (_: Exception) { }
             }
         }
+
+        val actionRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER
+            setPadding(0, dp(12), 0, dp(4))
+        }
+        fun actionButton(label: String, fill: Int, stroke: Int, onClick: () -> Unit): TextView {
+            return TextView(this).apply {
+                text = label
+                gravity = Gravity.CENTER
+                setTextColor(Color.WHITE)
+                textSize = 12f
+                setTypeface(typeface, android.graphics.Typeface.BOLD)
+                setPadding(dp(4), dp(13), dp(4), dp(13))
+                background = rounded(fill, stroke, 22f)
+                isClickable = true
+                setOnClickListener { onClick() }
+            }
+        }
+        val resetButton = actionButton("RESET", Color.rgb(42, 48, 61), Color.rgb(65, 185, 245)) {
+            sizeSeek.progress = 286 - 240
+            left.isChecked = true
+            transparencySeek.progress = 100 - 60
+            autoHide.isChecked = true
+            applyPanelSettings(286, "LEFT", 100, true)
+            showPanelStatus("PANEL SETTINGS RESET TO DEFAULT")
+            showPremiumPopup("PANEL SETTINGS RESET")
+        }
+        val cancelButton = actionButton("CANCEL", Color.rgb(42, 48, 61), Color.rgb(105, 125, 150)) {
+            dialog.dismiss()
+        }
+        val saveButton = actionButton("SAVE", Color.rgb(38, 92, 220), Color.rgb(65, 185, 245)) {
+            val selectedPosition = if (right.isChecked) "RIGHT" else "LEFT"
+            applyPanelSettings(sizeSeek.progress + 240, selectedPosition, transparencySeek.progress + 60, autoHide.isChecked)
+            showPanelStatus("PANEL SETTINGS SAVED")
+            dialog.dismiss()
+        }
+        listOf(resetButton, cancelButton, saveButton).forEachIndexed { index, button ->
+            actionRow.addView(button, LinearLayout.LayoutParams(0, dp(46), 1f).apply {
+                if (index > 0) marginStart = dp(7)
+            })
+        }
+        content.addView(actionRow)
         dialog.window?.setType(overlayWindowType())
         dialog.show()
     }
