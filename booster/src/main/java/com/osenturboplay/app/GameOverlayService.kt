@@ -441,10 +441,33 @@ class GameOverlayService : Service() {
         val dialog = AlertDialog.Builder(this)
             .setTitle("⚙ PANEL SETTINGS")
             .setView(scroll)
+            .setNeutralButton("RESET", null)
             .setNegativeButton("CANCEL", null)
             .setPositiveButton("SAVE", null)
             .create()
         dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
+                // Restore the safe default panel layout and persist it immediately.
+                sizeSeek.progress = 286 - 240
+                left.isChecked = true
+                transparencySeek.progress = 100 - 60
+                autoHide.isChecked = true
+                prefs.edit()
+                    .putInt("panel_size", 286)
+                    .putString("panel_position", "LEFT")
+                    .putInt("panel_transparency", 100)
+                    .putBoolean("auto_hide", true)
+                    .apply()
+                overlayView?.let { current ->
+                    val resetWidth = min(dp(286), resources.displayMetrics.widthPixels - dp(20)).coerceAtLeast(dp(210))
+                    params.width = resetWidth
+                    params.x = dp(6)
+                    current.alpha = 1f
+                    try { windowManager.updateViewLayout(current, params) } catch (_: Exception) { }
+                }
+                showPanelStatus("PANEL SETTINGS RESET TO DEFAULT")
+                showPremiumPopup("PANEL SETTINGS RESET")
+            }
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                 val selectedPosition = if (right.isChecked) "RIGHT" else "LEFT"
                 prefs.edit()
