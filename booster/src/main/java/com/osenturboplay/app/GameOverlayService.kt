@@ -1,6 +1,12 @@
 package com.osenturboplay.app
 
 import android.app.Notification
+import android.widget.ScrollView
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.Switch
+import android.widget.SeekBar
+import android.app.AlertDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.usage.UsageEvents
@@ -92,7 +98,7 @@ class GameOverlayService : Service() {
                 // Usage Events can briefly report the launcher/system UI while an overlay is tapped.
                 // Only minimize after another app remains foreground for 10 seconds.
                 if (outsideGameSince == 0L) outsideGameSince = now
-                if (expanded && now - outsideGameSince >= 10000L) {
+                if (expanded && getPanelPrefs().getBoolean("auto_hide", true) && now - outsideGameSince >= 10000L) {
                     freeFireWasForeground = false
                     outsideGameSince = 0L
                     minimizePanel("OSEN")
@@ -339,7 +345,7 @@ class GameOverlayService : Service() {
             val tile = action(title, title) {
                 val message = when (index) {
                     0 -> "GAMING SETTINGS • Use Android game settings for supported options."
-                    1 -> "PANEL SETTINGS • Drag the top header to move this panel. Tap BACK to minimize."
+                    1 -> { showPanelSettings(); "PANEL SETTINGS OPENED" }
                     else -> "THEME SETTINGS • Premium Sky Blue with Gold BOOST is active."
                 }
                 showPanelStatus(message)
@@ -357,14 +363,111 @@ class GameOverlayService : Service() {
         panel.addView(dnd, spacedParams(dp(4)))
         panel.addView(bottomActions, spacedParams(dp(4)))
 
-        val width = min(dp(286), resources.displayMetrics.widthPixels - dp(20))
-        params = windowParams(width.coerceAtLeast(dp(210)), WindowManager.LayoutParams.WRAP_CONTENT).apply {
-            x = savedX
+        val prefs = getPanelPrefs()
+        val width = min(dp(prefs.getInt("panel_size", 286)), resources.displayMetrics.widthPixels - dp(20)).coerceAtLeast(dp(210))
+        params = windowParams(width, WindowManager.LayoutParams.WRAP_CONTENT).apply {
+            x = if (prefs.getString("panel_position", "LEFT") == "RIGHT") {
+                (resources.displayMetrics.widthPixels - width - dp(6)).coerceAtLeast(0)
+            } else savedX
             y = savedY
         }
+        panel.alpha = prefs.getInt("panel_transparency", 100).coerceIn(60, 100) / 100f
         overlayView = panel
         windowManager.addView(panel, params)
         makeDraggable(header)
+    }
+
+    private fun getPanelPrefs() = getSharedPreferences("osen_panel_settings", MODE_PRIVATE)
+
+    private fun showPanelSettings() {
+        val prefs = getPanelPrefs()
+        val content = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(dp(18), dp(8), dp(18), dp(4))
+        }
+        val scroll = ScrollView(this).apply { addView(content) }
+
+        fun section(text: String) {
+            content.addView(TextView(this).apply {
+                this.text = text
+                setTextColor(Color.rgb(65, 185, 245))
+                textSize = 12f
+                setTypeface(typeface, android.graphics.Typeface.BOLD)
+                setPadding(0, dp(10), 0, dp(4))
+            })
+        }
+        fun seekSetting(title: String, key: String, minValue: Int, maxValue: Int, defaultValue: Int, suffix: String): SeekBar {
+            val value = prefs.getInt(key, defaultValue).coerceIn(minValue, maxValue)
+            val labelView = TextView(this).apply {
+                text = "$title: $value$suffix"
+                setTextColor(Color.WHITE)
+                textSize = 13f
+            }
+            content.addView(labelView)
+            val seek = SeekBar(this).apply {
+                max = maxValue - minValue
+                progress = value - minValue
+                setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                    override fun onProgressChanged(bar: SeekBar?, progress: Int, fromUser: Boolean) {
+                        labelView.text = "$title: ${progress + minValue}$suffix"
+                    }
+                    override fun onStartTrackingTouch(bar: SeekBar?) {}
+                    override fun onStopTrackingTouch(bar: SeekBar?) {}
+                })
+            }
+            content.addView(seek)
+            return seek
+        }
+
+        section("PANEL SIZE")
+        val sizeSeek = seekSetting("Width", "panel_size", 240, 320, 286, " dp")
+        section("PANEL POSITION")
+        val positionGroup = RadioGroup(this).apply { orientation = RadioGroup.HORIZONTAL }
+        val left = RadioButton(this).apply { text = "Left"; setTextColor(Color.WHITE); id = View.generateViewId() }
+        val right = RadioButton(this).apply { text = "Right"; setTextColor(Color.WHITE); id = View.generateViewId() }
+        positionGroup.addView(left)
+        positionGroup.addView(right)
+        if (prefs.getString("panel_position", "LEFT") == "RIGHT") right.isChecked = true else left.isChecked = true
+        content.addView(positionGroup)
+        section("PANEL TRANSPARENCY")
+        val transparencySeek = seekSetting("Opacity", "panel_transparency", 60, 100, 100, "%")
+        val autoHide = Switch(this).apply {
+            text = "Auto Hide after leaving Free Fire"
+            setTextColor(Color.WHITE)
+            textSize = 13f
+            isChecked = prefs.getBoolean("auto_hide", true)
+        }
+        content.addView(autoHide)
+        val dialog = AlertDialog.Builder(this)
+            .setTitle("⚙ PANEL SETTINGS")
+            .setView(scroll)
+            .setNegativeButton("CANCEL", null)
+            .setPositiveButton("SAVE", null)
+            .create()
+        dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                val selectedPosition = if (right.isChecked) "RIGHT" else "LEFT"
+                prefs.edit()
+                    .putInt("panel_size", sizeSeek.progress + 240)
+                    .putString("panel_position", selectedPosition)
+                    .putInt("panel_transparency", transparencySeek.progress + 60)
+                    .putBoolean("auto_hide", autoHide.isChecked)
+                    .apply()
+                overlayView?.let { current ->
+                    val newWidth = min(dp(sizeSeek.progress + 240), resources.displayMetrics.widthPixels - dp(20)).coerceAtLeast(dp(210))
+                    params.width = newWidth
+                    params.x = if (selectedPosition == "RIGHT") {
+                        (resources.displayMetrics.widthPixels - newWidth - dp(6)).coerceAtLeast(0)
+                    } else dp(6)
+                    current.alpha = (transparencySeek.progress + 60) / 100f
+                    try { windowManager.updateViewLayout(current, params) } catch (_: Exception) { }
+                }
+                showPanelStatus("PANEL SETTINGS SAVED")
+                dialog.dismiss()
+            }
+        }
+        dialog.window?.setType(overlayWindowType())
+        dialog.show()
     }
 
     private fun goldInfoCard(title: String, value: String, footer: String): View {
