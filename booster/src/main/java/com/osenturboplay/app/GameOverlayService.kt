@@ -441,8 +441,10 @@ class GameOverlayService : Service() {
             }
             .setNegativeButton("CLOSE", null)
             .create()
-        dialog.show()
+        // Set the overlay window type before showing; setting it afterwards can
+        // cause Android to reject/recreate the dialog and collapse the floating panel.
         dialog.window?.setType(overlayWindowType())
+        dialog.show()
     }
 
     private fun getPanelPrefs() = getSharedPreferences("osen_panel_settings", MODE_PRIVATE)
