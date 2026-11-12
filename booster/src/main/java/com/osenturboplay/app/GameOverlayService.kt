@@ -44,6 +44,9 @@ class GameOverlayService : Service() {
     private var dndButton: TextView? = null
     private var ramValueView: TextView? = null
     private var storageValueView: TextView? = null
+    private var popupView: View? = null
+    private val popupHandler = Handler(Looper.getMainLooper())
+    private val popupDismiss = Runnable { popupView?.let { view -> try { windowManager.removeView(view) } catch (_: Exception) { }; popupView = null } }
     private val autoCloseHandler = Handler(Looper.getMainLooper())
     private var freeFireWasForeground = false
     private val autoCloseCheck = object : Runnable {
@@ -497,8 +500,53 @@ class GameOverlayService : Service() {
     }
 
     private fun showActionPopup(buttonName: String) {
-        Toast.makeText(this, "$buttonName BUTTON PRESSED", Toast.LENGTH_SHORT).show()
+        showPremiumPopup("$buttonName BUTTON PRESSED")
         showPanelStatus("$buttonName BUTTON PRESSED")
+    }
+
+    // Branded, non-interactive popup shown above the overlay panel.
+    private fun showPremiumPopup(message: String) {
+        popupHandler.removeCallbacks(popupDismiss)
+        popupView?.let { try { windowManager.removeView(it) } catch (_: Exception) { } }
+        val popup = TextView(this).apply {
+            text = "✦  $message"
+            textSize = 11f
+            gravity = Gravity.CENTER
+            maxWidth = dp(250)
+            setTextColor(Color.WHITE)
+            setTypeface(typeface, android.graphics.Typeface.BOLD)
+            setPadding(dp(16), dp(11), dp(16), dp(11))
+            background = GradientDrawable(
+                GradientDrawable.Orientation.LEFT_RIGHT,
+                intArrayOf(Color.rgb(105, 220, 255), Color.rgb(25, 155, 225), Color.rgb(5, 82, 145))
+            ).apply {
+                cornerRadius = dp(18).toFloat()
+                setStroke(dp(1), Color.rgb(190, 245, 255))
+            }
+            elevation = dp(12).toFloat()
+        }
+        val popupParams = WindowManager.LayoutParams(
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            overlayWindowType(),
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
+                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+            PixelFormat.TRANSLUCENT
+        ).apply {
+            gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+            y = dp(58)
+        }
+        try {
+            windowManager.addView(popup, popupParams)
+            popupView = popup
+            popup.alpha = 0f
+            popup.translationY = -dp(8).toFloat()
+            popup.animate().alpha(1f).translationY(0f).setDuration(170).start()
+            popupHandler.postDelayed(popupDismiss, 1500)
+        } catch (_: Exception) {
+            popupView = null
+        }
     }
 
     private fun minimizePanel(bubbleLabel: String = "OSEN") {
@@ -556,7 +604,7 @@ class GameOverlayService : Service() {
             animate().scaleX(0.97f).scaleY(0.97f).setDuration(65).withEndAction {
                 animate().scaleX(1f).scaleY(1f).setDuration(90).start()
             }.start()
-            Toast.makeText(context, popupText, Toast.LENGTH_SHORT).show()
+            showPremiumPopup(popupText)
             onClick?.invoke()
         }
     }
@@ -662,6 +710,9 @@ class GameOverlayService : Service() {
         ramValueView = null
         storageValueView = null
         autoCloseHandler.removeCallbacks(autoCloseCheck)
+        popupHandler.removeCallbacks(popupDismiss)
+        popupView?.let { try { windowManager.removeView(it) } catch (_: Exception) { } }
+        popupView = null
         stopForeground(STOP_FOREGROUND_REMOVE)
         super.onDestroy()
     }
