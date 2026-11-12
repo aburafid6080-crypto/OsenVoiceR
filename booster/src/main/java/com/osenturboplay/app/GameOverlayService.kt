@@ -342,46 +342,36 @@ class GameOverlayService : Service() {
             gravity = Gravity.CENTER
         }
         val quickTiles = mutableListOf<TextView>()
-        var activeQuickTile = -1
-        fun updateQuickTileGlow(activeIndex: Int) {
-            activeQuickTile = activeIndex
-            quickTiles.forEachIndexed { tileIndex, tile ->
-                val selected = activeIndex >= 0 && tileIndex == activeIndex
-                tile.background = GradientDrawable().apply {
-                    setColor(if (selected) Color.rgb(8, 76, 112) else Color.rgb(5, 39, 63))
+        var gamingGlowOn = getPanelPrefs().getBoolean("gaming_glow_on", false)
+        fun updateGamingGlow() {
+            quickTiles.firstOrNull()?.let { gamingTile ->
+                gamingTile.background = GradientDrawable().apply {
+                    setColor(if (gamingGlowOn) Color.rgb(8, 76, 112) else Color.rgb(5, 39, 63))
                     cornerRadius = dp(11).toFloat()
-                    setStroke(dp(if (selected) 2 else 1), if (selected) Color.rgb(125, 235, 255) else Color.rgb(45, 150, 195))
+                    setStroke(dp(if (gamingGlowOn) 2 else 1), if (gamingGlowOn) Color.rgb(125, 235, 255) else Color.rgb(45, 150, 195))
                 }
-                tile.elevation = dp(if (selected) 9 else 1).toFloat()
-                tile.setTextColor(if (selected) Color.rgb(190, 245, 255) else Color.WHITE)
-                tile.alpha = if (selected) 1f else 0.88f
-            }
-            if (activeIndex >= 0) {
-                quickTiles.getOrNull(activeIndex)?.let { selected ->
-                    selected.animate().cancel()
-                    selected.scaleX = 1f
-                    selected.scaleY = 1f
-                    selected.animate().scaleX(1.035f).scaleY(1.035f).setDuration(150)
-                        .withEndAction {
-                            selected.animate().scaleX(1f).scaleY(1f).setDuration(150).start()
-                        }.start()
-                }
+                gamingTile.elevation = dp(if (gamingGlowOn) 9 else 1).toFloat()
+                gamingTile.setTextColor(if (gamingGlowOn) Color.rgb(190, 245, 255) else Color.WHITE)
+                gamingTile.alpha = 1f
             }
         }
         listOf("🎮 GAMING", "⚙ PANEL", "✦ THEME").forEachIndexed { index, title ->
             val tile = action(title, title) {
-                val nextActive = if (activeQuickTile == index) -1 else index
-                updateQuickTileGlow(nextActive)
-                val state = if (nextActive == -1) "OFF" else "ACTIVE"
-                val message = when (index) {
-                    0 -> if (nextActive == -1) "GAMING OFF • Glow turned off." else "GAMING ACTIVE • Gaming section selected."
-                    1 -> {
-                        if (nextActive >= 0) showPanelSettings()
-                        if (nextActive == -1) "PANEL OFF • Glow turned off." else "PANEL ACTIVE • Settings opened."
+                when (index) {
+                    0 -> {
+                        gamingGlowOn = !gamingGlowOn
+                        getPanelPrefs().edit().putBoolean("gaming_glow_on", gamingGlowOn).apply()
+                        updateGamingGlow()
+                        showPanelStatus(if (gamingGlowOn) "GAMING LIGHT ON" else "GAMING LIGHT OFF")
                     }
-                    else -> if (nextActive == -1) "THEME OFF • Glow turned off." else "THEME ACTIVE • Premium Sky Blue with Gold BOOST."
+                    1 -> {
+                        showPanelSettings()
+                        showPanelStatus("PANEL SETTINGS OPENED")
+                    }
+                    else -> {
+                        showPanelStatus("THEME SETTINGS • Premium Sky Blue with Gold BOOST is active.")
+                    }
                 }
-                showPanelStatus(message)
             }.apply {
                 textSize = 8f
                 setPadding(dp(3), dp(9), dp(3), dp(9))
@@ -392,6 +382,7 @@ class GameOverlayService : Service() {
                 if (index > 0) marginStart = dp(4)
             })
         }
+        updateGamingGlow()
         panel.addView(quickSettings, spacedParams(dp(5)))
         panel.addView(status, spacedParams(dp(5)))
         panel.addView(dnd, spacedParams(dp(4)))
