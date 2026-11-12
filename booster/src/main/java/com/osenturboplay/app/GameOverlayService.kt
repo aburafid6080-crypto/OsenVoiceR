@@ -243,14 +243,14 @@ class GameOverlayService : Service() {
         val boost = action("⚡  BOOST", "BOOST").apply {
             background = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
-                intArrayOf(Color.rgb(130, 230, 255), Color.rgb(35, 165, 235), Color.rgb(5, 85, 150))
+                intArrayOf(Color.rgb(255, 225, 115), Color.rgb(245, 176, 35), Color.rgb(190, 112, 12))
             ).apply {
                 cornerRadius = dp(13).toFloat()
-                setStroke(dp(2), Color.rgb(190, 240, 255))
+                setStroke(dp(2), Color.rgb(255, 239, 175))
             }
             elevation = dp(8).toFloat()
             textSize = 11f
-            setTextColor(Color.WHITE)
+            setTextColor(Color.rgb(35, 25, 5))
             isClickable = true
             isFocusable = true
             setOnClickListener { animateButtonPress(this) { showActionPopup("BOOST") } }
