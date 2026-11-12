@@ -912,9 +912,13 @@ class GameOverlayService : Service() {
         val prefs = getPanelPrefs()
         val saved = prefs.getString("performance_profile", null)
         if (saved != null) {
-            return try { PerformanceProfile.valueOf(saved) } catch (_: IllegalArgumentException) {
+            val stored = try { PerformanceProfile.valueOf(saved) } catch (_: IllegalArgumentException) {
                 PerformanceProfile.STANDARD
             }
+            // A previously selected Premium profile remains locked after the service restarts.
+            return if (stored == PerformanceProfile.PREMIUM && !premiumUnlockedThisSession) {
+                PerformanceProfile.STANDARD
+            } else stored
         }
         // Choose a conservative first-run default using Android's reported device capacity.
         val memory = ActivityManager.MemoryInfo()
