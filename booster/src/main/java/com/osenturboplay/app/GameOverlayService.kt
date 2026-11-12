@@ -167,8 +167,8 @@ class GameOverlayService : Service() {
         try { windowManager.removeView(old) } catch (_: Exception) { }
         expanded = true
 
-        val gold = Color.rgb(45, 190, 255)
-        val brightGold = Color.rgb(155, 230, 255)
+        val gold = getPanelPrefs().getInt("theme_accent_color", Color.rgb(45, 190, 255))
+        val brightGold = getPanelPrefs().getInt("theme_accent_light", Color.rgb(155, 230, 255))
         val muted = Color.rgb(130, 190, 215)
         val panel = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -369,7 +369,7 @@ class GameOverlayService : Service() {
                         showPanelStatus("PANEL SETTINGS OPENED")
                     }
                     else -> {
-                        showPanelStatus("THEME SETTINGS • Premium Sky Blue with Gold BOOST is active.")
+                        showThemeSettings()
                     }
                 }
             }.apply {
@@ -400,6 +400,52 @@ class GameOverlayService : Service() {
         overlayView = panel
         windowManager.addView(panel, params)
         makeDraggable(header)
+    }
+
+
+    private fun showThemeSettings() {
+        val prefs = getPanelPrefs()
+        val names = arrayOf("Sky Blue", "Purple", "Emerald", "Rose", "Amber")
+        val accents = intArrayOf(
+            Color.rgb(45, 190, 255),
+            Color.rgb(177, 105, 255),
+            Color.rgb(55, 210, 145),
+            Color.rgb(255, 105, 135),
+            Color.rgb(235, 170, 55)
+        )
+        val lightAccents = intArrayOf(
+            Color.rgb(155, 230, 255),
+            Color.rgb(220, 180, 255),
+            Color.rgb(165, 255, 215),
+            Color.rgb(255, 190, 205),
+            Color.rgb(255, 225, 155)
+        )
+        val current = prefs.getInt("theme_accent_color", accents[0])
+        val selected = accents.indexOf(current).coerceAtLeast(0)
+        AlertDialog.Builder(this)
+            .setTitle("✦  CUSTOMIZE COLORS")
+            .setSingleChoiceItems(names, selected) { dialog, which ->
+                prefs.edit()
+                    .putInt("theme_accent_color", accents[which])
+                    .putInt("theme_accent_light", lightAccents[which])
+                    .apply()
+                dialog.dismiss()
+                showPanelStatus("THEME COLOR SAVED • ${names[which].uppercase()}")
+                // Rebuild the panel so the selected accent is visible immediately.
+                val x = params.x
+                val y = params.y
+                minimizePanel()
+                showBubble()
+                params.x = x
+                params.y = y
+                overlayView?.let { try { windowManager.updateViewLayout(it, params) } catch (_: Exception) { } }
+            }
+            .setNegativeButton("CLOSE", null)
+            .create()
+            .also { dialog ->
+                dialog.window?.setType(overlayWindowType())
+                dialog.show()
+            }
     }
 
     private fun getPanelPrefs() = getSharedPreferences("osen_panel_settings", MODE_PRIVATE)
