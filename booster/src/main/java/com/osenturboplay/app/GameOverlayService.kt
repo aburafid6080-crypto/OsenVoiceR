@@ -399,7 +399,7 @@ class GameOverlayService : Service() {
         panel.addView(quickSettings, spacedParams(dp(5)))
         panel.addView(status, spacedParams(dp(5)))
         panel.addView(dnd, spacedParams(dp(4)))
-        val passwordSettingsButton = action("🔐  PREMIUM PASSWORD SETTINGS", "PASSWORD SETTINGS") {
+        val passwordSettingsButton = action("🔐  PREMIUM DEVICE ID", "DEVICE ID") {
             showPremiumPasswordSettings()
         }.apply {
             textSize = 8f
@@ -912,19 +912,27 @@ class GameOverlayService : Service() {
     }
 
     // Premium password is stored only as a salted PBKDF2 hash in private app storage.
-    // Unlock is session-scoped; restarting the overlay requires the password again.
+    // Premium access is verified by the owner's server-side settings and device approval.
+    // Unlock lasts only for this floating-panel session.
     private var premiumUnlockedThisSession = false
+
+    private fun getPremiumDeviceId(): String {
+        val identityPrefs = getSharedPreferences("osen_device_identity", MODE_PRIVATE)
+        val existing = identityPrefs.getString("device_id", null)
+        if (!existing.isNullOrBlank()) return existing
+        val created = java.util.UUID.randomUUID().toString()
+        identityPrefs.edit().putString("device_id", created).apply()
+        return created
+    }
 
     private fun requestPremiumUnlock(toggle: TextView, options: LinearLayout) {
         if (premiumUnlockedThisSession) {
             selectPerformanceProfile(PerformanceProfile.PREMIUM, toggle, options)
             return
         }
-        val prefs = getPanelPrefs()
-        val hasPassword = prefs.contains("premium_password_hash") &&
-            prefs.contains("premium_password_salt")
+        val deviceId = getPremiumDeviceId()
         val passwordInput = EditText(this).apply {
-            hint = "Enter your password"
+            hint = "Admin-provided Premium password"
             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
             setSingleLine(true)
         }
@@ -933,60 +941,75 @@ class GameOverlayService : Service() {
             setPadding(dp(20), dp(8), dp(20), dp(4))
         }
         addPasswordInput(content, passwordInput)
-        val confirmInput = if (hasPassword) null else EditText(this).apply {
-            hint = "Confirm your password"
-            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            setSingleLine(true)
-        }
-        if (confirmInput != null) addPasswordInput(content, confirmInput)
         val dialog = AlertDialog.Builder(this)
-            .setTitle(if (hasPassword) "🔒 UNLOCK PREMIUM" else "🔐 CREATE PREMIUM PASSWORD")
-            .setMessage(if (hasPassword) "Enter your password to unlock Premium." else "Create a password with at least 6 characters. It is stored securely on this phone.")
+            .setTitle("🔒  PREMIUM ACCESS")
+            .setMessage("Enter the Premium password. This device must also be approved by the app owner.")
             .setView(content)
-            .setPositiveButton(if (hasPassword) "UNLOCK" else "SAVE PASSWORD", null)
+            .setPositiveButton("VERIFY & UNLOCK", null)
+            .setNeutralButton("COPY DEVICE ID", null)
             .setNegativeButton("CANCEL", null)
             .create()
         dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
+                val clipboard = getSystemService(CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                clipboard.setPrimaryClip(android.content.ClipData.newPlainText("OSEN Device ID", deviceId))
+                Toast.makeText(this, "Device ID copied.", Toast.LENGTH_SHORT).show()
+            }
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                 val entered = passwordInput.text?.toString().orEmpty()
-                if (entered.length < 6) {
-                    passwordInput.error = "Use at least 6 characters"
+                if (entered.length < 8 || entered.length > 128) {
+                    passwordInput.error = "Enter the valid Premium password"
                     return@setOnClickListener
                 }
-                if (hasPassword) {
-                    val salt = try {
-                        Base64.decode(prefs.getString("premium_password_salt", "") ?: "", Base64.NO_WRAP)
-                    } catch (_: Exception) { byteArrayOf() }
-                    val expected = try {
-                        Base64.decode(prefs.getString("premium_password_hash", "") ?: "", Base64.NO_WRAP)
-                    } catch (_: Exception) { byteArrayOf() }
-                    val actual = try { derivePremiumPasswordHash(entered.toCharArray(), salt) }
-                        catch (_: Exception) { byteArrayOf() }
-                    if (salt.isEmpty() || expected.isEmpty() || !MessageDigest.isEqual(expected, actual)) {
-                        passwordInput.error = "Incorrect password"
-                        return@setOnClickListener
-                    }
-                } else {
-                    val confirmation = confirmInput?.text?.toString().orEmpty()
-                    if (entered != confirmation) {
-                        confirmInput?.error = "Passwords do not match"
-                        return@setOnClickListener
-                    }
-                    val salt = ByteArray(16).also { SecureRandom().nextBytes(it) }
-                    val hash = try { derivePremiumPasswordHash(entered.toCharArray(), salt) }
-                        catch (_: Exception) {
-                            passwordInput.error = "Could not securely save password. Try again."
-                            return@setOnClickListener
+                val verifyButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                verifyButton.isEnabled = false
+                verifyButton.text = "CHECKING…"
+                Thread {
+                    var resultCode = "NETWORK_ERROR"
+                    var unlocked = false
+                    var connection: java.net.HttpURLConnection? = null
+                    try {
+                        connection = (java.net.URL("$PREMIUM_API_URL/api/premium/verify").openConnection()
+                            as java.net.HttpURLConnection).apply {
+                            requestMethod = "POST"
+                            connectTimeout = 10000
+                            readTimeout = 10000
+                            doOutput = true
+                            setRequestProperty("Content-Type", "application/json; charset=utf-8")
                         }
-                    prefs.edit()
-                        .putString("premium_password_salt", Base64.encodeToString(salt, Base64.NO_WRAP))
-                        .putString("premium_password_hash", Base64.encodeToString(hash, Base64.NO_WRAP))
-                        .apply()
-                }
-                premiumUnlockedThisSession = true
-                dialog.dismiss()
-                selectPerformanceProfile(PerformanceProfile.PREMIUM, toggle, options)
-                showPanelStatus("PREMIUM UNLOCKED • THIS SESSION")
+                        val payload = org.json.JSONObject().put("device_id", deviceId).put("password", entered)
+                        connection.outputStream.use { it.write(payload.toString().toByteArray(Charsets.UTF_8)) }
+                        val responseStream = if (connection.responseCode in 200..299) connection.inputStream else connection.errorStream
+                        val responseText = responseStream?.bufferedReader()?.use { it.readText() }.orEmpty()
+                        val response = org.json.JSONObject(responseText)
+                        unlocked = response.optBoolean("ok", false)
+                        resultCode = response.optString("code", if (unlocked) "OK" else "DENIED")
+                    } catch (_: Exception) {
+                        resultCode = "NETWORK_ERROR"
+                    } finally {
+                        connection?.disconnect()
+                    }
+                    runOnUiThread {
+                        if (unlocked) {
+                            premiumUnlockedThisSession = true
+                            dialog.dismiss()
+                            selectPerformanceProfile(PerformanceProfile.PREMIUM, toggle, options)
+                            showPanelStatus("PREMIUM UNLOCKED • OWNER APPROVED")
+                        } else {
+                            verifyButton.isEnabled = true
+                            verifyButton.text = "VERIFY & UNLOCK"
+                            val message = when (resultCode) {
+                                "NOT_APPROVED" -> "This device is not approved yet. Send this Device ID to the owner:\n$deviceId"
+                                "PREMIUM_DISABLED" -> "Premium is currently disabled by the owner."
+                                "WRONG_PASSWORD" -> "Incorrect Premium password."
+                                "PASSWORD_NOT_SET" -> "The owner has not set the Premium password yet."
+                                "INVALID_PASSWORD" -> "Enter a valid Premium password."
+                                else -> "Could not verify Premium. Check your internet connection and try again."
+                            }
+                            dialog.setMessage(message)
+                        }
+                    }
+                }.start()
             }
         }
         dialog.window?.setType(overlayWindowType())
@@ -1020,88 +1043,19 @@ class GameOverlayService : Service() {
     }
 
     private fun showPremiumPasswordSettings() {
-        val prefs = getPanelPrefs()
-        val hasPassword = prefs.contains("premium_password_hash") &&
-            prefs.contains("premium_password_salt")
-        val content = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(dp(20), dp(8), dp(20), dp(4))
-        }
-        fun field(hintText: String): EditText = EditText(this).apply {
-            hint = hintText
-            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            setSingleLine(true)
-        }
-        val current = if (hasPassword) field("Current password") else null
-        val fresh = field("New password (at least 6 characters)")
-        val confirm = field("Confirm new password")
-        if (current != null) addPasswordInput(content, current)
-        addPasswordInput(content, fresh)
-        addPasswordInput(content, confirm)
-
+        val deviceId = getPremiumDeviceId()
         val dialog = AlertDialog.Builder(this)
-            .setTitle(if (hasPassword) "🔐 CHANGE PREMIUM PASSWORD" else "🔐 SET PREMIUM PASSWORD")
-            .setMessage("Password is stored on this phone as a salted PBKDF2 hash. It cannot be read back from storage.")
-            .setView(content)
-            .setPositiveButton(if (hasPassword) "UPDATE PASSWORD" else "SAVE PASSWORD", null)
-            .setNegativeButton("CANCEL", null)
-            .create()
-        dialog.setOnShowListener {
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                if (hasPassword) {
-                    val old = current?.text?.toString().orEmpty()
-                    val saltOld = try {
-                        Base64.decode(prefs.getString("premium_password_salt", "") ?: "", Base64.NO_WRAP)
-                    } catch (_: Exception) { byteArrayOf() }
-                    val hashOld = try {
-                        Base64.decode(prefs.getString("premium_password_hash", "") ?: "", Base64.NO_WRAP)
-                    } catch (_: Exception) { byteArrayOf() }
-                    val checkOld = try { derivePremiumPasswordHash(old.toCharArray(), saltOld) }
-                        catch (_: Exception) { byteArrayOf() }
-                    if (old.isEmpty() || saltOld.isEmpty() || hashOld.isEmpty() ||
-                        !MessageDigest.isEqual(hashOld, checkOld)) {
-                        current?.error = "Current password is incorrect"
-                        return@setOnClickListener
-                    }
-                }
-                val next = fresh.text?.toString().orEmpty()
-                if (next.length < 6) {
-                    fresh.error = "Use at least 6 characters"
-                    return@setOnClickListener
-                }
-                if (next != confirm.text?.toString().orEmpty()) {
-                    confirm.error = "Passwords do not match"
-                    return@setOnClickListener
-                }
-                val salt = ByteArray(16).also { SecureRandom().nextBytes(it) }
-                val hash = try { derivePremiumPasswordHash(next.toCharArray(), salt) }
-                    catch (_: Exception) {
-                        fresh.error = "Could not securely save password"
-                        return@setOnClickListener
-                    }
-                prefs.edit()
-                    .putString("premium_password_salt", Base64.encodeToString(salt, Base64.NO_WRAP))
-                    .putString("premium_password_hash", Base64.encodeToString(hash, Base64.NO_WRAP))
-                    .apply()
-                premiumUnlockedThisSession = false
-                showPanelStatus("PREMIUM PASSWORD ${if (hasPassword) "UPDATED" else "SAVED"}")
-                Toast.makeText(this, "Premium password saved securely on this phone.", Toast.LENGTH_SHORT).show()
-                dialog.dismiss()
+            .setTitle("OSEN TURBOPLAY • DEVICE ID")
+            .setMessage("Share this ID with the app owner to request Premium approval:\n\n$deviceId\n\nOnly the owner can approve this device and change the Premium password.")
+            .setPositiveButton("COPY DEVICE ID") { _, _ ->
+                val clipboard = getSystemService(CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                clipboard.setPrimaryClip(android.content.ClipData.newPlainText("OSEN Device ID", deviceId))
+                Toast.makeText(this, "Device ID copied.", Toast.LENGTH_SHORT).show()
             }
-        }
+            .setNegativeButton("CLOSE", null)
+            .create()
         dialog.window?.setType(overlayWindowType())
         dialog.show()
-    }
-
-    private fun derivePremiumPasswordHash(password: CharArray, salt: ByteArray): ByteArray {
-        val spec = PBEKeySpec(password, salt, 120_000, 256)
-        return try {
-            SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
-                .generateSecret(spec).encoded
-        } finally {
-            spec.clearPassword()
-            password.fill('\u0000')
-        }
     }
 
     private fun selectPerformanceProfile(
@@ -1294,6 +1248,7 @@ class GameOverlayService : Service() {
     companion object {
         private const val CHANNEL_ID = "osen_game_panel"
         private const val NOTIFICATION_ID = 2107
+        private const val PREMIUM_API_URL = "https://osen-voice-r.vercel.app"
         private const val FREE_FIRE_PACKAGE = "com.dts.freefireth"
         private const val FREE_FIRE_MAX_PACKAGE = "com.dts.freefiremax"
     }
