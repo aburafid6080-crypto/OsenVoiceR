@@ -989,7 +989,7 @@ class GameOverlayService : Service() {
                     } finally {
                         connection?.disconnect()
                     }
-                    runOnUiThread {
+                    popupHandler.post {
                         if (unlocked) {
                             premiumUnlockedThisSession = true
                             dialog.dismiss()
