@@ -356,7 +356,7 @@ class GameOverlayService : Service() {
             }
         }
         listOf("🎮 GAMING", "⚙ PANEL", "✦ THEME").forEachIndexed { index, title ->
-            val tile = action(title, title) {
+            val tile = action(title, if (index == 0) "OSEN GAME BOOST" else title) {
                 when (index) {
                     0 -> {
                         gamingGlowOn = !gamingGlowOn
