@@ -740,26 +740,7 @@ private fun openDeviceSettings(context: Context) {
     safeOpen(context, Intent(Settings.ACTION_SETTINGS))
 }
 
-private fun toggleDndMode(context: Context): String {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-        return "Do Not Disturb requires Android 6.0 or newer."
-    }
-    val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    if (!manager.isNotificationPolicyAccessGranted) {
-        safeOpen(context, Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS))
-        return "Allow OSEN TURBOPLAY Do Not Disturb access, then tap DND MODE again."
-    }
-    return try {
-        val turningOff = manager.currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_NONE
-        manager.setInterruptionFilter(
-            if (turningOff) NotificationManager.INTERRUPTION_FILTER_ALL
-            else NotificationManager.INTERRUPTION_FILTER_NONE
-        )
-        if (turningOff) "Do Not Disturb turned OFF." else "Do Not Disturb turned ON."
-    } catch (_: SecurityException) {
-        "Android did not allow changing Do Not Disturb mode."
-    }
-}
+private fun toggleDndMode(context: Context): String = GameDndController.toggle(context)
 
 private fun enableGamingQuietMode(context: Context): String {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
