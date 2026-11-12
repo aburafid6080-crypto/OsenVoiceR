@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 type User = { user_id: string; premium: boolean; updated_at?: string };
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+const rawSupabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+const supabaseUrl = (() => { try { const parsed = new URL(rawSupabaseUrl.trim()); return `${parsed.protocol}//${parsed.host}`; } catch { return rawSupabaseUrl.trim().replace(/\\/+$/, ""); } })();
 const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
 export default function Home() {
  const [email,setEmail]=useState(""); const [password,setPassword]=useState(""); const [token,setToken]=useState("");
