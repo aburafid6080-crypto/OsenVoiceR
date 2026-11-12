@@ -196,7 +196,8 @@ class GameOverlayService : Service() {
             background = rounded(Color.rgb(24, 39, 23), Color.rgb(113, 185, 70), 16f)
         }
         header.addView(identity, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
-        val premiumToggle = label("♛ PREMIUM  ▾", 9f, Color.rgb(255, 218, 105), true).apply {
+        val profile = getPerformanceProfile()
+        val premiumToggle = label(profile.displayName + "  ▾", 9f, Color.rgb(255, 218, 105), true).apply {
             gravity = Gravity.CENTER
             setPadding(dp(9), dp(8), dp(9), dp(8))
             background = GradientDrawable(
@@ -222,16 +223,33 @@ class GameOverlayService : Service() {
                 setStroke(dp(1), Color.rgb(255, 205, 75))
             }
         }
-        val premiumModes = listOf("♛  PREMIUM  •  SELECTED", "◇  STANDARD", "◇  BALANCED", "◇  LITE")
-        premiumModes.forEach { mode ->
-            val option = label(mode, 9f, if (mode.startsWith("♛")) Color.rgb(255, 218, 105) else Color.WHITE, true).apply {
-                setPadding(dp(10), dp(8), dp(10), dp(8))
+        PerformanceProfile.values().forEach { mode ->
+            val option = label(
+                (if (mode == profile) "✓  " else "◇  ") + mode.displayName + "  •  " + mode.description,
+                8f,
+                if (mode == profile) Color.rgb(255, 218, 105) else Color.WHITE,
+                true
+            ).apply {
+                setPadding(dp(10), dp(9), dp(10), dp(9))
                 isClickable = true
                 setOnClickListener {
-                    premiumToggle.text = if (mode.contains("PREMIUM")) "♛ PREMIUM  ▾"
-                        else mode.substringAfter("  ").substringBefore("  •") + "  ▾"
+                    getPanelPrefs().edit().putString("performance_profile", mode.name).apply()
+                    premiumToggle.text = mode.displayName + "  ▾"
                     premiumOptions.visibility = View.GONE
-                    showPanelStatus("DISPLAY PROFILE: ${mode.substringAfter("  ").substringBefore("  •")} • UI PRESET ONLY")
+                    premiumOptions.removeAllViews()
+                    PerformanceProfile.values().forEach { item ->
+                        val selected = item == mode
+                        premiumOptions.addView(label(
+                            (if (selected) "✓  " else "◇  ") + item.displayName + "  •  " + item.description,
+                            8f,
+                            if (selected) Color.rgb(255, 218, 105) else Color.WHITE,
+                            true
+                        ).apply {
+                            setPadding(dp(10), dp(9), dp(10), dp(9))
+                            setOnClickListener { selectPerformanceProfile(item, premiumToggle, premiumOptions) }
+                        })
+                    }
+                    showPanelStatus("PROFILE ACTIVE: ${mode.displayName} • ${mode.description}")
                 }
             }
             premiumOptions.addView(option)
@@ -886,11 +904,80 @@ class GameOverlayService : Service() {
         }
     }
 
+    private enum class PerformanceProfile(
+        val displayName: String,
+        val description: String
+    ) {
+        PREMIUM("♛ PREMIUM", "Full panel effects"),
+        STANDARD("STANDARD", "Normal panel motion"),
+        BALANCED("BALANCED", "Reduced panel motion"),
+        LITE("LITE", "Minimal panel motion")
+    }
+
+    private fun getPerformanceProfile(): PerformanceProfile {
+        val prefs = getPanelPrefs()
+        val saved = prefs.getString("performance_profile", null)
+        if (saved != null) {
+            return try { PerformanceProfile.valueOf(saved) } catch (_: IllegalArgumentException) {
+                PerformanceProfile.STANDARD
+            }
+        }
+        // Choose a conservative first-run default using Android's reported device capacity.
+        val memory = ActivityManager.MemoryInfo()
+        (getSystemService(ACTIVITY_SERVICE) as ActivityManager).getMemoryInfo(memory)
+        val cores = Runtime.getRuntime().availableProcessors()
+        val detected = when {
+            memory.totalMem < 4L * 1024L * 1024L * 1024L || cores <= 4 -> PerformanceProfile.LITE
+            memory.totalMem < 6L * 1024L * 1024L * 1024L || cores <= 6 -> PerformanceProfile.BALANCED
+            else -> PerformanceProfile.STANDARD
+        }
+        prefs.edit().putString("performance_profile", detected.name).apply()
+        return detected
+    }
+
+    private fun selectPerformanceProfile(
+        mode: PerformanceProfile,
+        toggle: TextView,
+        options: LinearLayout
+    ) {
+        getPanelPrefs().edit().putString("performance_profile", mode.name).apply()
+        toggle.text = mode.displayName + "  ▾"
+        options.visibility = View.GONE
+        options.removeAllViews()
+        PerformanceProfile.values().forEach { item ->
+            val selected = item == mode
+            options.addView(label(
+                (if (selected) "✓  " else "◇  ") + item.displayName + "  •  " + item.description,
+                8f,
+                if (selected) Color.rgb(255, 218, 105) else Color.WHITE,
+                true
+            ).apply {
+                setPadding(dp(10), dp(9), dp(10), dp(9))
+                setOnClickListener { selectPerformanceProfile(item, toggle, options) }
+            })
+        }
+        showPanelStatus("PROFILE ACTIVE: ${mode.displayName} • ${mode.description}")
+    }
+
+    private fun profileAnimationScale(): Float {
+        return when (getPerformanceProfile()) {
+            PerformanceProfile.PREMIUM -> 1.15f
+            PerformanceProfile.STANDARD -> 1.0f
+            PerformanceProfile.BALANCED -> 0.7f
+            PerformanceProfile.LITE -> 0f
+        }
+    }
+
     private fun animateButtonPress(view: View, onFinished: () -> Unit) {
+        val scale = profileAnimationScale()
         view.animate().cancel()
-        view.animate().scaleX(0.94f).scaleY(0.94f).alpha(0.82f).setDuration(75)
+        if (scale <= 0f) {
+            onFinished()
+            return
+        }
+        view.animate().scaleX(0.94f).scaleY(0.94f).alpha(0.82f).setDuration((75 * scale).toLong())
             .withEndAction {
-                view.animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration(105)
+                view.animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration((105 * scale).toLong())
                     .withEndAction { onFinished() }.start()
             }.start()
     }
@@ -903,9 +990,12 @@ class GameOverlayService : Service() {
         setPadding(dp(10), dp(12), dp(10), dp(12))
         background = rounded(Color.rgb(20, 27, 43), Color.rgb(0, 205, 205), 12f)
         setOnClickListener {
-            animate().scaleX(0.97f).scaleY(0.97f).setDuration(65).withEndAction {
-                animate().scaleX(1f).scaleY(1f).setDuration(90).start()
-            }.start()
+            val animationScale = profileAnimationScale()
+            if (animationScale > 0f) {
+                animate().scaleX(0.97f).scaleY(0.97f).setDuration((65 * animationScale).toLong()).withEndAction {
+                    animate().scaleX(1f).scaleY(1f).setDuration((90 * animationScale).toLong()).start()
+                }.start()
+            }
             showPremiumPopup(popupText)
             onClick?.invoke()
         }
