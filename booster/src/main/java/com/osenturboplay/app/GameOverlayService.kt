@@ -113,8 +113,8 @@ class GameOverlayService : Service() {
             gravity = Gravity.CENTER
             setTextColor(Color.WHITE)
             background = rounded(
-                if (isBoost) Color.rgb(10, 35, 58) else Color.rgb(8, 13, 25),
-                if (isBoost) Color.rgb(255, 196, 45) else Color.rgb(0, 220, 210),
+                if (isBoost) Color.rgb(10, 35, 58) else Color.rgb(4, 24, 40),
+                if (isBoost) Color.rgb(255, 196, 45) else Color.rgb(70, 205, 255),
                 28f
             )
             elevation = dp(8).toFloat()
@@ -139,15 +139,15 @@ class GameOverlayService : Service() {
         try { windowManager.removeView(old) } catch (_: Exception) { }
         expanded = true
 
-        val gold = Color.rgb(0, 190, 255)
-        val brightGold = Color.rgb(130, 230, 255)
-        val muted = Color.rgb(130, 180, 210)
+        val gold = Color.rgb(45, 190, 255)
+        val brightGold = Color.rgb(155, 230, 255)
+        val muted = Color.rgb(130, 190, 215)
         val panel = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(dp(8), dp(8), dp(8), dp(8))
             background = GradientDrawable(
                 GradientDrawable.Orientation.TL_BR,
-                intArrayOf(Color.rgb(2, 7, 20), Color.rgb(4, 24, 49), Color.rgb(2, 9, 23))
+                intArrayOf(Color.rgb(3, 15, 28), Color.rgb(5, 28, 48), Color.rgb(2, 13, 24))
             ).apply {
                 cornerRadius = dp(17).toFloat()
                 setStroke(dp(2), gold)
@@ -171,7 +171,7 @@ class GameOverlayService : Service() {
         header.addView(live)
 
         val divider = View(this).apply {
-            setBackgroundColor(Color.rgb(0, 105, 210))
+            setBackgroundColor(Color.rgb(35, 160, 225))
         }
 
         val fpsCard = LinearLayout(this).apply {
@@ -180,7 +180,7 @@ class GameOverlayService : Service() {
             setPadding(dp(8), dp(6), dp(8), dp(6))
             background = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
-                intArrayOf(Color.rgb(5, 37, 72), Color.rgb(3, 15, 33))
+                intArrayOf(Color.rgb(8, 48, 75), Color.rgb(3, 22, 38))
             ).apply {
                 cornerRadius = dp(13).toFloat()
                 setStroke(dp(1), gold)
@@ -189,12 +189,12 @@ class GameOverlayService : Service() {
         val fpsInfo = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         fpsInfo.addView(label("YOUR PHONE", 7f, muted, true))
         fpsInfo.addView(label(readPhoneName(), 15f, brightGold, true), spacedParams(dp(1)))
-        fpsInfo.addView(label("DEVICE MODEL", 6f, Color.rgb(130, 180, 210), true), spacedParams(dp(1)))
+        fpsInfo.addView(label("DEVICE MODEL", 6f, Color.rgb(130, 190, 215), true), spacedParams(dp(1)))
         fpsCard.addView(fpsInfo, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
         fpsCard.addView(label(readDisplayRate(), 9f, brightGold, true).apply {
             gravity = Gravity.CENTER
             setPadding(dp(7), dp(7), dp(7), dp(7))
-            background = rounded(Color.rgb(3, 24, 48), gold, 12f)
+            background = rounded(Color.rgb(5, 34, 54), gold, 12f)
         })
 
         val resourcesTitle = label("DEVICE STATUS", 6f, gold, true)
@@ -206,18 +206,18 @@ class GameOverlayService : Service() {
         val hardware = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(dp(8), dp(6), dp(8), dp(6))
-            background = rounded(Color.rgb(3, 17, 36), Color.rgb(0, 105, 210), 14f)
+            background = rounded(Color.rgb(4, 27, 45), Color.rgb(35, 160, 225), 14f)
         }
         hardware.addView(label("CPU  •  ${readCpuName().take(26)}", 8f, Color.WHITE, true))
         hardware.addView(label("${Runtime.getRuntime().availableProcessors()} CORES  •  GPU  •  ${readGpuRenderer().take(22)}", 7f, muted, true), spacedParams(dp(2)))
         
 
-        val status = label("SYSTEM READY  •  DND STATUS CHECK", 7f, Color.rgb(255, 204, 112), true)
+        val status = label("SYSTEM READY  •  DND STATUS CHECK", 7f, Color.rgb(120, 220, 255), true)
         panelStatus = status
         val dnd = action(dndLabel(), dndLabel()) { toggleDnd() }.apply {
             background = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
-                intArrayOf(Color.rgb(0, 116, 190), Color.rgb(3, 37, 72))
+                intArrayOf(Color.rgb(35, 165, 225), Color.rgb(5, 45, 73))
             ).apply {
                 cornerRadius = dp(14).toFloat()
                 setStroke(dp(1), brightGold)
@@ -233,7 +233,7 @@ class GameOverlayService : Service() {
             gravity = Gravity.CENTER
         }
         val back = action("‹  BACK", "BACK").apply {
-            background = rounded(Color.rgb(4, 25, 48), Color.rgb(0, 190, 255), 13f)
+            background = rounded(Color.rgb(5, 39, 63), Color.rgb(45, 190, 255), 13f)
             textSize = 11f
             setTextColor(Color.WHITE)
             isClickable = true
@@ -243,10 +243,10 @@ class GameOverlayService : Service() {
         val boost = action("⚡  BOOST", "BOOST").apply {
             background = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
-                intArrayOf(Color.rgb(255, 226, 92), Color.rgb(255, 157, 20), Color.rgb(205, 91, 0))
+                intArrayOf(Color.rgb(130, 230, 255), Color.rgb(35, 165, 235), Color.rgb(5, 85, 150))
             ).apply {
                 cornerRadius = dp(13).toFloat()
-                setStroke(dp(2), Color.rgb(255, 241, 170))
+                setStroke(dp(2), Color.rgb(190, 240, 255))
             }
             elevation = dp(8).toFloat()
             textSize = 11f
@@ -285,17 +285,17 @@ class GameOverlayService : Service() {
             setPadding(dp(9), dp(8), dp(9), dp(8))
             background = GradientDrawable(
                 GradientDrawable.Orientation.TL_BR,
-                intArrayOf(Color.rgb(13, 43, 68), Color.rgb(8, 20, 36))
+                intArrayOf(Color.rgb(10, 48, 75), Color.rgb(5, 28, 45))
             ).apply {
                 cornerRadius = dp(14).toFloat()
-                setStroke(dp(1), Color.rgb(0, 113, 195))
+                setStroke(dp(1), Color.rgb(50, 175, 235))
             }
-            addView(label(title, 8f, Color.rgb(70, 196, 255), true))
+            addView(label(title, 8f, Color.rgb(115, 215, 255), true))
             val valueView = label(value, 16f, Color.WHITE, true)
             if (title == "RAM") ramValueView = valueView
             if (title == "STORAGE") storageValueView = valueView
             addView(valueView, spacedParams(dp(5)))
-            addView(label(footer, 7f, Color.rgb(0, 220, 255), true), spacedParams(dp(2)))
+            addView(label(footer, 7f, Color.rgb(105, 220, 255), true), spacedParams(dp(2)))
         }
     }
 
@@ -361,11 +361,11 @@ class GameOverlayService : Service() {
     private fun updateDndButtonVisual(animateChange: Boolean) {
         val button = dndButton ?: return
         val enabled = isDndEnabled()
-        val border = if (enabled) Color.rgb(80, 240, 255) else Color.rgb(65, 155, 220)
+        val border = if (enabled) Color.rgb(145, 235, 255) else Color.rgb(75, 190, 245)
         val gradient = if (enabled) {
-            intArrayOf(Color.rgb(0, 190, 220), Color.rgb(0, 88, 160), Color.rgb(3, 35, 75))
+            intArrayOf(Color.rgb(0, 190, 220), Color.rgb(12, 115, 180), Color.rgb(3, 44, 70))
         } else {
-            intArrayOf(Color.rgb(8, 75, 125), Color.rgb(3, 43, 82), Color.rgb(2, 24, 52))
+            intArrayOf(Color.rgb(8, 68, 105), Color.rgb(4, 42, 68), Color.rgb(3, 27, 45))
         }
         val applyVisual = {
             button.text = dndLabel()
