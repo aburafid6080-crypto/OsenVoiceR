@@ -666,11 +666,7 @@ class GameOverlayService : Service() {
         return if (hz > 0) "DISPLAY\\n${hz} Hz" else "DISPLAY\\n—"
     }
 
-    private fun isDndEnabled(): Boolean {
-        val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-            manager.currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_NONE
-    }
+    private fun isDndEnabled(): Boolean = GameDndController.isEnabled(this)
 
     private fun dndLabel(): String {
         return if (isDndEnabled()) "◉  DO NOT DISTURB  •  ON"
@@ -782,33 +778,8 @@ class GameOverlayService : Service() {
     }
 
     private fun toggleDnd() {
-        val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            showPanelStatus("DND needs Android 6.0 or newer.")
-            return
-        }
-        if (!manager.isNotificationPolicyAccessGranted) {
-            showPanelStatus("Allow OSEN TURBOPLAY in the DND access screen, then return and tap again.")
-            try {
-                startActivity(Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-            } catch (_: Exception) {
-                showPanelStatus("Open Android Settings > Special app access > Do Not Disturb access.")
-            }
-            return
-        }
-        try {
-            val turningOff = manager.currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_NONE
-            manager.setInterruptionFilter(
-                if (turningOff) NotificationManager.INTERRUPTION_FILTER_ALL
-                else NotificationManager.INTERRUPTION_FILTER_NONE
-            )
-            val result = if (turningOff) "DO NOT DISTURB OFF • interruptions restored."
-                else "DO NOT DISTURB ON • interruptions silenced."
-            showPanelStatus(result)
-            updateDndButtonVisual(true)
-        } catch (_: SecurityException) {
-            showPanelStatus("Android denied DND access. Check OSEN permission.")
-        }
+        showPanelStatus(GameDndController.toggle(this))
+        updateDndButtonVisual(true)
     }
 
     private fun showPanelStatus(message: String) {
