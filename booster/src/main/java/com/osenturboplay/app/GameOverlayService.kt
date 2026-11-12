@@ -1037,9 +1037,9 @@ class GameOverlayService : Service() {
             setOnClickListener {
                 val start = input.selectionStart.coerceAtLeast(0)
                 val visible = input.inputType and InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD != 0
-                input.inputType = InputType.TYPE_CLASS_TEXT or
-                    if (visible) InputType.TYPE_TEXT_VARIATION_PASSWORD
-                    else InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                input.inputType = InputType.TYPE_CLASS_TEXT or (if (visible)
+                    InputType.TYPE_TEXT_VARIATION_PASSWORD
+                    else InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD)
                 input.setSelection(start.coerceAtMost(input.text?.length ?: 0))
                 text = if (visible) "SHOW" else "HIDE"
             }
@@ -1118,8 +1118,8 @@ class GameOverlayService : Service() {
                 dialog.dismiss()
             }
         }
-        dialog.show()
         dialog.window?.setType(overlayWindowType())
+        dialog.show()
     }
 
     private fun derivePremiumPasswordHash(password: CharArray, salt: ByteArray): ByteArray {
