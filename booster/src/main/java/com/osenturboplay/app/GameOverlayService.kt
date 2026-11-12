@@ -500,8 +500,13 @@ class GameOverlayService : Service() {
     }
 
     private fun showActionPopup(buttonName: String) {
-        showPremiumPopup("$buttonName BUTTON PRESSED")
-        showPanelStatus("$buttonName BUTTON PRESSED")
+        if (buttonName == "BOOST") {
+            refreshBoostInfo()
+            showPremiumPopup("BOOST • DEVICE STATUS UPDATED")
+        } else {
+            showPremiumPopup("$buttonName • READY")
+            showPanelStatus("$buttonName • READY")
+        }
     }
 
     // Branded, non-interactive popup shown above the overlay panel.
@@ -509,19 +514,21 @@ class GameOverlayService : Service() {
         popupHandler.removeCallbacks(popupDismiss)
         popupView?.let { try { windowManager.removeView(it) } catch (_: Exception) { } }
         val popup = TextView(this).apply {
-            text = "✦  $message"
-            textSize = 11f
+            text = "✦  OSEN TURBOPLAY  ✦\n$message"
+            textSize = 10f
             gravity = Gravity.CENTER
-            maxWidth = dp(250)
+            maxWidth = dp(260)
+            minWidth = dp(190)
+            setLineSpacing(dp(2).toFloat(), 1.05f)
             setTextColor(Color.WHITE)
             setTypeface(typeface, android.graphics.Typeface.BOLD)
             setPadding(dp(16), dp(11), dp(16), dp(11))
             background = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
-                intArrayOf(Color.rgb(105, 220, 255), Color.rgb(25, 155, 225), Color.rgb(5, 82, 145))
+                intArrayOf(Color.rgb(145, 232, 255), Color.rgb(38, 165, 235), Color.rgb(5, 88, 160))
             ).apply {
                 cornerRadius = dp(18).toFloat()
-                setStroke(dp(1), Color.rgb(190, 245, 255))
+                setStroke(dp(2), Color.rgb(205, 247, 255))
             }
             elevation = dp(12).toFloat()
         }
@@ -543,7 +550,7 @@ class GameOverlayService : Service() {
             popup.alpha = 0f
             popup.translationY = -dp(8).toFloat()
             popup.animate().alpha(1f).translationY(0f).setDuration(170).start()
-            popupHandler.postDelayed(popupDismiss, 1500)
+            popupHandler.postDelayed(popupDismiss, 1850)
         } catch (_: Exception) {
             popupView = null
         }
