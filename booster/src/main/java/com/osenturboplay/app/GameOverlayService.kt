@@ -35,6 +35,13 @@ import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.EditText
+import android.text.InputType
+import android.util.Base64
+import java.security.MessageDigest
+import java.security.SecureRandom
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.PBEKeySpec
 import kotlin.math.min
 
 /**
@@ -232,7 +239,13 @@ class GameOverlayService : Service() {
             ).apply {
                 setPadding(dp(10), dp(9), dp(10), dp(9))
                 isClickable = true
-                setOnClickListener { selectPerformanceProfile(mode, premiumToggle, premiumOptions) }
+                setOnClickListener {
+                    if (mode == PerformanceProfile.PREMIUM) {
+                        requestPremiumUnlock(premiumToggle, premiumOptions)
+                    } else {
+                        selectPerformanceProfile(mode, premiumToggle, premiumOptions)
+                    }
+                }
             }
             premiumOptions.addView(option)
         }
@@ -915,6 +928,99 @@ class GameOverlayService : Service() {
         return detected
     }
 
+    // Premium password is stored only as a salted PBKDF2 hash in private app storage.
+    // Unlock is session-scoped; restarting the overlay requires the password again.
+    private var premiumUnlockedThisSession = false
+
+    private fun requestPremiumUnlock(toggle: TextView, options: LinearLayout) {
+        if (premiumUnlockedThisSession) {
+            selectPerformanceProfile(PerformanceProfile.PREMIUM, toggle, options)
+            return
+        }
+        val prefs = getPanelPrefs()
+        val hasPassword = prefs.contains("premium_password_hash") &&
+            prefs.contains("premium_password_salt")
+        val passwordInput = EditText(this).apply {
+            hint = "Enter your password"
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            setSingleLine(true)
+        }
+        val content = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(dp(20), dp(8), dp(20), dp(4))
+            addView(passwordInput)
+        }
+        val confirmInput = if (hasPassword) null else EditText(this).apply {
+            hint = "Confirm your password"
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            setSingleLine(true)
+        }
+        if (confirmInput != null) content.addView(confirmInput)
+        val dialog = AlertDialog.Builder(this)
+            .setTitle(if (hasPassword) "🔒 UNLOCK PREMIUM" else "🔐 CREATE PREMIUM PASSWORD")
+            .setMessage(if (hasPassword) "Enter your password to unlock Premium." else "Create a password with at least 6 characters. It is stored securely on this phone.")
+            .setView(content)
+            .setPositiveButton(if (hasPassword) "UNLOCK" else "SAVE PASSWORD", null)
+            .setNegativeButton("CANCEL", null)
+            .create()
+        dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                val entered = passwordInput.text?.toString().orEmpty()
+                if (entered.length < 6) {
+                    passwordInput.error = "Use at least 6 characters"
+                    return@setOnClickListener
+                }
+                if (hasPassword) {
+                    val salt = try {
+                        Base64.decode(prefs.getString("premium_password_salt", "") ?: "", Base64.NO_WRAP)
+                    } catch (_: Exception) { byteArrayOf() }
+                    val expected = try {
+                        Base64.decode(prefs.getString("premium_password_hash", "") ?: "", Base64.NO_WRAP)
+                    } catch (_: Exception) { byteArrayOf() }
+                    val actual = try { derivePremiumPasswordHash(entered.toCharArray(), salt) }
+                        catch (_: Exception) { byteArrayOf() }
+                    if (salt.isEmpty() || expected.isEmpty() || !MessageDigest.isEqual(expected, actual)) {
+                        passwordInput.error = "Incorrect password"
+                        return@setOnClickListener
+                    }
+                } else {
+                    val confirmation = confirmInput?.text?.toString().orEmpty()
+                    if (entered != confirmation) {
+                        confirmInput?.error = "Passwords do not match"
+                        return@setOnClickListener
+                    }
+                    val salt = ByteArray(16).also { SecureRandom().nextBytes(it) }
+                    val hash = try { derivePremiumPasswordHash(entered.toCharArray(), salt) }
+                        catch (_: Exception) {
+                            passwordInput.error = "Could not securely save password. Try again."
+                            return@setOnClickListener
+                        }
+                    prefs.edit()
+                        .putString("premium_password_salt", Base64.encodeToString(salt, Base64.NO_WRAP))
+                        .putString("premium_password_hash", Base64.encodeToString(hash, Base64.NO_WRAP))
+                        .apply()
+                }
+                premiumUnlockedThisSession = true
+                dialog.dismiss()
+                selectPerformanceProfile(PerformanceProfile.PREMIUM, toggle, options)
+                showPanelStatus("PREMIUM UNLOCKED • THIS SESSION")
+            }
+        }
+        dialog.window?.setType(overlayWindowType())
+        dialog.show()
+    }
+
+    private fun derivePremiumPasswordHash(password: CharArray, salt: ByteArray): ByteArray {
+        val spec = PBEKeySpec(password, salt, 120_000, 256)
+        return try {
+            SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
+                .generateSecret(spec).encoded
+        } finally {
+            spec.clearPassword()
+            password.fill('\u0000')
+        }
+    }
+
     private fun selectPerformanceProfile(
         mode: PerformanceProfile,
         toggle: TextView,
@@ -933,7 +1039,13 @@ class GameOverlayService : Service() {
                 true
             ).apply {
                 setPadding(dp(10), dp(9), dp(10), dp(9))
-                setOnClickListener { selectPerformanceProfile(item, toggle, options) }
+                setOnClickListener {
+                    if (item == PerformanceProfile.PREMIUM) {
+                        requestPremiumUnlock(toggle, options)
+                    } else {
+                        selectPerformanceProfile(item, toggle, options)
+                    }
+                }
             })
         }
         showPanelStatus("PROFILE ACTIVE: ${mode.displayName} • UI ANIMATIONS ONLY")
