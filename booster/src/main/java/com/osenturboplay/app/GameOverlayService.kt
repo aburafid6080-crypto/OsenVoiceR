@@ -190,7 +190,49 @@ class GameOverlayService : Service() {
             background = rounded(Color.rgb(24, 39, 23), Color.rgb(113, 185, 70), 16f)
         }
         header.addView(identity, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+        val premiumToggle = label("♛ PREMIUM  ▾", 9f, Color.rgb(255, 218, 105), true).apply {
+            gravity = Gravity.CENTER
+            setPadding(dp(9), dp(8), dp(9), dp(8))
+            background = GradientDrawable(
+                GradientDrawable.Orientation.LEFT_RIGHT,
+                intArrayOf(Color.rgb(125, 82, 8), Color.rgb(65, 39, 3))
+            ).apply {
+                cornerRadius = dp(12).toFloat()
+                setStroke(dp(1), Color.rgb(255, 218, 105))
+            }
+        }
+        header.addView(premiumToggle)
         header.addView(live)
+
+        val premiumOptions = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            visibility = View.GONE
+            setPadding(dp(7), dp(5), dp(7), dp(5))
+            background = GradientDrawable(
+                GradientDrawable.Orientation.TL_BR,
+                intArrayOf(Color.rgb(8, 39, 62), Color.rgb(3, 19, 34))
+            ).apply {
+                cornerRadius = dp(12).toFloat()
+                setStroke(dp(1), Color.rgb(255, 205, 75))
+            }
+        }
+        val premiumModes = listOf("♛  PREMIUM  •  SELECTED", "◇  STANDARD", "◇  BALANCED", "◇  LITE")
+        premiumModes.forEach { mode ->
+            val option = label(mode, 9f, if (mode.startsWith("♛")) Color.rgb(255, 218, 105) else Color.WHITE, true).apply {
+                setPadding(dp(10), dp(8), dp(10), dp(8))
+                isClickable = true
+                setOnClickListener {
+                    premiumToggle.text = if (mode.contains("PREMIUM")) "♛ PREMIUM  ▾"
+                        else mode.substringAfter("  ").substringBefore("  •") + "  ▾"
+                    premiumOptions.visibility = View.GONE
+                    showPanelStatus("DISPLAY PROFILE: ${mode.substringAfter("  ").substringBefore("  •")} • UI PRESET ONLY")
+                }
+            }
+            premiumOptions.addView(option)
+        }
+        premiumToggle.setOnClickListener {
+            premiumOptions.visibility = if (premiumOptions.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+        }
 
         val divider = View(this).apply {
             setBackgroundColor(Color.rgb(35, 160, 225))
@@ -281,12 +323,36 @@ class GameOverlayService : Service() {
         bottomActions.addView(boost, LinearLayout.LayoutParams(0, dp(39), 1f).apply { marginStart = dp(5) })
 
         panel.addView(header)
+        panel.addView(premiumOptions, spacedParams(dp(4)))
         panel.addView(divider, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(1)).apply { topMargin = dp(5); bottomMargin = dp(5) })
         panel.addView(fpsCard)
         panel.addView(resourcesTitle, spacedParams(dp(6)))
         panel.addView(resourceRow, spacedParams(dp(4)))
         panel.addView(hardwareTitle, spacedParams(dp(6)))
         panel.addView(hardware, spacedParams(dp(4)))
+
+        val quickSettings = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER
+        }
+        listOf("🎮 GAMING", "⚙ PANEL", "✦ THEME").forEachIndexed { index, title ->
+            val tile = action(title, title) {
+                val message = when (index) {
+                    0 -> "GAMING SETTINGS • Use Android game settings for supported options."
+                    1 -> "PANEL SETTINGS • Drag the top header to move this panel. Tap BACK to minimize."
+                    else -> "THEME SETTINGS • Premium Sky Blue with Gold BOOST is active."
+                }
+                showPanelStatus(message)
+            }.apply {
+                textSize = 8f
+                setPadding(dp(3), dp(9), dp(3), dp(9))
+                background = rounded(Color.rgb(5, 39, 63), Color.rgb(45, 190, 255), 11f)
+            }
+            quickSettings.addView(tile, LinearLayout.LayoutParams(0, dp(38), 1f).apply {
+                if (index > 0) marginStart = dp(4)
+            })
+        }
+        panel.addView(quickSettings, spacedParams(dp(5)))
         panel.addView(status, spacedParams(dp(5)))
         panel.addView(dnd, spacedParams(dp(4)))
         panel.addView(bottomActions, spacedParams(dp(4)))
