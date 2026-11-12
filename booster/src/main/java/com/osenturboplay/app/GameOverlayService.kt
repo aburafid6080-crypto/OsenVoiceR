@@ -399,6 +399,14 @@ class GameOverlayService : Service() {
         panel.addView(quickSettings, spacedParams(dp(5)))
         panel.addView(status, spacedParams(dp(5)))
         panel.addView(dnd, spacedParams(dp(4)))
+        val passwordSettingsButton = action("🔐  PREMIUM PASSWORD SETTINGS", "PASSWORD SETTINGS") {
+            showPremiumPasswordSettings()
+        }.apply {
+            textSize = 8f
+            setPadding(dp(8), dp(9), dp(8), dp(9))
+            background = rounded(Color.rgb(8, 39, 63), Color.rgb(255, 205, 75), 12f)
+        }
+        panel.addView(passwordSettingsButton, spacedParams(dp(4)))
         panel.addView(bottomActions, spacedParams(dp(4)))
 
         val prefs = getPanelPrefs()
@@ -952,14 +960,14 @@ class GameOverlayService : Service() {
         val content = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(dp(20), dp(8), dp(20), dp(4))
-            addView(passwordInput)
         }
+        addPasswordInput(content, passwordInput)
         val confirmInput = if (hasPassword) null else EditText(this).apply {
             hint = "Confirm your password"
             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
             setSingleLine(true)
         }
-        if (confirmInput != null) content.addView(confirmInput)
+        if (confirmInput != null) addPasswordInput(content, confirmInput)
         val dialog = AlertDialog.Builder(this)
             .setTitle(if (hasPassword) "🔒 UNLOCK PREMIUM" else "🔐 CREATE PREMIUM PASSWORD")
             .setMessage(if (hasPassword) "Enter your password to unlock Premium." else "Create a password with at least 6 characters. It is stored securely on this phone.")
@@ -1012,6 +1020,106 @@ class GameOverlayService : Service() {
         }
         dialog.window?.setType(overlayWindowType())
         dialog.show()
+    }
+
+    private fun addPasswordInput(container: LinearLayout, input: EditText) {
+        val row = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+        }
+        row.addView(input, LinearLayout.LayoutParams(0, dp(48), 1f))
+        val visibility = TextView(this).apply {
+            text = "SHOW"
+            textSize = 10f
+            setTextColor(Color.rgb(255, 205, 75))
+            gravity = Gravity.CENTER
+            setPadding(dp(10), dp(10), dp(10), dp(10))
+            setOnClickListener {
+                val start = input.selectionStart.coerceAtLeast(0)
+                val visible = input.inputType and InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD != 0
+                input.inputType = InputType.TYPE_CLASS_TEXT or
+                    if (visible) InputType.TYPE_TEXT_VARIATION_PASSWORD
+                    else InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                input.setSelection(start.coerceAtMost(input.text?.length ?: 0))
+                text = if (visible) "SHOW" else "HIDE"
+            }
+        }
+        row.addView(visibility, LinearLayout.LayoutParams(dp(58), dp(48)))
+        container.addView(row)
+    }
+
+    private fun showPremiumPasswordSettings() {
+        val prefs = getPanelPrefs()
+        val hasPassword = prefs.contains("premium_password_hash") &&
+            prefs.contains("premium_password_salt")
+        val content = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(dp(20), dp(8), dp(20), dp(4))
+        }
+        fun field(hintText: String): EditText = EditText(this).apply {
+            hint = hintText
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            setSingleLine(true)
+        }
+        val current = if (hasPassword) field("Current password") else null
+        val fresh = field("New password (at least 6 characters)")
+        val confirm = field("Confirm new password")
+        if (current != null) addPasswordInput(content, current)
+        addPasswordInput(content, fresh)
+        addPasswordInput(content, confirm)
+
+        val dialog = AlertDialog.Builder(this)
+            .setTitle(if (hasPassword) "🔐 CHANGE PREMIUM PASSWORD" else "🔐 SET PREMIUM PASSWORD")
+            .setMessage("Password is stored on this phone as a salted PBKDF2 hash. It cannot be read back from storage.")
+            .setView(content)
+            .setPositiveButton(if (hasPassword) "UPDATE PASSWORD" else "SAVE PASSWORD", null)
+            .setNegativeButton("CANCEL", null)
+            .create()
+        dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                if (hasPassword) {
+                    val old = current?.text?.toString().orEmpty()
+                    val saltOld = try {
+                        Base64.decode(prefs.getString("premium_password_salt", "") ?: "", Base64.NO_WRAP)
+                    } catch (_: Exception) { byteArrayOf() }
+                    val hashOld = try {
+                        Base64.decode(prefs.getString("premium_password_hash", "") ?: "", Base64.NO_WRAP)
+                    } catch (_: Exception) { byteArrayOf() }
+                    val checkOld = try { derivePremiumPasswordHash(old.toCharArray(), saltOld) }
+                        catch (_: Exception) { byteArrayOf() }
+                    if (old.isEmpty() || saltOld.isEmpty() || hashOld.isEmpty() ||
+                        !MessageDigest.isEqual(hashOld, checkOld)) {
+                        current?.error = "Current password is incorrect"
+                        return@setOnClickListener
+                    }
+                }
+                val next = fresh.text?.toString().orEmpty()
+                if (next.length < 6) {
+                    fresh.error = "Use at least 6 characters"
+                    return@setOnClickListener
+                }
+                if (next != confirm.text?.toString().orEmpty()) {
+                    confirm.error = "Passwords do not match"
+                    return@setOnClickListener
+                }
+                val salt = ByteArray(16).also { SecureRandom().nextBytes(it) }
+                val hash = try { derivePremiumPasswordHash(next.toCharArray(), salt) }
+                    catch (_: Exception) {
+                        fresh.error = "Could not securely save password"
+                        return@setOnClickListener
+                    }
+                prefs.edit()
+                    .putString("premium_password_salt", Base64.encodeToString(salt, Base64.NO_WRAP))
+                    .putString("premium_password_hash", Base64.encodeToString(hash, Base64.NO_WRAP))
+                    .apply()
+                premiumUnlockedThisSession = false
+                showPanelStatus("PREMIUM PASSWORD ${if (hasPassword) "UPDATED" else "SAVED"}")
+                Toast.makeText(this, "Premium password saved securely on this phone.", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
+            }
+        }
+        dialog.show()
+        dialog.window?.setType(overlayWindowType())
     }
 
     private fun derivePremiumPasswordHash(password: CharArray, salt: ByteArray): ByteArray {
