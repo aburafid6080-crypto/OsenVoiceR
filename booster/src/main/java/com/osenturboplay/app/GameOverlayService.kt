@@ -346,7 +346,7 @@ class GameOverlayService : Service() {
         fun updateQuickTileGlow(activeIndex: Int) {
             activeQuickTile = activeIndex
             quickTiles.forEachIndexed { tileIndex, tile ->
-                val selected = tileIndex == activeIndex
+                val selected = activeIndex >= 0 && tileIndex == activeIndex
                 tile.background = GradientDrawable().apply {
                     setColor(if (selected) Color.rgb(8, 76, 112) else Color.rgb(5, 39, 63))
                     cornerRadius = dp(11).toFloat()
@@ -356,23 +356,30 @@ class GameOverlayService : Service() {
                 tile.setTextColor(if (selected) Color.rgb(190, 245, 255) else Color.WHITE)
                 tile.alpha = if (selected) 1f else 0.88f
             }
-            quickTiles.getOrNull(activeIndex)?.let { selected ->
-                selected.animate().cancel()
-                selected.scaleX = 1f
-                selected.scaleY = 1f
-                selected.animate().scaleX(1.035f).scaleY(1.035f).setDuration(150)
-                    .withEndAction {
-                        selected.animate().scaleX(1f).scaleY(1f).setDuration(150).start()
-                    }.start()
+            if (activeIndex >= 0) {
+                quickTiles.getOrNull(activeIndex)?.let { selected ->
+                    selected.animate().cancel()
+                    selected.scaleX = 1f
+                    selected.scaleY = 1f
+                    selected.animate().scaleX(1.035f).scaleY(1.035f).setDuration(150)
+                        .withEndAction {
+                            selected.animate().scaleX(1f).scaleY(1f).setDuration(150).start()
+                        }.start()
+                }
             }
         }
         listOf("🎮 GAMING", "⚙ PANEL", "✦ THEME").forEachIndexed { index, title ->
             val tile = action(title, title) {
-                updateQuickTileGlow(index)
+                val nextActive = if (activeQuickTile == index) -1 else index
+                updateQuickTileGlow(nextActive)
+                val state = if (nextActive == -1) "OFF" else "ACTIVE"
                 val message = when (index) {
-                    0 -> "GAMING ACTIVE • Gaming section selected."
-                    1 -> { showPanelSettings(); "PANEL ACTIVE • Settings opened." }
-                    else -> "THEME ACTIVE • Premium Sky Blue with Gold BOOST."
+                    0 -> if (nextActive == -1) "GAMING OFF • Glow turned off." else "GAMING ACTIVE • Gaming section selected."
+                    1 -> {
+                        if (nextActive >= 0) showPanelSettings()
+                        if (nextActive == -1) "PANEL OFF • Glow turned off." else "PANEL ACTIVE • Settings opened."
+                    }
+                    else -> if (nextActive == -1) "THEME OFF • Glow turned off." else "THEME ACTIVE • Premium Sky Blue with Gold BOOST."
                 }
                 showPanelStatus(message)
             }.apply {
