@@ -49,15 +49,16 @@ class GameOverlayService : Service() {
     private val popupDismiss = Runnable { popupView?.let { view -> try { windowManager.removeView(view) } catch (_: Exception) { }; popupView = null } }
     private val autoCloseHandler = Handler(Looper.getMainLooper())
     private var freeFireWasForeground = false
+    private var outsideGameSince = 0L
     private val autoCloseCheck = object : Runnable {
         override fun run() {
             if (!hasUsageAccess()) {
-                autoCloseHandler.postDelayed(this, 1500)
+                autoCloseHandler.postDelayed(this, 2000)
                 return
             }
             val now = System.currentTimeMillis()
             val events = (getSystemService(USAGE_STATS_SERVICE) as UsageStatsManager)
-                .queryEvents(now - 15000L, now)
+                .queryEvents(now - 20000L, now)
             val event = UsageEvents.Event()
             var latestForegroundPackage: String? = null
             var latestForegroundTime = 0L
@@ -74,14 +75,32 @@ class GameOverlayService : Service() {
                     latestForegroundPackage = event.packageName
                 }
             }
+
             val isFreeFire = latestForegroundPackage == FREE_FIRE_PACKAGE ||
                 latestForegroundPackage == FREE_FIRE_MAX_PACKAGE
-            if (isFreeFire) freeFireWasForeground = true
-            else if (freeFireWasForeground && latestForegroundPackage != null) {
-                freeFireWasForeground = false
-                if (expanded) minimizePanel("OSEN")
+            val isTemporarySystemUi = latestForegroundPackage in setOf(
+                packageName,
+                "com.android.systemui",
+                "com.android.permissioncontroller",
+                "com.google.android.permissioncontroller"
+            )
+
+            if (isFreeFire) {
+                freeFireWasForeground = true
+                outsideGameSince = 0L
+            } else if (freeFireWasForeground && latestForegroundPackage != null && !isTemporarySystemUi) {
+                // Usage Events can briefly report the launcher/system UI while an overlay is tapped.
+                // Only minimize after another app remains foreground for 10 seconds.
+                if (outsideGameSince == 0L) outsideGameSince = now
+                if (expanded && now - outsideGameSince >= 10000L) {
+                    freeFireWasForeground = false
+                    outsideGameSince = 0L
+                    minimizePanel("OSEN")
+                }
+            } else if (isTemporarySystemUi) {
+                outsideGameSince = 0L
             }
-            autoCloseHandler.postDelayed(this, 1500)
+            autoCloseHandler.postDelayed(this, 2000)
         }
     }
 
