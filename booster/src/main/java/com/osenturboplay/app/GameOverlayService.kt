@@ -422,7 +422,7 @@ class GameOverlayService : Service() {
         )
         val current = prefs.getInt("theme_accent_color", accents[0])
         val selected = accents.indexOf(current).coerceAtLeast(0)
-        AlertDialog.Builder(this)
+        val dialog = AlertDialog.Builder(this)
             .setTitle("✦  CUSTOMIZE COLORS")
             .setSingleChoiceItems(names, selected) { dialog, which ->
                 prefs.edit()
@@ -430,22 +430,19 @@ class GameOverlayService : Service() {
                     .putInt("theme_accent_light", lightAccents[which])
                     .apply()
                 dialog.dismiss()
-                showPanelStatus("THEME COLOR SAVED • ${names[which].uppercase()}")
-                // Rebuild the panel so the selected accent is visible immediately.
+                // Rebuild the expanded panel so the selected accent is visible immediately.
                 val x = params.x
                 val y = params.y
                 minimizePanel()
-                showBubble()
                 params.x = x
                 params.y = y
-                overlayView?.let { try { windowManager.updateViewLayout(it, params) } catch (_: Exception) { } }
+                showPanel()
+                showPanelStatus("THEME COLOR SAVED • ${names[which].uppercase()}")
             }
             .setNegativeButton("CLOSE", null)
             .create()
-            .also { dialog ->
-                dialog.window?.setType(overlayWindowType())
-                dialog.show()
-            }
+        dialog.show()
+        dialog.window?.setType(overlayWindowType())
     }
 
     private fun getPanelPrefs() = getSharedPreferences("osen_panel_settings", MODE_PRIVATE)
