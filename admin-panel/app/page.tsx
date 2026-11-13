@@ -7,7 +7,8 @@ const rawUrl=process.env.NEXT_PUBLIC_SUPABASE_URL??"";
 const supabaseUrl=(()=>{try{const u=new URL(rawUrl.trim());return u.protocol+"//"+u.host}catch{return rawUrl.trim().replace(/\/+$/,"")}})();
 const anonKey=process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY??"";
 const OWNER="Abu Rafid";
-const nav=[["overview","Overview","◈"],["premium","Premium","◇"],["users","Users","▣"],["app-control","App control","⚙"],["websites","Websites","◎"],["activity","Activity log","≋"],["integrations","Integrations","⌘"]];
+const appNav=[["overview","Overview","◈"],["premium","Premium","◇"],["users","Users","▣"],["app-control","App control","⚙"],["activity","Activity log","≋"],["integrations","Integrations","⌘"]];
+const websiteNav=[["websites","Website projects","◎"],["activity","Activity log","≋"],["integrations","Hosting integrations","⌘"]];
 export default function Home(){
  const[email,setEmail]=useState("");const[password,setPassword]=useState("");const[token,setToken]=useState("");
  const[busy,setBusy]=useState(false);const[showLogin,setShowLogin]=useState(false);const[workspace,setWorkspace]=useState<"chooser"|"website"|"app">("chooser");const[mobileMenuOpen,setMobileMenuOpen]=useState(false);const[activeSection,setActiveSection]=useState("overview");const[notice,setNotice]=useState("");const[noticeError,setNoticeError]=useState(false);
@@ -28,6 +29,7 @@ export default function Home(){
  const filteredUsers=useMemo(()=>users.filter(u=>u.user_id.toLowerCase().includes(userSearch.toLowerCase())),[users,userSearch]);
  const filteredSites=useMemo(()=>sites.filter(s=>s.name.toLowerCase().includes(siteSearch.toLowerCase())),[sites,siteSearch]);
  const premiumCount=users.filter(u=>u.premium).length;
+ const currentNav=workspace==="website"?websiteNav:appNav;
  return <main className="nexus-shell">
   {(token||showLogin)&&<header className="nexus-topbar"><a className="nexus-brand" href="#overview"><span className="brand-mark">O</span><span><b>OSEN <i>NEXUS</i></b><small>PRIVATE OWNER CONSOLE</small></span></a><div className="topbar-right"><span className="secure-state"><i/> SECURE ADMIN</span>{token&&<div className="owner-chip"><span className="owner-avatar">AR</span><span><b>{OWNER}</b><small>OWNER</small></span><button className="logout-btn" onClick={logout}>LOG OUT</button></div>}</div></header>}
   {!token?(!showLogin?<div className="public-home">
@@ -57,13 +59,13 @@ export default function Home(){
    </div>
    <div className="picker-foot"><span>♛ OSEN NEXUS</span><span>ONE OWNER · TWO WORKSPACES</span><button onClick={logout}>LOG OUT</button></div>
   </section>:<div className="nexus-workspace">
-   <aside className="side-nav"><button className="workspace-switch" onClick={()=>setWorkspace("chooser")}>← ALL WORKSPACES</button><div className="nav-caption">WORKSPACE</div>{nav.map(([id,label,ico])=><a key={id} href={"#"+id} aria-current={activeSection===id?"page":undefined} className={activeSection===id?"nav-active":""} onClick={()=>setActiveSection(id)}><span>{ico}</span>{label}</a>)}<div className="sidebar-bottom"><i/> SYSTEM READY<small>Owner-only workspace</small></div></aside>
-   <div className="dashboard-content" data-active={activeSection}>
-    <section id="overview" className="welcome-panel"><div><div className="section-kicker">CONTROL CENTER　/　{(nav.find(([id])=>id===activeSection)?.[1]||"OVERVIEW").toUpperCase()}</div><h1>{activeSection==="overview"?"Welcome back,":activeSection==="premium"?"Premium":"Manage"} <em>{activeSection==="overview"?OWNER:activeSection==="premium"?"Access":" "+(nav.find(([id])=>id===activeSection)?.[1]||"Workspace")}.</em></h1><p>{activeSection==="premium"?"Manage global Premium availability and securely update the app verification password.":activeSection==="overview"?"Your private workspace to manage OSEN apps, access and website projects.":`Manage ${nav.find(([id])=>id===activeSection)?.[1]||"workspace"} settings from your private OSEN NEXUS console.`}</p></div><div className="welcome-status"><i/> PRIVATE WORKSPACE</div></section>
+   <aside className="side-nav"><button className="workspace-switch" onClick={()=>setWorkspace("chooser")}>← ALL WORKSPACES</button><div className="nav-caption">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div>{currentNav.map(([id,label,ico])=><a key={id} href={"#"+id} aria-current={activeSection===id?"page":undefined} className={activeSection===id?"nav-active":""} onClick={()=>setActiveSection(id)}><span>{ico}</span>{label}</a>)}<div className="sidebar-bottom"><i/> SYSTEM READY<small>Owner-only workspace</small></div></aside>
+   <div className="dashboard-content" data-active={activeSection} data-workspace={workspace}>
+    <section id="overview" className="welcome-panel"><div className="workspace-context">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div><div><div className="section-kicker">CONTROL CENTER　/　{(currentNav.find(([id])=>id===activeSection)?.[1]||"OVERVIEW").toUpperCase()}</div><h1>{activeSection==="overview"?"Welcome back,":activeSection==="premium"?"Premium":"Manage"} <em>{activeSection==="overview"?OWNER:activeSection==="premium"?"Access":" "+(nav.find(([id])=>id===activeSection)?.[1]||"Workspace")}.</em></h1><p>{activeSection==="premium"?"Manage global Premium availability and securely update the app verification password.":activeSection==="overview"?"Your private workspace to manage OSEN apps, access and website projects.":`Manage ${nav.find(([id])=>id===activeSection)?.[1]||"workspace"} settings from your private OSEN NEXUS console.`}</p></div><div className="welcome-status"><i/> PRIVATE WORKSPACE</div></section>
     <div className="metric-grid">
      <article className="metric-card metric-gold"><span>PREMIUM SYSTEM</span><strong className={enabled?"status-on":"status-off"}>{enabled?"ENABLED":"DISABLED"}</strong><small>Global Premium access</small><button className="primary-btn" disabled={busy} onClick={()=>run("set_premium_enabled",{enabled:!enabled},enabled?"Premium access disabled.":"Premium access enabled.")}>{enabled?"TURN OFF PREMIUM":"TURN ON PREMIUM"}</button></article>
      <article className="metric-card"><span>PREMIUM ACCESS RECORDS</span><strong>{users.length}</strong><small>{premiumCount} currently approved · {users.length-premiumCount} not approved</small><a className="text-link" href="#users" onClick={()=>setActiveSection("users")}>Manage users　↗</a></article>
-     <article className="metric-card"><span>WEBSITE PROJECTS</span><strong>{sites.length}</strong><small>Saved project drafts</small><a className="text-link" href="#websites" onClick={()=>setActiveSection("websites")}>Open projects　↗</a></article>
+
      <article className="metric-card"><span>MAINTENANCE MODE</span><strong className={maintenance?"status-off":"status-on"}>{maintenance?"ON":"OFF"}</strong><small>Remote setting · app integration pending</small><a className="text-link" href="#app-control" onClick={()=>setActiveSection("app-control")}>App settings　↗</a></article>
     </div>
     <div className="content-grid">
