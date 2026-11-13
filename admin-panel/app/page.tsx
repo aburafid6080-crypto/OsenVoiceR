@@ -33,7 +33,6 @@ export default function Home(){
   {!token?(!showLogin?<div className="public-home">
   <header className="public-nav">
    <a className="public-brand" href="#home"><span className="public-crown">♛</span><span><b>OSEN <em>NEXUS</em></b><small>PRIVATE OWNER CONSOLE</small></span></a>
-   <nav aria-label="Main navigation"><a className="public-active public-home-link" href="#home">Home</a><a className="public-feature-link" href="#features" onClick={e=>{e.preventDefault();setWebsiteBuilderPending(true);setShowLogin(true)}}>Website Builder</a></nav>
    <button className="public-login" onClick={()=>setShowLogin(true)}>OWNER LOGIN ↗</button>
   </header>
   <section className="public-hero" id="home">
