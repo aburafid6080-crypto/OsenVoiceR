@@ -101,3 +101,52 @@ button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.45;curs
  .panel-card,.span-two{padding:15px 12px}.panel-heading h2{font-size:16px}
 }
 @media(min-width:721px){.side-nav{display:flex}}
+
+/* DESKTOP VISUAL REFINEMENT — keep the existing responsive mobile app layout */
+@media(min-width:721px){
+ body{background:radial-gradient(ellipse at 78% -12%,#123c50 0,transparent 34%),radial-gradient(ellipse at 8% 70%,#10283b55,transparent 38%),#05090f}
+ .nexus-shell{width:min(100%,1680px);padding:0 42px}
+ .nexus-topbar{height:76px;border-bottom-color:#294357}
+ .nexus-brand{gap:15px}.brand-mark{width:48px;height:48px;border-radius:15px;font-size:25px;box-shadow:0 0 0 5px #d8b15e12,0 0 32px #48caff22}
+ .nexus-brand b{font-size:15px;letter-spacing:2px}.nexus-brand small{font-size:8px;letter-spacing:1.8px}
+ .topbar-right{gap:22px}.owner-chip{padding:7px 10px;border:1px solid #29475b;border-radius:13px;background:linear-gradient(135deg,#101d2a,#09121c);gap:12px}
+ .nexus-workspace{display:grid;grid-template-columns:226px minmax(0,1fr);gap:28px;padding-top:26px;align-items:start}
+ .side-nav{position:sticky;top:24px;min-height:calc(100vh - 124px);padding:18px 12px;border:1px solid #29475b;border-radius:20px;background:linear-gradient(165deg,#101c29f2,#080f18f2);box-shadow:0 18px 45px #0005}
+ .nav-caption{padding:7px 12px 15px;color:#77cce9;font-size:9px;letter-spacing:1.8px}
+ .side-nav>a{display:flex;align-items:center;gap:12px;margin:3px 0;padding:13px 12px;border:1px solid transparent;border-radius:11px;color:#a9bdcc;font-size:11px;transition:background .18s,border-color .18s,color .18s}
+ .side-nav>a span{width:17px;color:#83cde8;font-size:14px;text-align:center}
+ .side-nav>a:hover,.side-nav>a.nav-active{border-color:#39718a;background:linear-gradient(100deg,#16384b,#0d1c29);color:#f1faff}
+ .side-nav>a.nav-active span{color:#e4c276}
+ .sidebar-bottom{margin:26px 0 0;padding:17px 11px 5px;border-top:1px solid #263e50;color:#6fe2b6;font-size:8px;letter-spacing:1px}
+ .dashboard-content{min-width:0}
+ .welcome-panel{position:relative;min-height:132px;margin-bottom:19px;padding:20px 23px;border:1px solid #2a4c60;border-radius:19px;background:radial-gradient(ellipse at 92% 0,#16465d88,transparent 48%),linear-gradient(115deg,#101d2a,#09121b 70%);box-shadow:0 15px 36px #0004;overflow:hidden}
+ .welcome-panel:after{content:"NEXUS";position:absolute;right:25px;bottom:-21px;color:#8bdcff09;font-size:100px;font-weight:900;letter-spacing:-7px;pointer-events:none}
+ .welcome-panel h1{font-size:36px;letter-spacing:-1.5px;margin:12px 0 7px}
+ .welcome-panel p{font-size:12px;color:#afc2d0;max-width:620px}
+ .welcome-status{position:absolute;right:22px;bottom:22px;z-index:1;padding:9px 13px;border:1px solid #27604e;border-radius:9px;background:#0b211b;color:#75e5b8;font-size:8px;letter-spacing:1px}
+ .metric-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:17px}
+ .metric-card{position:relative;min-height:166px;padding:19px 18px;border:1px solid #29465a;border-radius:17px;background:linear-gradient(150deg,#111e2b,#0a111a);box-shadow:0 12px 28px #0004;transition:transform .18s,border-color .18s,box-shadow .18s;overflow:hidden}
+ .metric-card:before{content:"";position:absolute;top:0;left:16px;right:16px;height:1px;background:linear-gradient(90deg,transparent,#7bdcff80,transparent)}
+ .metric-card:hover{transform:translateY(-3px);border-color:#4c829b;box-shadow:0 18px 35px #0006}
+ .metric-card.metric-gold{border-color:#705a34;background:radial-gradient(ellipse at 100% 0,#4a361b66,transparent 55%),linear-gradient(145deg,#1b1b1a,#0b121a)}
+ .metric-card>span{font-size:8px;letter-spacing:1.25px;color:#82d9f7}
+ .metric-card>strong{display:block;font-size:27px;letter-spacing:-.8px;margin:13px 0 5px}
+ .metric-card>small{font-size:9px;color:#9db2c2;line-height:1.5}
+ .metric-card .primary-btn{margin-top:15px;min-height:36px;padding:0 16px;border-radius:10px;font-size:8px;letter-spacing:.8px}
+ .metric-card .text-link{display:inline-flex;margin-top:19px;font-size:9px}
+ .content-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;align-items:start}
+ .panel-card,.span-two{padding:22px 21px;border:1px solid #2a4659;border-radius:18px;background:linear-gradient(145deg,#101b27,#090f17);box-shadow:0 14px 32px #0004;transition:border-color .18s}
+ .panel-card:hover{border-color:#3d667d}
+ .panel-heading{margin-bottom:13px}
+ .panel-heading h2{font-size:19px;letter-spacing:-.6px;margin-top:7px}
+ .panel-card>p{font-size:11px;line-height:1.75;color:#a9bdcc}
+ .panel-icon{width:37px;height:37px;border:1px solid #35627a;border-radius:11px;background:#0e2230;color:#8bdcff}
+ .inline-form{gap:10px}.inline-form input{min-height:43px;border-radius:10px}.inline-form button{min-height:43px;border-radius:10px;padding:0 16px;font-size:8px;letter-spacing:.8px}
+ .setting-row{padding:15px 0;border-top:1px solid #243c4f}
+ .setting-row b{font-size:11px}.setting-row small{font-size:9px;color:#8fa7b8}
+ .outline-btn{border-radius:9px;padding:9px 13px}
+ .span-two{grid-column:1/-1}
+ .data-row,.site-row{border-bottom:1px solid #203547}
+ .primary-btn{box-shadow:0 5px 18px #34b9ed22}
+ .primary-btn:hover:not(:disabled){filter:brightness(1.08);transform:translateY(-1px)}
+}
