@@ -35,7 +35,7 @@ export default function Home(){
  const premiumCount=users.filter(u=>u.premium).length;
  const currentNav=workspace==="website"?websiteNav:appNav;
  return <main className="nexus-shell">
-  {token&&<header className="nexus-topbar"><a className="nexus-brand" href="#overview"><span className="brand-mark">O</span><span><b>OSEN <i>NEXUS</i></b><small>ADMIN PANEL · PRIVATE OWNER</small></span></a><div className="topbar-right"><span className="secure-state"><i/> SECURE ADMIN</span>{token&&<div className="owner-chip"><span className="owner-avatar">AR</span><span><b>{OWNER}</b><small>OWNER</small></span><button className="logout-btn" onClick={logout}>LOG OUT</button></div>}</div></header>}
+  {token&&<header className="nexus-topbar"><a className="nexus-brand" href="#overview"><span className="brand-mark">A</span><span><b>OSEN <i>AUREX</i></b><small>ADMIN PANEL · PRIVATE OWNER</small></span></a><div className="topbar-right"><span className="secure-state"><i/> SECURE ADMIN</span>{token&&<div className="owner-chip"><span className="owner-avatar">AR</span><span><b>{OWNER}</b><small>OWNER</small></span><button className="logout-btn" onClick={logout}>LOG OUT</button></div>}</div></header>}
   {!token?<section className="nexus-login-page">
    <div className="login-ambient login-ambient-one"/><div className="login-ambient login-ambient-two"/>
    <div className="login-stage">
@@ -68,14 +68,14 @@ export default function Home(){
        <circle cx="260" cy="266" r="192" fill="#e5b64b" opacity=".08" filter="url(#nxGlow)"/>
       </svg>
      </div>
-     <div className="login-visual-caption"><span>♛</span><b>OSEN <i>NEXUS</i></b><small>THE ULTIMATE CONTROL CENTER</small></div>
+     <div className="login-visual-caption"><span>♛</span><b>OSEN <i>AUREX</i></b><small>THE ULTIMATE CONTROL CENTER</small></div>
      <div className="login-art-tag">PRIVATE OWNER ACCESS <span>✦</span></div>
     </div>
     <div className="login-panel-wrap">
      <div className="login-panel">
-      <div className="login-panel-brand"><span>♛</span><div><b>OSEN <em>NEXUS</em></b><small>ADMINISTRATION PORTAL</small></div></div>
+      <div className="login-panel-brand"><span className="aurex-mark">A</span><div><b>OSEN <em>AUREX</em></b><small>ADMINISTRATION PORTAL</small></div></div>
       <div className="login-panel-kicker"><i/> WELCOME BACK · OWNER</div>
-      <h1>Enter the <em>NEXUS.</em></h1>
+      <h1>Enter <em>AUREX.</em></h1>
       <p>Sign in to access your private workspace and manage your projects.</p>
       <form onSubmit={login}>
        <label htmlFor="admin-email">OWNER EMAIL</label>
@@ -90,18 +90,18 @@ export default function Home(){
      <div className="login-benefits"><span><b>✦</b> ADVANCED CONTROL</span><span><b>♢</b> ULTIMATE SECURITY</span><span><b>◇</b> PREMIUM EXPERIENCE</span></div>
     </div>
    </div>
-   <footer className="login-page-footer"><span>♛ OSEN NEXUS</span><span>OWNER ACCESS ONLY · © 2026</span></footer>
+   <footer className="login-page-footer"><span>Ⓐ OSEN AUREX</span><span>OWNER ACCESS ONLY · © 2026</span></footer>
   </section>:workspace==="chooser"?<section className="workspace-picker">
    <div className="picker-heading"><span className="section-kicker">ADMIN PANEL · PRIVATE OWNER</span><h1>Choose your <em>workspace</em></h1><p>Website projects and Android app controls stay in separate work areas.</p></div>
    <div className="picker-grid">
     <button className="workspace-tile website-tile" onClick={()=>{setWorkspace("website");setActiveSection("websites");loadDashboard(token,"website").catch(e=>{setNotice(e instanceof Error?e.message:"Could not load Website Studio");setNoticeError(true)})}}><span className="tile-icon">◎</span><span className="tile-kicker">01 / WEB PLATFORM</span><strong>WEBSITE CENTER</strong><small>Build and manage websites, projects, domains and hosting.</small><span className="tile-cta">OPEN WEBSITE CENTER ↗</span></button>
     <button className="workspace-tile app-tile" onClick={()=>{setWorkspace("app");setActiveSection("overview");loadDashboard(token,"app").catch(e=>{setNotice(e instanceof Error?e.message:"Could not load App Studio");setNoticeError(true)})}}><span className="tile-icon">▣</span><span className="tile-kicker">02 / ANDROID PLATFORM</span><strong>ANDROID APP CENTER</strong><small>Manage app access, Premium, Voice and Game Booster controls.</small><span className="tile-cta">OPEN APP CENTER ↗</span></button>
    </div>
-   <div className="picker-foot"><span>♛ OSEN NEXUS</span><span>ONE OWNER · TWO WORKSPACES</span><button onClick={logout}>LOG OUT</button></div>
+   <div className="picker-foot"><span>Ⓐ OSEN AUREX</span><span>ONE OWNER · TWO WORKSPACES</span><button onClick={logout}>LOG OUT</button></div>
   </section>:<div className="nexus-workspace">
    <aside className="side-nav"><button className="workspace-switch" onClick={()=>setWorkspace("chooser")}>← ALL WORKSPACES</button><div className="nav-caption">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div>{currentNav.map(([id,label,ico])=><a key={id} href={"#"+id} aria-current={activeSection===id?"page":undefined} className={activeSection===id?"nav-active":""} onClick={()=>setActiveSection(id)}><span>{ico}</span>{label}</a>)}<div className="sidebar-bottom"><i/> SYSTEM READY<small>Owner-only workspace</small></div></aside>
    <div className="dashboard-content" data-active={activeSection} data-workspace={workspace}>
-    <section id="overview" className="welcome-panel"><div className="workspace-context">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div><div><div className="section-kicker">CONTROL CENTER　/　{(currentNav.find(([id])=>id===activeSection)?.[1]||"OVERVIEW").toUpperCase()}</div><h1>{activeSection==="overview"?"Welcome back,":activeSection==="premium"?"Premium":"Manage"} <em>{activeSection==="overview"?OWNER:activeSection==="premium"?"Access":" "+(currentNav.find(([id])=>id===activeSection)?.[1]||"Workspace")}.</em></h1><p>{activeSection==="premium"?"Manage global Premium availability and securely update the app verification password.":activeSection==="overview"?"Your private workspace to manage OSEN apps, access and website projects.":`Manage ${currentNav.find(([id])=>id===activeSection)?.[1]||"workspace"} settings from your private OSEN NEXUS console.`}</p></div><div className="welcome-status"><i/> PRIVATE WORKSPACE</div></section>
+    <section id="overview" className="welcome-panel"><div className="workspace-context">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div><div><div className="section-kicker">CONTROL CENTER　/　{(currentNav.find(([id])=>id===activeSection)?.[1]||"OVERVIEW").toUpperCase()}</div><h1>{activeSection==="overview"?"Welcome back,":activeSection==="premium"?"Premium":"Manage"} <em>{activeSection==="overview"?OWNER:activeSection==="premium"?"Access":" "+(currentNav.find(([id])=>id===activeSection)?.[1]||"Workspace")}.</em></h1><p>{activeSection==="premium"?"Manage global Premium availability and securely update the app verification password.":activeSection==="overview"?"Your private workspace to manage OSEN apps, access and website projects.":`Manage ${currentNav.find(([id])=>id===activeSection)?.[1]||"workspace"} settings from your private OSEN AUREX console.`}</p></div><div className="welcome-status"><i/> PRIVATE WORKSPACE</div></section>
     <div className="metric-grid">
      <article className="metric-card metric-gold"><span>PREMIUM SYSTEM</span><strong className={enabled?"status-on":"status-off"}>{enabled?"ENABLED":"DISABLED"}</strong><small>Global Premium access</small><button className="primary-btn" disabled={busy} onClick={()=>run("set_premium_enabled",{enabled:!enabled},enabled?"Premium access disabled.":"Premium access enabled.")}>{enabled?"TURN OFF PREMIUM":"TURN ON PREMIUM"}</button></article>
      <article className="metric-card"><span>PREMIUM ACCESS RECORDS</span><strong>{users.length}</strong><small>{premiumCount} currently approved · {users.length-premiumCount} not approved</small><a className="text-link" href="#users" onClick={()=>setActiveSection("users")}>Manage users　↗</a></article>
@@ -118,7 +118,7 @@ export default function Home(){
      <section id="integrations" className="panel-card span-two"><div className="panel-heading"><div><span className="section-kicker">PLATFORM INTEGRATIONS</span><h2>Owner <em>tools</em></h2></div><span className="panel-icon">⌘</span></div><div className="integration-list"><div><b>Android device registry</b><span>Pending · app must register a generated device UUID</span></div><div><b>Voice & Booster remote controls</b><span>Pending · Android app must fetch and apply remote settings</span></div><div><b>Vercel hosting & custom domains</b><span>Pending · provider API credentials and project linking required</span></div><div><b>Audit trail</b><span className="ready-label">ACTIVE · admin actions are logged</span></div></div></section>
     </div>
     {notice&&<div className={noticeError?"alert error":"alert"} role="status">{notice}</div>}
-    <footer className="nexus-footer"><span>OSEN NEXUS　·　OWNER CONSOLE</span><span>BLACK / SKY BLUE / GOLD　·　{OWNER}</span></footer>
+    <footer className="nexus-footer"><span>OSEN AUREX　·　OWNER CONSOLE</span><span>BLACK / SKY BLUE / GOLD　·　{OWNER}</span></footer>
    </div>
   </div>}
  </main>;
