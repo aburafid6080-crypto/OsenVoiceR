@@ -38,10 +38,20 @@ export default function Home(){
    <button className="public-login" onClick={()=>setShowLogin(true)}>OWNER LOGIN ↗</button>
   </header>
   <section className="public-hero" id="home">
-   <div className="hero-copy"><span className="hero-eyebrow"><i/> WELCOME TO OSEN NEXUS</span><h1>Control. Manage.<br/><em>Grow.</em></h1><p>Your private workspace to manage OSEN apps, premium access and website projects — all from one secure place.</p>
+   <div className="hero-copy"><span className="hero-eyebrow"><i/> WELCOME TO OSEN NEXUS</span><h1>Control. Manage.<br/><em>Grow.</em></h1><p>Two dedicated studios. Create websites in one workspace and build Android apps in the other — with your owner controls in one secure place.</p>
     <div className="hero-workspaces">
-     <button className="hero-workspace-card website-choice" type="button" onClick={()=>{setWorkspace("website");setWebsiteBuilderPending(true);setShowLogin(true)}}><span className="choice-icon">◎</span><span className="choice-copy"><strong>WEBSITE CENTER</strong><small>Build and manage your websites</small></span><span className="choice-arrow">↗</span></button>
-     <button className="hero-workspace-card app-choice" type="button" onClick={()=>{setWorkspace("app");setWebsiteBuilderPending(false);setShowLogin(true)}}><span className="choice-icon">▣</span><span className="choice-copy"><strong>ANDROID APP CENTER</strong><small>Manage your Android apps</small></span><span className="choice-arrow">↗</span></button>
+     <button className="hero-workspace-card website-choice" type="button" onClick={()=>{setWorkspace("website");setWebsiteBuilderPending(true);setShowLogin(true)}}>
+      <span className="studio-card-top"><span className="choice-icon">◎</span><span className="studio-label">STUDIO 01 · WEB PLATFORM</span><span className="choice-arrow">↗</span></span>
+      <strong className="studio-title">WEBSITE STUDIO</strong><small className="studio-desc">Create websites for yourself or clients, then manage projects from one place.</small>
+      <span className="studio-features"><i>✓</i> Website projects & page design</span><span className="studio-features"><i>✓</i> Templates and custom domains</span><span className="studio-features"><i>✓</i> Hosting and publish workflow</span>
+      <span className="studio-cta">ENTER WEBSITE STUDIO　→</span>
+     </button>
+     <button className="hero-workspace-card app-choice" type="button" onClick={()=>{setWorkspace("app");setWebsiteBuilderPending(false);setShowLogin(true)}}>
+      <span className="studio-card-top"><span className="choice-icon">▣</span><span className="studio-label">STUDIO 02 · ANDROID PLATFORM</span><span className="choice-arrow">↗</span></span>
+      <strong className="studio-title">APP STUDIO</strong><small className="studio-desc">Plan, design, build and manage Android app projects independently.</small>
+      <span className="studio-features"><i>✓</i> App projects and UI design</span><span className="studio-features"><i>✓</i> Android APK / AAB build workflow</span><span className="studio-features"><i>✓</i> App settings and release management</span>
+      <span className="studio-cta">ENTER APP STUDIO　→</span>
+     </button>
     </div>
     <div className="hero-trust"><span><i/> OWNER-ONLY ACCESS</span><span>BLACK · SKY BLUE · GOLD</span></div>
    </div>
