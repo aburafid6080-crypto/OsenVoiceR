@@ -1559,3 +1559,42 @@ img,svg,video,canvas{max-width:100%}
  .public-brand small{font-size:5.5px!important;letter-spacing:.7px!important}
  .public-login{min-height:36px!important;padding:0 10px!important;font-size:7px!important;letter-spacing:.4px!important;border-radius:9px!important}
 }
+
+
+/* OSEN NEXUS — refined landing-page motion */
+@keyframes nx-enter{0%{opacity:0;transform:translate3d(0,18px,0)}100%{opacity:1;transform:translate3d(0,0,0)}}
+@keyframes nx-crown{0%,100%{filter:drop-shadow(0 0 5px #ffd84a55);box-shadow:0 0 0 4px #ffd84a0c,0 0 17px #ffd84a30}50%{filter:drop-shadow(0 0 12px #ffe36e);box-shadow:0 0 0 6px #ffd84a18,0 0 30px #ffd84a66}}
+@keyframes nx-float{0%,100%{translate:0 0}50%{translate:0 -9px}}
+@keyframes nx-orbit{from{rotate:0deg}to{rotate:360deg}}
+@keyframes nx-orbit-reverse{from{rotate:360deg}to{rotate:0deg}}
+@keyframes nx-spark{0%,100%{opacity:.45;scale:.82}50%{opacity:1;scale:1.18}}
+@keyframes nx-sweep{0%{transform:translateX(-130%) skewX(-18deg)}100%{transform:translateX(230%) skewX(-18deg)}}
+@keyframes nx-button-glow{0%,100%{box-shadow:0 0 10px #00dfff35,inset 0 0 10px #00dfff0a}50%{box-shadow:0 0 22px #00dfff70,inset 0 0 15px #00dfff18}}
+@media(prefers-reduced-motion:no-preference){
+ .public-crown{animation:nx-crown 3.8s ease-in-out infinite!important;will-change:filter,box-shadow}
+ .hero-eyebrow{animation:nx-enter .55s ease-out both}
+ .hero-copy h1{animation:nx-enter .72s .08s cubic-bezier(.2,.75,.25,1) both}
+ .hero-copy>p{animation:nx-enter .7s .17s ease-out both}
+ .hero-workspace-card{position:relative;isolation:isolate;animation:nx-enter .72s .24s cubic-bezier(.2,.75,.25,1) both!important;will-change:transform}
+ .hero-workspace-card:nth-child(2){animation-delay:.36s!important}
+ .hero-workspace-card:after{content:"";position:absolute;inset:0 auto 0 -45%;width:34%;pointer-events:none;background:linear-gradient(100deg,transparent,#ffffff18,transparent);transform:skewX(-18deg);opacity:0}
+ .hero-workspace-card:hover:after{opacity:1;animation:nx-sweep .85s ease-out}
+ .hero-workspace-card:hover{transform:translateY(-7px) scale(1.012)!important}
+ .website-choice .studio-cta{animation:nx-button-glow 3.2s ease-in-out infinite}
+ .app-choice .studio-cta{animation:nx-gold-button 3.2s ease-in-out infinite}
+ .hero-art{animation:nx-enter .9s .2s ease-out both}
+ .art-core{animation:nx-float 5.8s ease-in-out infinite!important;will-change:translate}
+ .art-orbit{animation:nx-orbit 36s linear infinite!important;transform-origin:center}
+ .art-orbit.orbit-two{animation:nx-orbit-reverse 48s linear infinite!important}
+ .art-card{animation:nx-float 5.2s ease-in-out infinite}
+ .art-right{animation-delay:1.25s}
+ .art-spark{animation:nx-spark 2.6s ease-in-out infinite}
+ .spark-b{animation-delay:.8s}.spark-c{animation-delay:1.4s}
+ .public-login{transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease!important}
+ .public-login:hover{transform:translateY(-2px)!important;box-shadow:0 0 22px #e6b94c44!important}
+ .public-footer{animation:nx-enter .7s .3s ease-out both}
+}
+@keyframes nx-gold-button{0%,100%{box-shadow:0 0 12px #ffbd0040,inset 0 0 10px #fff7a022}50%{box-shadow:0 0 25px #ffbd0090,inset 0 0 18px #fff7a055}}
+@media(prefers-reduced-motion:reduce){
+ .public-crown,.hero-eyebrow,.hero-copy h1,.hero-copy>p,.hero-workspace-card,.hero-art,.art-core,.art-orbit,.art-card,.art-spark,.public-footer,.studio-cta{animation:none!important}
+}
