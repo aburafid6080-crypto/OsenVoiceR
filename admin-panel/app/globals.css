@@ -1137,3 +1137,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #7bdc
  .public-footer{flex-wrap:wrap!important;justify-content:center!important;text-align:center!important;padding:14px 10px!important}
  .public-footer>span:nth-child(2){width:100%;order:3}
 }
+
+.hero-copy h1:before{content:none!important}
+.hero-copy>p:before{content:none!important}
+.hero-copy>p{font-size:clamp(13px,1.25vw,19px)!important}
