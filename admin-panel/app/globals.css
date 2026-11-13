@@ -256,3 +256,9 @@ footer{color:#8ba3b5!important}footer span{color:#e6b957!important}
 @media(min-width:900px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.section{padding:28px}.shell{padding:28px 34px}}
 @media(max-width:760px){.shell{padding:15px 13px}.welcome{gap:12px}.welcome h1{font-size:27px}.stats{grid-template-columns:1fr}.formrow{flex-direction:column;align-items:stretch}.formrow button{width:100%}.user{flex-wrap:wrap}.user code{flex-basis:100%}.card{padding:18px}}
 @media(prefers-reduced-motion:reduce){.card,button{transition:none!important}}
+/* OSEN NEXUS desktop sidebar and compact mobile navigation */
+.nx-side{position:fixed;z-index:5;left:max(12px,calc((100vw - 1480px)/2 + 8px));top:108px;bottom:18px;width:190px;padding:15px 11px;display:flex;flex-direction:column;gap:8px;border:1px solid #29465b;border-radius:15px;background:linear-gradient(180deg,#0d1723f5,#080d15f7);box-shadow:0 18px 50px #0008}
+.nx-side-logo{padding:8px 8px 20px;margin-bottom:10px;border-bottom:1px solid #294052;color:#e8bd61;font-size:20px;font-weight:900;letter-spacing:1px}.nx-side-logo span{color:#78d9ff}.nx-side-logo small{display:block;margin-top:5px;color:#8299ac;font-size:8px;letter-spacing:1.5px}
+.nx-side a{padding:12px 10px;border:1px solid transparent;border-radius:9px;text-decoration:none;color:#b7c8d6;font-size:11px;transition:.2s}.nx-side a:hover{color:#f0cb75;border-color:#705a31;background:#d5a84b14;box-shadow:inset 3px 0 #e6b957}
+.nx-dashboard{margin-left:210px}.top{margin-left:210px}.shell>footer{margin-left:210px}
+@media(max-width:760px){.nx-side{position:relative;left:auto;top:auto;bottom:auto;width:auto;margin:0 0 15px;display:flex;flex-direction:row;align-items:center;overflow-x:auto;padding:8px;gap:5px}.nx-side-logo{flex:0 0 auto;padding:4px 10px 4px 4px;margin:0;border:0;font-size:13px}.nx-side-logo small{display:none}.nx-side a{flex:0 0 auto;padding:9px 8px;font-size:9px;white-space:nowrap}.nx-dashboard,.top,.shell>footer{margin-left:0}}
