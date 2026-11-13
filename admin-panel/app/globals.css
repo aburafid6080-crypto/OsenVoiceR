@@ -1179,3 +1179,14 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #7bdc
 @media(prefers-reduced-motion:reduce){
  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
 }
+
+
+/* Admin Panel identity + ambient website animation */
+.public-nav,.nexus-topbar{position:relative;isolation:isolate}
+.public-nav:after,.nexus-topbar:after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;pointer-events:none;background:linear-gradient(90deg,transparent,#00dfff,#ffd24a,#00dfff,transparent);background-size:200% 100%;animation:nexusShimmer 7s linear infinite}
+@keyframes nexusShimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+.public-home:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.22;background:radial-gradient(circle at 12% 20%,#00cfff55 0,transparent 22%),radial-gradient(circle at 85% 75%,#ffc02b44 0,transparent 24%);animation:nexusAmbient 12s ease-in-out infinite alternate}
+@keyframes nexusAmbient{0%{transform:translate3d(-1%,0,0) scale(1)}100%{transform:translate3d(1%,1%,0) scale(1.05)}}
+.public-brand small:after,.nexus-brand small:after{content:"ADMIN PANEL";display:block;color:#80ddf7;font-size:9px;letter-spacing:2.2px;margin-top:4px}
+.public-brand small,.nexus-brand small{font-size:0!important}
+.public-brand small:after,.nexus-brand small:after{font-size:9px!important}
