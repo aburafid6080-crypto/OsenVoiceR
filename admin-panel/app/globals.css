@@ -1695,3 +1695,62 @@ img,svg,video,canvas{max-width:100%}
  .nexus-login-page .login-panel{padding:15px 14px}
  .nexus-login-page .login-benefits{flex-direction:row;align-items:center}
 }
+
+
+/* LOGIN-ONLY refinement: stronger character framing and stable responsive composition */
+.nexus-login-page .login-visual{
+  min-height:640px;
+  background:
+    radial-gradient(ellipse at 50% 38%,#d7ad4a35,transparent 43%),
+    radial-gradient(ellipse at 50% 82%,#8a5b1b20,transparent 46%),
+    linear-gradient(145deg,#17130d,#080a0f 72%);
+}
+.nexus-login-page .login-character{
+  width:min(100%,570px);
+  height:96%;
+  bottom:0;
+  transform:scale(1.025);
+  transform-origin:center bottom;
+  filter:drop-shadow(0 16px 24px #000c) drop-shadow(0 0 28px #d7ad4a42);
+}
+.nexus-login-page .login-character svg{
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain;
+}
+.nexus-login-page .login-visual-caption{
+  padding:10px 13px;
+  border:1px solid #d7ae4b42;
+  border-radius:13px;
+  background:linear-gradient(110deg,#090a0de8,#17130bdc);
+  backdrop-filter:blur(10px);
+}
+.nexus-login-page .login-panel{
+  box-shadow:0 30px 100px #000c,0 0 0 1px #d7ae4a12,inset 0 1px #fff2;
+}
+.nexus-login-page .login-field{min-width:0}
+.nexus-login-page .login-submit{cursor:pointer}
+@media(max-width:980px){
+  .nexus-login-page .login-visual{min-height:540px}
+}
+@media(max-width:720px){
+  .nexus-login-page .login-stage{align-items:stretch}
+  .nexus-login-page .login-visual{
+    height:205px;
+    min-height:205px;
+    flex-basis:205px;
+  }
+  .nexus-login-page .login-character{
+    width:83%;
+    height:112%;
+    transform:scale(1.04);
+  }
+  .nexus-login-page .login-panel-wrap{width:100%}
+}
+@media(max-width:380px){
+  .nexus-login-page .login-visual{
+    height:180px;
+    min-height:180px;
+    flex-basis:180px;
+  }
+}
