@@ -33,7 +33,7 @@ export default function Home(){
   {!token?(!showLogin?<div className="public-home">
   <header className="public-nav">
    <a className="public-brand" href="#home"><span className="public-crown">♛</span><span><b>OSEN <em>NEXUS</em></b><small>PRIVATE OWNER CONSOLE</small></span></a>
-   <nav aria-label="Main navigation"><a className="public-active public-home-link" href="#home" onClick={()=>setMobileMenuOpen(false)}>Home</a><button type="button" className="public-menu-toggle" aria-expanded={mobileMenuOpen} aria-label={mobileMenuOpen?"Close menu":"Open menu"} onClick={()=>setMobileMenuOpen(v=>!v)}><span>{mobileMenuOpen?"✕":"☰"}</span><b>{mobileMenuOpen?"CLOSE":"MENU"}</b></button><div className={"public-menu-links"+(mobileMenuOpen?" is-open":"")}><a href="#features" onClick={()=>setMobileMenuOpen(false)}>Features</a><a href="#platform" onClick={()=>setMobileMenuOpen(false)}>Platform</a><a href="#security" onClick={()=>setMobileMenuOpen(false)}>Security</a></div></nav>
+   <nav aria-label="Main navigation"><a className="public-active public-home-link" href="#home">Home</a><a className="public-feature-link" href="#features">Features</a></nav>
    <button className="public-login" onClick={()=>setShowLogin(true)}>OWNER LOGIN ↗</button>
   </header>
   <section className="public-hero" id="home">
@@ -49,22 +49,8 @@ export default function Home(){
     <div className="art-spark spark-a">✧</div><div className="art-spark spark-b">✦</div><div className="art-spark spark-c">✧</div>
    </div>
   </section>
-  <section className="public-stats" id="platform">
-   <article><span className="stat-symbol blue">◎</span><div><b>PRIVATE</b><small>Owner Workspace</small></div></article>
-   <article><span className="stat-symbol gold">◇</span><div><b>PREMIUM</b><small>Access Management</small></div></article>
-   <article><span className="stat-symbol violet">▦</span><div><b>PROJECTS</b><small>Website Manager</small></div></article>
-   <article><span className="stat-symbol green">⬡</span><div><b>SECURE</b><small>Admin Controls</small></div></article>
-  </section>
   <section className="public-features" id="features">
    <div className="features-intro"><span className="hero-eyebrow">✦　THE NEXUS WORKSPACE</span><h2>Powerful tools.<br/><em>One control center.</em></h2><p>Choose a workspace area to sign in and continue managing your OSEN platform.</p><button className="hero-primary" onClick={()=>setShowLogin(true)}>OPEN OWNER CONSOLE　→</button></div>
-   <div className="feature-tiles">
-    <button onClick={()=>{setActiveSection("premium");setShowLogin(true)}}><span className="tile-icon gold">♛</span><b>Premium Access</b><small>Manage premium settings</small></button>
-    <button onClick={()=>{setActiveSection("users");setShowLogin(true)}}><span className="tile-icon blue">♙</span><b>User Management</b><small>Review access records</small></button>
-    <button onClick={()=>{setActiveSection("app-control");setShowLogin(true)}}><span className="tile-icon green">⚙</span><b>App Control</b><small>Remote app configuration</small></button>
-    <button onClick={()=>{setActiveSection("websites");setShowLogin(true)}}><span className="tile-icon violet">▦</span><b>Website Projects</b><small>Organize project drafts</small></button>
-    <button onClick={()=>{setActiveSection("activity");setShowLogin(true)}}><span className="tile-icon blue">≋</span><b>Activity Log</b><small>Review admin activity</small></button>
-    <button onClick={()=>{setActiveSection("integrations");setShowLogin(true)}}><span className="tile-icon gold">⌘</span><b>Integrations</b><small>Connect platform services</small></button>
-   </div>
   </section>
   <footer className="public-footer" id="security"><span>♛　OSEN NEXUS</span><span>CONTROL WITH CONFIDENCE · BUILT FOR YOUR WORKFLOW</span><button onClick={()=>setShowLogin(true)}>SECURE OWNER LOGIN ↗</button></footer>
  </div>:<section className="login-wrap"><div className="login-card"><div className="login-kicker"><span>✦</span> RESTRICTED ACCESS <span className="login-secure">SECURE</span></div><h1>Welcome <em>back.</em></h1><p>Sign in to your private OSEN NEXUS control center.</p><form onSubmit={login}><label htmlFor="admin-email">ADMIN EMAIL</label><input id="admin-email" type="email" autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Enter owner email" required/><label htmlFor="admin-password">PASSWORD</label><input id="admin-password" type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter password" required/><button className="primary-btn" disabled={busy}>{busy?"VERIFYING…":"SECURE LOGIN　→"}</button></form><div className="login-note">PRIVATE OWNER ACCESS ONLY · OSEN NEXUS</div><button type="button" className="back-home-btn" onClick={()=>setShowLogin(false)}>← BACK TO HOME</button>{notice&&<div className={noticeError?"alert error":"alert"}>{notice}</div>}</div></section>):<div className="nexus-workspace">
