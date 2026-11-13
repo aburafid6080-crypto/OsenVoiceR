@@ -32,3 +32,28 @@ body{min-height:100vh;background:radial-gradient(ellipse at 50% 8%,rgba(188,139,
 .shell>footer{margin-top:auto;padding-top:22px}
 @media(max-width:600px){.shell{padding:15px 14px 14px}.top{padding:8px 0 19px}.mark{width:42px;height:42px}.brand b{font-size:13px}.brand small{font-size:8px}.secure{font-size:8px;letter-spacing:1px}.login{margin: auto auto 24px;padding:25px 21px}.login-head{margin-bottom:25px}.login h1{font-size:34px}.shell>footer{padding:18px 2px 8px;gap:10px;flex-wrap:wrap}}
 @media(prefers-reduced-motion:reduce){.login input,.login button{transition:none}}
+
+
+/* OSEN motion system: subtle, performant, and accessible */
+@keyframes osenPageIn{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes osenGlow{0%,100%{opacity:.45;transform:scale(.96)}50%{opacity:.9;transform:scale(1.06)}}
+@keyframes osenMarkPulse{0%,100%{box-shadow:0 0 0 5px #e8bd610d,0 8px 26px #0008,inset 0 1px #fff2}50%{box-shadow:0 0 0 7px #e8bd6115,0 0 28px #e8bd6133,inset 0 1px #fff2}}
+@keyframes osenShine{0%{transform:translateX(-150%) skewX(-18deg)}55%,100%{transform:translateX(260%) skewX(-18deg)}}
+@keyframes osenDot{0%,100%{opacity:.55;box-shadow:0 0 4px #64dca3}50%{opacity:1;box-shadow:0 0 12px #64dca3}}
+.login{animation:osenPageIn .65s cubic-bezier(.2,.75,.25,1) both}
+.login-orbit{animation:osenGlow 6s ease-in-out infinite}
+.mark{animation:osenMarkPulse 4.5s ease-in-out infinite}
+.login-live i{animation:osenDot 2.4s ease-in-out infinite}
+.login button{position:relative;isolation:isolate;overflow:hidden}
+.login button:after{content:"";position:absolute;z-index:-1;top:-30%;bottom:-30%;left:0;width:32%;background:linear-gradient(90deg,transparent,#fff8,transparent);transform:translateX(-150%) skewX(-18deg);animation:osenShine 4.8s ease-in-out infinite}
+.login button:focus-visible,.ghost:focus-visible,.mini:focus-visible{outline:2px solid #f0c96e;outline-offset:3px}
+.login input:hover{border-color:#806b47}
+.card{transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease}
+.stats .card:hover,.section:hover{border-color:#6b5737;box-shadow:0 18px 48px #0007,0 0 24px #e8bd610b}
+button:not(:disabled){transition:filter .18s ease,transform .18s ease,box-shadow .18s ease}
+button:not(:disabled):active{transform:translateY(1px) scale(.99)}
+/* Wide desktop and laptop */
+@media(min-width:900px){.shell{max-width:1120px;padding:30px 34px 22px}.login{margin-top:auto;margin-bottom:auto}.top{padding-top:16px}.welcome{padding-top:44px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.section{padding:28px}}
+/* Small phones and narrow browser windows */
+@media(max-width:380px){.shell{padding:12px 10px}.brand{gap:10px}.brand b{font-size:11px;letter-spacing:1.4px}.brand small{font-size:7px;letter-spacing:1px}.secure{font-size:7px}.login{padding:21px 16px}.login h1{font-size:30px}.login-subtitle{font-size:12px}.login-footnote{font-size:7px;letter-spacing:1px}.user{flex-wrap:wrap}.user code{flex-basis:100%}}
+@media(prefers-reduced-motion:reduce){.login,.login-orbit,.mark,.login-live i,.login button:after{animation:none!important}.card,button:not(:disabled){transition:none!important}}
