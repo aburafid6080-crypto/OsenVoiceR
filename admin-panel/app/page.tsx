@@ -29,7 +29,7 @@ export default function Home(){
  const filteredSites=useMemo(()=>sites.filter(s=>s.name.toLowerCase().includes(siteSearch.toLowerCase())),[sites,siteSearch]);
  const premiumCount=users.filter(u=>u.premium).length;
  return <main className="nexus-shell">
-  <header className="nexus-topbar"><a className="nexus-brand" href="#overview"><span className="brand-mark">O</span><span><b>OSEN <i>NEXUS</i></b><small>PRIVATE OWNER CONSOLE</small></span></a><div className="topbar-right"><span className="secure-state"><i/> SECURE ADMIN</span>{token&&<div className="owner-chip"><span className="owner-avatar">AR</span><span><b>{OWNER}</b><small>OWNER</small></span><button className="logout-btn" onClick={logout}>LOG OUT</button></div>}</div></header>
+  {(token||showLogin)&&<header className="nexus-topbar"><a className="nexus-brand" href="#overview"><span className="brand-mark">O</span><span><b>OSEN <i>NEXUS</i></b><small>PRIVATE OWNER CONSOLE</small></span></a><div className="topbar-right"><span className="secure-state"><i/> SECURE ADMIN</span>{token&&<div className="owner-chip"><span className="owner-avatar">AR</span><span><b>{OWNER}</b><small>OWNER</small></span><button className="logout-btn" onClick={logout}>LOG OUT</button></div>}</div></header>}
   {!token?(!showLogin?<div className="public-home">
   <header className="public-nav">
    <a className="public-brand" href="#home"><span className="public-crown">♛</span><span><b>OSEN <em>NEXUS</em></b><small>PRIVATE OWNER CONSOLE</small></span></a>
