@@ -1399,3 +1399,102 @@ img,svg,video,canvas{max-width:100%}
  .hero-art{width:100%!important;max-width:100%!important;min-height:270px!important;height:270px!important;display:flex!important}
  .public-footer{width:100%!important;padding-left:10px!important;padding-right:10px!important}
 }
+
+
+/* OSEN NEXUS HOME — refined typography, balanced spacing and clear motion */
+.public-home{isolation:isolate}
+.public-nav{min-height:72px}
+.public-hero{gap:clamp(24px,3vw,46px)}
+.hero-copy{min-width:0}
+.hero-copy h1{
+  font-size:clamp(34px,4.1vw,58px)!important;
+  line-height:1.06!important;
+  letter-spacing:-1.9px!important;
+  max-width:760px;
+  margin:17px 0 12px!important;
+  text-wrap:balance;
+}
+.hero-copy>p{font-size:13px!important;line-height:1.7!important;max-width:590px!important}
+.hero-eyebrow{font-size:8px!important;letter-spacing:1.15px!important;padding:8px 11px!important}
+.hero-workspaces{gap:15px!important;margin-top:22px!important}
+.hero-workspace-card{
+  min-height:238px!important;
+  padding:19px!important;
+  border-radius:17px!important;
+  gap:8px!important;
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+}
+.hero-workspace-card:before{
+  content:"";
+  position:absolute;
+  inset:0 auto 0 -65%;
+  width:45%;
+  z-index:-1;
+  background:linear-gradient(105deg,transparent,#ffffff12,transparent);
+  transform:skewX(-18deg);
+  transition:left .65s ease;
+}
+.hero-workspace-card:hover:before{left:125%}
+.studio-card-top{min-height:34px!important;gap:8px!important}
+.studio-label{font-size:7px!important;letter-spacing:.85px!important;line-height:1.4!important}
+.choice-icon{width:34px!important;height:34px!important;flex-basis:34px!important;font-size:19px!important}
+.choice-arrow{font-size:14px}
+.studio-title{font-size:15px!important;letter-spacing:.55px!important;line-height:1.25!important}
+.studio-desc{font-size:10px!important;line-height:1.6!important;min-height:0!important;max-width:440px}
+.studio-features{font-size:8px!important;line-height:1.5!important}
+.studio-cta{font-size:8px!important;letter-spacing:.65px!important;padding-top:9px!important}
+.hero-trust{font-size:8px!important;letter-spacing:.85px!important}
+.hero-art{min-width:0}
+.art-core{transform:scale(.94)}
+.public-footer{font-size:7px!important}
+.public-footer span:first-child{font-size:10px!important}
+.public-footer button{font-size:7px!important}
+@media(min-width:1101px){
+ .public-hero{grid-template-columns:minmax(0,1.08fr) minmax(300px,.92fr)!important;align-items:center!important}
+ .hero-copy h1{max-width:680px}
+ .hero-workspaces{max-width:850px!important}
+}
+@media(max-width:1100px) and (min-width:721px){
+ .hero-copy h1{font-size:clamp(34px,4.6vw,48px)!important}
+ .hero-workspace-card{min-height:220px!important}
+}
+@media(max-width:720px){
+ .public-nav{min-height:62px!important}
+ .public-brand b{font-size:11px!important}
+ .public-brand small{font-size:6px!important;letter-spacing:1.1px!important}
+ .public-login{font-size:8px!important;padding:9px 11px!important}
+ .public-hero{padding:23px 13px 17px!important;gap:17px!important}
+ .hero-copy h1{font-size:clamp(30px,8.4vw,40px)!important;line-height:1.1!important;letter-spacing:-1.1px!important;margin:15px 0 10px!important}
+ .hero-copy>p{font-size:11px!important;line-height:1.65!important}
+ .hero-eyebrow{font-size:7px!important;letter-spacing:.8px!important}
+ .hero-workspaces{margin-top:16px!important;gap:10px!important}
+ .hero-workspace-card{min-height:0!important;padding:16px!important;gap:8px!important}
+ .studio-label{font-size:7px!important}
+ .studio-title{font-size:14px!important}
+ .studio-desc{font-size:9px!important}
+ .studio-features{font-size:8px!important}
+ .studio-cta{font-size:7px!important}
+ .hero-art{height:245px!important;min-height:245px!important}
+ .public-footer{gap:8px!important;flex-wrap:wrap!important;font-size:6px!important}
+}
+@media(prefers-reduced-motion:no-preference){
+ .hero-eyebrow i{animation:nexus-pulse 2.2s ease-in-out infinite}
+ .hero-workspace-card{animation:nexus-card-in .55s cubic-bezier(.2,.75,.25,1) both}
+ .hero-workspace-card:nth-child(2){animation-delay:.12s}
+ .hero-art .art-core{animation:nexus-float 5s ease-in-out infinite}
+ .hero-art .art-orbit{animation:nexus-orbit 24s linear infinite}
+ .hero-art .art-orbit.orbit-two{animation-direction:reverse;animation-duration:32s}
+ .public-crown{animation:nexus-crown-glow 3.5s ease-in-out infinite}
+ .public-login,.hero-workspace-card{transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
+ .public-login:hover{transform:translateY(-2px)}
+}
+@keyframes nexus-pulse{0%,100%{opacity:1;box-shadow:0 0 7px #67e2b7}50%{opacity:.55;box-shadow:0 0 15px #67e2b7}}
+@keyframes nexus-card-in{from{opacity:0;transform:translateY(13px)}to{opacity:1;transform:translateY(0)}}
+@keyframes nexus-float{0%,100%{translate:0 0}50%{translate:0 -7px}}
+@keyframes nexus-orbit{to{transform:rotate(360deg)}}
+@keyframes nexus-crown-glow{0%,100%{box-shadow:0 0 14px #e5b74618}50%{box-shadow:0 0 25px #e5b74642}}
+@media(prefers-reduced-motion:reduce){
+ .hero-workspace-card:before{display:none}
+}
