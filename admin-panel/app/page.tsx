@@ -12,11 +12,11 @@ const appNav=[["overview","Overview","◈"],["app-projects","App projects","▣"
 const websiteNav=[["websites","Website projects","◎"]];
 export default function Home(){
  const[email,setEmail]=useState("");const[password,setPassword]=useState("");const[token,setToken]=useState("");
- const[busy,setBusy]=useState(false);const[showLogin,setShowLogin]=useState(false);const[workspace,setWorkspace]=useState<"chooser"|"website"|"app">("chooser");const[mobileMenuOpen,setMobileMenuOpen]=useState(false);const[activeSection,setActiveSection]=useState("overview");const[notice,setNotice]=useState("");const[noticeError,setNoticeError]=useState(false);
+ const[busy,setBusy]=useState(false);const[workspace,setWorkspace]=useState<"chooser"|"website"|"app">("chooser");const[mobileMenuOpen,setMobileMenuOpen]=useState(false);const[activeSection,setActiveSection]=useState("overview");const[notice,setNotice]=useState("");const[noticeError,setNoticeError]=useState(false);
  const[enabled,setEnabled]=useState(false);const[users,setUsers]=useState<User[]>([]);const[logs,setLogs]=useState<Log[]>([]);
  const[newId,setNewId]=useState("");const[newPass,setNewPass]=useState("");const[userSearch,setUserSearch]=useState("");
  const[maintenance,setMaintenance]=useState(false);const[forceUpdate,setForceUpdate]=useState(false);const[announcement,setAnnouncement]=useState("");
- const[sites,setSites]=useState<Site[]>([]);const[siteName,setSiteName]=useState("");const[siteSearch,setSiteSearch]=useState("");const[appProjects,setAppProjects]=useState<AppProject[]>([]);const[appName,setAppName]=useState("");const[appSearch,setAppSearch]=useState("");const[websiteBuilderPending,setWebsiteBuilderPending]=useState(false);
+ const[sites,setSites]=useState<Site[]>([]);const[siteName,setSiteName]=useState("");const[siteSearch,setSiteSearch]=useState("");const[appProjects,setAppProjects]=useState<AppProject[]>([]);const[appName,setAppName]=useState("");const[appSearch,setAppSearch]=useState("");
  async function loadDashboard(t=token,target=workspace){
   const endpoint=target==="website"?"/api/website-admin":"/api/admin";
   const r=await fetch(endpoint,{headers:{Authorization:"Bearer "+t},cache:"no-store"});const d=await r.json();
@@ -27,48 +27,71 @@ export default function Home(){
  }
  async function api(action:string,extra:Record<string,unknown>={}){const websiteActions=["create_site_project","set_site_status","delete_site_project"];const endpoint=websiteActions.includes(action)?"/api/website-admin":"/api/admin";const r=await fetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({action,...extra})});const d=await r.json();if(!r.ok)throw new Error(d.error||"Request failed");return d;}
  async function run(action:string,extra:Record<string,unknown>={},success="Changes saved."){setBusy(true);setNotice("");setNoticeError(false);try{await api(action,extra);await loadDashboard();setNotice(success)}catch(e){setNotice(e instanceof Error?e.message:"Action failed");setNoticeError(true)}finally{setBusy(false)}}
- async function login(e:React.FormEvent){e.preventDefault();setBusy(true);setNotice("");setNoticeError(false);try{if(!supabaseUrl||!anonKey)throw new Error("Admin website environment is not configured.");const r=await fetch(supabaseUrl+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"Content-Type":"application/json",apikey:anonKey},body:JSON.stringify({email,password})});const d=await r.json();if(!r.ok)throw new Error(d.msg||d.message||"Login failed");await loadDashboard(d.access_token,workspace);setToken(d.access_token);setActiveSection(websiteBuilderPending?"websites":"overview");setWebsiteBuilderPending(false);setPassword("")}catch(e){setNotice(e instanceof Error?e.message:"Could not sign in");setNoticeError(true)}finally{setBusy(false)}}
- function logout(){setToken("");setShowLogin(false);setUsers([]);setSites([]);setAppProjects([]);setLogs([]);setEnabled(false);setNotice("")}
+ async function login(e:React.FormEvent){e.preventDefault();setBusy(true);setNotice("");setNoticeError(false);try{if(!supabaseUrl||!anonKey)throw new Error("Admin website environment is not configured.");const r=await fetch(supabaseUrl+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"Content-Type":"application/json",apikey:anonKey},body:JSON.stringify({email,password})});const d=await r.json();if(!r.ok)throw new Error(d.msg||d.message||"Login failed");await loadDashboard(d.access_token,workspace);setToken(d.access_token);setActiveSection("overview");setPassword("")}catch(e){setNotice(e instanceof Error?e.message:"Could not sign in");setNoticeError(true)}finally{setBusy(false)}}
+ function logout(){setToken("");setUsers([]);setSites([]);setAppProjects([]);setLogs([]);setEnabled(false);setNotice("")}
  const filteredUsers=useMemo(()=>users.filter(u=>u.user_id.toLowerCase().includes(userSearch.toLowerCase())),[users,userSearch]);
  const filteredSites=useMemo(()=>sites.filter(s=>s.name.toLowerCase().includes(siteSearch.toLowerCase())),[sites,siteSearch]);
  const filteredAppProjects=useMemo(()=>appProjects.filter(p=>p.name.toLowerCase().includes(appSearch.toLowerCase())),[appProjects,appSearch]);
  const premiumCount=users.filter(u=>u.premium).length;
  const currentNav=workspace==="website"?websiteNav:appNav;
  return <main className="nexus-shell">
-  {(token||showLogin)&&<header className="nexus-topbar"><a className="nexus-brand" href="#overview"><span className="brand-mark">O</span><span><b>OSEN <i>NEXUS</i></b><small>ADMIN PANEL · PRIVATE OWNER</small></span></a><div className="topbar-right"><span className="secure-state"><i/> SECURE ADMIN</span>{token&&<div className="owner-chip"><span className="owner-avatar">AR</span><span><b>{OWNER}</b><small>OWNER</small></span><button className="logout-btn" onClick={logout}>LOG OUT</button></div>}</div></header>}
-  {!token?(!showLogin?<div className="public-home">
-  <header className="public-nav">
-   <a className="public-brand" href="#home"><span className="public-crown">♛</span><span><b>OSEN <em>NEXUS</em></b><small>ADMIN PANEL · PRIVATE OWNER</small></span></a>
-   <button className="public-login" onClick={()=>setShowLogin(true)}>OWNER LOGIN ↗</button>
-  </header>
-  <section className="public-hero" id="home">
-   <div className="hero-copy"><span className="hero-eyebrow"><i/> WELCOME TO OSEN NEXUS</span><h1>Welcome to <em>OSEN NEXUS</em></h1><p>Manage Your Projects　•　Build Your Dreams　•　All in One Place</p>
-    <div className="hero-workspaces">
-     <button className="hero-workspace-card website-choice" type="button" onClick={()=>{setWorkspace("website");setWebsiteBuilderPending(true);setShowLogin(true)}}>
-      <span className="studio-card-top"><span className="choice-icon">◎</span><span className="studio-label">STUDIO 01 · WEB PLATFORM</span><span className="choice-arrow">↗</span></span>
-      <strong className="studio-title">WEBSITE STUDIO</strong><small className="studio-desc">Create websites for yourself or clients, then manage projects from one place.</small>
-      <span className="studio-features"><i>✓</i> Website projects & page design</span><span className="studio-features"><i>✓</i> Templates and custom domains</span><span className="studio-features"><i>✓</i> Hosting and publish workflow</span>
-      <span className="studio-cta">ENTER WEBSITE STUDIO　→</span>
-     </button>
-     <button className="hero-workspace-card app-choice" type="button" onClick={()=>{setWorkspace("app");setWebsiteBuilderPending(false);setShowLogin(true)}}>
-      <span className="studio-card-top"><span className="choice-icon">▣</span><span className="studio-label">STUDIO 02 · ANDROID PLATFORM</span><span className="choice-arrow">↗</span></span>
-      <strong className="studio-title">APP STUDIO</strong><small className="studio-desc">Plan, design, build and manage Android app projects independently.</small>
-      <span className="studio-features"><i>✓</i> App projects and UI design</span><span className="studio-features"><i>✓</i> Android APK / AAB build workflow</span><span className="studio-features"><i>✓</i> App settings and release management</span>
-      <span className="studio-cta">ENTER APP STUDIO　→</span>
-     </button>
+  {token&&<header className="nexus-topbar"><a className="nexus-brand" href="#overview"><span className="brand-mark">O</span><span><b>OSEN <i>NEXUS</i></b><small>ADMIN PANEL · PRIVATE OWNER</small></span></a><div className="topbar-right"><span className="secure-state"><i/> SECURE ADMIN</span>{token&&<div className="owner-chip"><span className="owner-avatar">AR</span><span><b>{OWNER}</b><small>OWNER</small></span><button className="logout-btn" onClick={logout}>LOG OUT</button></div>}</div></header>}
+  {!token?<section className="nexus-login-page">
+   <div className="login-ambient login-ambient-one"/><div className="login-ambient login-ambient-two"/>
+   <div className="login-stage">
+    <div className="login-visual">
+     <div className="login-visual-grid"/>
+     <div className="login-orbit login-orbit-a"/><div className="login-orbit login-orbit-b"/>
+     <div className="login-character" aria-hidden="true">
+      <svg viewBox="0 0 520 620" role="img" aria-label="Stylized silver-haired gaming guardian">
+       <defs>
+        <linearGradient id="nxHair" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#fff9df"/><stop offset=".42" stopColor="#aeb9c8"/><stop offset="1" stopColor="#4a5261"/></linearGradient>
+        <linearGradient id="nxArmor" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#fff0b0"/><stop offset=".35" stopColor="#9b7530"/><stop offset="1" stopColor="#171923"/></linearGradient>
+        <linearGradient id="nxFace" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#e8d6c4"/><stop offset="1" stopColor="#776b6b"/></linearGradient>
+        <filter id="nxGlow"><feGaussianBlur stdDeviation="7"/></filter>
+       </defs>
+       <ellipse cx="260" cy="265" rx="188" ry="188" fill="none" stroke="#e8bd58" strokeWidth="2" opacity=".65"/>
+       <ellipse cx="260" cy="265" rx="205" ry="205" fill="none" stroke="#e8bd58" strokeWidth="1" strokeDasharray="3 13" opacity=".65"/>
+       <path d="M260 26l17 31 35-10-6 37 32 18-34 17-1 38-43-20-43 20-1-38-34-17 32-18-6-37 35 10z" fill="#dcb65d" opacity=".95"/>
+       <path d="M260 48l10 22 24-5-8 23 19 15-25 6-7 24-19-17-19 17-7-24-25-6 19-15-8-23 24 5z" fill="#fff0b5"/>
+       <path d="M98 620q10-155 93-204l69-30 69 30q83 49 93 204z" fill="url(#nxArmor)" stroke="#d6ae56" strokeWidth="3"/>
+       <path d="M165 421l95-55 95 55-44 95h-102z" fill="#111723" stroke="#d6ae56" strokeWidth="3"/>
+       <path d="M177 195q-4-106 83-133 89 23 86 137l-23 112-62 58-67-58z" fill="url(#nxHair)" stroke="#f0d58c" strokeWidth="2"/>
+       <path d="M174 197q-30-90 28-141l-4 92 38-87 5 94 49-100-7 111 62-72q28 81-4 144l-32-40-22 73-37-64-38 63-10-82-34 45z" fill="url(#nxHair)" stroke="#d9dce3" strokeWidth="2"/>
+       <path d="M213 206q46-41 93 0l-9 100-38 42-38-42z" fill="url(#nxFace)"/>
+       <path d="M211 239l49 13 49-13-12 46-37 17-37-17z" fill="#171923" stroke="#d7b45f" strokeWidth="3"/>
+       <path d="M222 246l35 9-28 8zM298 246l-35 9 28 8z" fill="#e6c36e"/>
+       <path d="M224 299l36 14 36-14-12 30h-48z" fill="#22232a" stroke="#a9843d" strokeWidth="2"/>
+       <path d="M180 390l80-26 80 26-42 41h-76z" fill="#202631" stroke="#d7b45f" strokeWidth="3"/>
+       <path d="M106 620l35-147 80-48 39 68 39-68 80 48 35 147" fill="none" stroke="#f0d58c" strokeWidth="5" opacity=".8"/>
+       <path d="M260 366v116m-42-93 42 40 42-40" fill="none" stroke="#f6d47d" strokeWidth="4" opacity=".9"/>
+       <circle cx="260" cy="266" r="192" fill="#e5b64b" opacity=".08" filter="url(#nxGlow)"/>
+      </svg>
+     </div>
+     <div className="login-visual-caption"><span>♛</span><b>OSEN <i>NEXUS</i></b><small>THE ULTIMATE CONTROL CENTER</small></div>
+     <div className="login-art-tag">PRIVATE OWNER ACCESS <span>✦</span></div>
     </div>
-    <div className="hero-trust"><span><i/> OWNER-ONLY ACCESS</span><span>BLACK · SKY BLUE · GOLD</span></div>
+    <div className="login-panel-wrap">
+     <div className="login-panel">
+      <div className="login-panel-brand"><span>♛</span><div><b>OSEN <em>NEXUS</em></b><small>ADMINISTRATION PORTAL</small></div></div>
+      <div className="login-panel-kicker"><i/> WELCOME BACK · OWNER</div>
+      <h1>Enter the <em>NEXUS.</em></h1>
+      <p>Sign in to access your private workspace and manage your projects.</p>
+      <form onSubmit={login}>
+       <label htmlFor="admin-email">OWNER EMAIL</label>
+       <div className="login-field"><span>✉</span><input id="admin-email" type="email" autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Enter your email address" required/></div>
+       <label htmlFor="admin-password">PASSWORD</label>
+       <div className="login-field"><span>♙</span><input id="admin-password" type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter your password" required/></div>
+       <button className="login-submit" disabled={busy}>{busy?<><span className="login-spinner"/> VERIFYING ACCESS…</>:"SECURE LOGIN　↗"}</button>
+      </form>
+      <div className="login-security"><span>♢</span> ENCRYPTED OWNER AUTHENTICATION <i/> SECURE ACCESS</div>
+      {notice&&<div className={noticeError?"alert error":"alert"} role="status">{notice}</div>}
+     </div>
+     <div className="login-benefits"><span><b>✦</b> ADVANCED CONTROL</span><span><b>♢</b> ULTIMATE SECURITY</span><span><b>◇</b> PREMIUM EXPERIENCE</span></div>
+    </div>
    </div>
-   <div className="hero-art" id="features" aria-label="Original OSEN Nexus gaming-inspired artwork">
-    <div className="art-orbit orbit-one"/><div className="art-orbit orbit-two"/>
-    <div className="art-core"><span className="core-crown">♛</span><b>OSEN</b><strong>NEXUS</strong><small>CONTROL CENTER</small></div>
-    <div className="art-card art-left"><span>✦</span><b>APP CONTROL</b><small>ONE PRIVATE WORKSPACE</small></div>
-    <div className="art-card art-right"><span>🐟</span><b>NEXUS FISH</b><small>YOUR DIGITAL COMPANION</small></div>
-    <div className="art-spark spark-a">✧</div><div className="art-spark spark-b">✦</div><div className="art-spark spark-c">✧</div>
-   </div>
-  </section>
-  <footer className="public-footer" id="security"><span>♛　OSEN NEXUS</span><span>CONTROL WITH CONFIDENCE · BUILT FOR YOUR WORKFLOW</span><button onClick={()=>setShowLogin(true)}>SECURE OWNER LOGIN ↗</button></footer>
- </div>:<section className="login-wrap"><div className="login-card"><div className="login-kicker"><span>✦</span> RESTRICTED ACCESS <span className="login-secure">SECURE</span></div><h1>Welcome <em>back.</em></h1><p>Sign in to your private OSEN NEXUS control center.</p><form onSubmit={login}><label htmlFor="admin-email">ADMIN EMAIL</label><input id="admin-email" type="email" autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Enter owner email" required/><label htmlFor="admin-password">PASSWORD</label><input id="admin-password" type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter password" required/><button className="primary-btn" disabled={busy}>{busy?"VERIFYING…":"SECURE LOGIN　→"}</button></form><div className="login-note">ADMIN PANEL · OWNER ACCESS ONLY</div><button type="button" className="back-home-btn" onClick={()=>setShowLogin(false)}>← BACK TO HOME</button>{notice&&<div className={noticeError?"alert error":"alert"}>{notice}</div>}</div></section>):workspace==="chooser"?<section className="workspace-picker">
+   <footer className="login-page-footer"><span>♛ OSEN NEXUS</span><span>OWNER ACCESS ONLY · © 2026</span></footer>
+  </section>:workspace==="chooser"?<section className="workspace-picker">
    <div className="picker-heading"><span className="section-kicker">ADMIN PANEL · PRIVATE OWNER</span><h1>Choose your <em>workspace</em></h1><p>Website projects and Android app controls stay in separate work areas.</p></div>
    <div className="picker-grid">
     <button className="workspace-tile website-tile" onClick={()=>{setWorkspace("website");setActiveSection("websites");loadDashboard(token,"website").catch(e=>{setNotice(e instanceof Error?e.message:"Could not load Website Studio");setNoticeError(true)})}}><span className="tile-icon">◎</span><span className="tile-kicker">01 / WEB PLATFORM</span><strong>WEBSITE CENTER</strong><small>Build and manage websites, projects, domains and hosting.</small><span className="tile-cta">OPEN WEBSITE CENTER ↗</span></button>
