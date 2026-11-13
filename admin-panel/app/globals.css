@@ -228,3 +228,31 @@ footer{color:#91a4b6}
   body:before{animation:none!important}
   .card,button:not(:disabled){transition:none!important}
 }
+
+/* OSEN NEXUS — clean black / sky blue / gold responsive theme */
+.shell{max-width:1480px;padding:24px 28px;background:radial-gradient(ellipse at 82% 0%,#0d385322,transparent 38%),#05080e}
+body{background:#05080e!important;color:#eef5fb}
+.top{border-bottom:1px solid #24445a;padding-bottom:20px}
+.mark{border-color:#d9b45e;color:#e8c36e;background:linear-gradient(145deg,#1b2630,#080d14);box-shadow:0 0 22px #e6b95722}
+.brand b span{color:#78d9ff!important}
+.welcome{padding:34px 0 22px;position:relative}
+.welcome h1{font-size:clamp(27px,3vw,38px);letter-spacing:-1px}
+.welcome h1 em{color:#e8bd61!important}
+.welcome p{font-size:13px}
+.card{background:linear-gradient(145deg,#101b28f5,#090f18f8 78%)!important;border:1px solid #29465b!important;border-radius:16px!important;box-shadow:0 16px 42px #0008,inset 0 1px #ffffff0a!important}
+.section{position:relative;overflow:hidden}
+.section:before{content:'';position:absolute;top:0;left:22px;right:22px;height:1px;background:linear-gradient(90deg,transparent,#63d5ff77,#dfb45c99,transparent)}
+.section h2 em{color:#78d9ff!important}
+.eyebrow,article small,label,.secure{color:#81d9ff!important}
+input{background:#070e17!important;border:1px solid #2b4b62!important;border-radius:10px}
+input:focus{border-color:#78d9ff!important;box-shadow:0 0 0 3px #78d9ff20!important}
+button{background:linear-gradient(110deg,#f0ca75,#d8a94d 60%,#92dcfa)!important;color:#11151a!important;border:1px solid #f4d58d!important;box-shadow:0 7px 22px #d4a64a20}
+.ghost,.mini{background:#0a1b29!important;color:#82ddff!important;border:1px solid #32617d!important;box-shadow:none}
+.ghost:hover,.mini:hover{border-color:#e6b957!important;color:#e6b957!important}
+.user{border-top:1px solid #263e50}
+.notice{background:#0b1e2c;border-color:#387b9d;color:#a5e8ff;box-shadow:inset 3px 0 #e6b957}
+.on{color:#65e6ad!important}.off{color:#ff9b8f!important}
+footer{color:#8ba3b5!important}footer span{color:#e6b957!important}
+@media(min-width:900px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.section{padding:28px}.shell{padding:28px 34px}}
+@media(max-width:760px){.shell{padding:15px 13px}.welcome{gap:12px}.welcome h1{font-size:27px}.stats{grid-template-columns:1fr}.formrow{flex-direction:column;align-items:stretch}.formrow button{width:100%}.user{flex-wrap:wrap}.user code{flex-basis:100%}.card{padding:18px}}
+@media(prefers-reduced-motion:reduce){.card,button{transition:none!important}}
