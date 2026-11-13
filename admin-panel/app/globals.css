@@ -1598,3 +1598,61 @@ img,svg,video,canvas{max-width:100%}
 @media(prefers-reduced-motion:reduce){
  .public-crown,.hero-eyebrow,.hero-copy h1,.hero-copy>p,.hero-workspace-card,.hero-art,.art-core,.art-orbit,.art-card,.art-spark,.public-footer,.studio-cta{animation:none!important}
 }
+
+
+/* OSEN NEXUS — standalone premium black & gold owner login */
+.nexus-login-page{position:relative;isolation:isolate;min-height:100vh;width:100%;overflow:hidden;background:radial-gradient(ellipse at 18% 48%,#38281255,transparent 42%),radial-gradient(ellipse at 85% 20%,#5d431c22,transparent 35%),#07080b;color:#f8f1df;display:flex;flex-direction:column}
+.nexus-login-page:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.2;background-image:linear-gradient(#d6ae5610 1px,transparent 1px),linear-gradient(90deg,#d6ae5610 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(90deg,#000,transparent 75%)}
+.login-ambient{position:absolute;z-index:-1;border-radius:50%;filter:blur(90px);pointer-events:none}
+.login-ambient-one{width:360px;height:360px;left:-160px;top:22%;background:#b8832940}
+.login-ambient-two{width:420px;height:420px;right:-210px;bottom:-170px;background:#a77a2c2a}
+.login-stage{width:min(1320px,100%);margin:auto;flex:1;display:grid;grid-template-columns:minmax(0,1.06fr) minmax(390px,.94fr);align-items:center;gap:clamp(28px,5vw,76px);padding:54px clamp(24px,5vw,76px) 34px}
+.login-visual{position:relative;min-height:620px;display:grid;place-items:center;overflow:hidden;border:1px solid #b58b4140;border-radius:30px;background:radial-gradient(ellipse at 50% 42%,#9c742b2d,transparent 48%),linear-gradient(145deg,#17130d,#090b10 72%);box-shadow:inset 0 0 70px #d5a9470c,0 25px 90px #0009}
+.login-visual:before{content:"";position:absolute;inset:14px;border:1px solid #d9b45a24;border-radius:22px;pointer-events:none}
+.login-visual-grid{position:absolute;inset:0;background:linear-gradient(135deg,transparent 48%,#d7ae4b0c 49%,transparent 50%),radial-gradient(#f5d88a55 .7px,transparent .7px);background-size:100% 100%,23px 23px;mask-image:radial-gradient(ellipse at center,#000,transparent 75%)}
+.login-orbit{position:absolute;width:74%;aspect-ratio:1;border:1px solid #d5aa4a55;border-radius:50%;box-shadow:0 0 28px #d5aa4a16,inset 0 0 28px #d5aa4a12}
+.login-orbit-a{transform:rotateX(66deg) rotate(-22deg)}
+.login-orbit-b{width:86%;transform:rotateX(66deg) rotate(42deg);border-style:dashed;opacity:.6}
+.login-character{position:absolute;width:min(94%,520px);height:91%;bottom:0;display:grid;place-items:center;filter:drop-shadow(0 0 32px #d7ad4a30);animation:nx-float 6s ease-in-out infinite}
+.login-character svg{width:100%;height:100%;object-fit:contain}
+.login-visual-caption{position:absolute;left:30px;bottom:28px;display:grid;grid-template-columns:38px auto;align-items:center;column-gap:10px;text-shadow:0 2px 12px #000}
+.login-visual-caption>span{grid-row:span 2;width:38px;height:38px;display:grid;place-items:center;border:1px solid #d9b45a;border-radius:11px;color:#f4d27a;font-size:22px;background:#17120a}
+.login-visual-caption b{font-size:15px;letter-spacing:2px}.login-visual-caption i{font-style:normal;color:#e8bd58}
+.login-visual-caption small{font-size:7px;letter-spacing:1.8px;color:#a99a7d;margin-top:3px}
+.login-art-tag{position:absolute;right:28px;top:30px;padding:10px 13px;border:1px solid #d7ae4b55;border-radius:20px;background:#08090bc9;color:#e6c36e;font-size:8px;letter-spacing:1.2px}
+.login-art-tag span{margin-left:8px}
+.login-panel-wrap{width:100%;max-width:510px;justify-self:center}
+.login-panel{padding:clamp(26px,3.5vw,48px);border:1px solid #c49b4d66;border-radius:25px;background:linear-gradient(150deg,#17140fef,#0d0e12f5 60%,#11100d);box-shadow:0 28px 90px #000b,inset 0 1px #fff2;position:relative;overflow:hidden}
+.login-panel:before{content:"";position:absolute;inset:0 18% auto;height:1px;background:linear-gradient(90deg,transparent,#f1d38c,transparent);box-shadow:0 0 20px #e8bd58}
+.login-panel-brand{display:flex;align-items:center;gap:12px;margin-bottom:42px}
+.login-panel-brand>span{width:47px;height:47px;display:grid;place-items:center;border:1px solid #d9b45a;border-radius:14px;background:linear-gradient(145deg,#342713,#111);color:#f3d17c;font-size:27px;box-shadow:0 0 24px #d7ad4a24}
+.login-panel-brand div{display:flex;flex-direction:column;gap:4px}.login-panel-brand b{font-size:15px;letter-spacing:2px}.login-panel-brand em{font-style:normal;color:#eac66d}.login-panel-brand small{font-size:7px;letter-spacing:2px;color:#94876e}
+.login-panel-kicker{display:flex;align-items:center;gap:9px;color:#bca36d;font-size:8px;letter-spacing:1.7px;font-weight:800}
+.login-panel-kicker i{width:7px;height:7px;border-radius:50%;background:#e8bd58;box-shadow:0 0 12px #e8bd58}
+.login-panel h1{margin:17px 0 9px;font-size:clamp(32px,3.2vw,45px);line-height:1.08;letter-spacing:-1.6px;color:#fff8e8}
+.login-panel h1 em{font-style:normal;color:#edc96e;text-shadow:0 0 24px #d7ad4a35}
+.login-panel>p{margin:0;color:#a89d88;font-size:11px;line-height:1.8}
+.login-panel form{display:grid;gap:10px;margin-top:31px}
+.login-panel label{margin-top:7px;color:#d4bd83;font-size:8px;letter-spacing:1.4px;font-weight:900}
+.login-field{height:52px;display:flex;align-items:center;gap:12px;padding:0 14px;border:1px solid #6c5935;border-radius:11px;background:#090a0d;transition:border-color .2s,box-shadow .2s}
+.login-field:focus-within{border-color:#e7bf61;box-shadow:0 0 0 3px #e7bf611c,0 0 22px #e7bf6110}
+.login-field>span{width:18px;text-align:center;color:#c6a55c;font-size:15px}
+.login-field input{width:100%;min-width:0;height:100%;border:0!important;outline:0!important;background:transparent!important;box-shadow:none!important;color:#fff6e5!important;font-size:11px!important;padding:0!important}
+.login-field input::placeholder{color:#6f6b62}
+.login-submit{height:54px;margin-top:13px;border:1px solid #f2d17d;border-radius:11px;background:linear-gradient(110deg,#8f6828,#f0d27d 48%,#a77b31);color:#17120a;font-size:10px;font-weight:1000;letter-spacing:1.3px;box-shadow:0 8px 26px #d7ad4a30,inset 0 1px #fff9;transition:transform .2s,box-shadow .2s,filter .2s}
+.login-submit:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 34px #d7ad4a55;filter:brightness(1.08)}
+.login-submit:disabled{opacity:.72;cursor:wait}
+.login-spinner{display:inline-block;width:12px;height:12px;margin-right:7px;vertical-align:-2px;border:2px solid #17120a55;border-top-color:#17120a;border-radius:50%;animation:nx-login-spin .7s linear infinite}
+@keyframes nx-login-spin{to{transform:rotate(360deg)}}
+.login-security{display:flex;align-items:center;justify-content:center;gap:9px;margin-top:23px;color:#9b8b69;font-size:7px;letter-spacing:1px}
+.login-security>span{color:#e4bd62;font-size:12px}.login-security i{width:4px;height:4px;border-radius:50%;background:#c39a4c}
+.login-benefits{display:flex;justify-content:space-between;gap:10px;margin-top:17px;padding:0 4px}
+.login-benefits span{display:flex;align-items:center;gap:6px;color:#9b9079;font-size:7px;letter-spacing:.8px;white-space:nowrap}
+.login-benefits b{color:#e8bd58;font-size:12px}
+.login-page-footer{display:flex;justify-content:space-between;gap:14px;width:min(1320px,100%);margin:0 auto;padding:12px clamp(24px,5vw,76px) 20px;color:#766d5b;font-size:7px;letter-spacing:1.3px}
+.login-page-footer span:first-child{color:#c9a85d;font-weight:900}
+.nexus-login-page .alert{margin-top:17px}
+@media(max-width:980px){.login-stage{grid-template-columns:minmax(0,.9fr) minmax(360px,1.1fr);gap:22px;padding-left:22px;padding-right:22px}.login-visual{min-height:560px}.login-panel{padding:28px}.login-benefits{flex-wrap:wrap;justify-content:center}}
+@media(max-width:720px){.login-stage{display:flex;flex-direction:column;gap:0;padding:20px 14px 14px}.login-visual{width:100%;min-height:270px;height:270px;border-radius:20px}.login-visual:before{inset:8px;border-radius:14px}.login-character{height:100%;width:78%}.login-visual-caption{left:17px;bottom:15px;grid-template-columns:30px auto;gap:7px}.login-visual-caption>span{width:30px;height:30px;font-size:17px;border-radius:9px}.login-visual-caption b{font-size:11px}.login-visual-caption small{font-size:5px;letter-spacing:1px}.login-art-tag{top:15px;right:15px;padding:8px 9px;font-size:6px}.login-panel-wrap{max-width:520px;margin-top:14px}.login-panel{padding:23px 20px;border-radius:19px}.login-panel-brand{margin-bottom:24px}.login-panel-brand>span{width:39px;height:39px;font-size:22px}.login-panel-brand b{font-size:12px}.login-panel h1{font-size:31px}.login-panel>p{font-size:10px}.login-panel form{margin-top:20px}.login-field{height:48px}.login-submit{height:49px}.login-security{font-size:6px;letter-spacing:.65px}.login-benefits{gap:9px;margin-top:13px}.login-benefits span{font-size:6px;letter-spacing:.3px}.login-page-footer{padding:10px 15px 16px;font-size:6px}}
+@media(max-width:380px){.login-visual{height:225px;min-height:225px}.login-panel{padding:19px 16px}.login-benefits{flex-direction:column;align-items:center}.login-page-footer{font-size:5px}}
+@media(prefers-reduced-motion:reduce){.login-character{animation:none}.login-spinner{animation:none}}
