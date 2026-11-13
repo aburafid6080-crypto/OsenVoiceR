@@ -574,3 +574,85 @@ html,body{width:100%;max-width:100%;overflow-x:clip}
  .feature-tiles button{min-height:108px!important}
  .public-footer{padding:14px 5px!important}
 }
+
+
+/* MOBILE PUBLIC NAV: Home stays visible; remaining links live in a compact menu.
+   Desktop navigation and all destinations remain unchanged. */
+.public-menu-toggle{display:none}
+.public-menu-links{display:contents}
+@media(max-width:720px){
+ .public-nav{
+  position:relative!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  grid-template-areas:"brand login" "links links"!important;
+  gap:10px 8px!important;
+  padding:10px 0 9px!important;
+ }
+ .public-nav nav{
+  position:relative!important;
+  grid-area:links!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:8px!important;
+  overflow:visible!important;
+  border-top:1px solid #1d394b!important;
+  padding:9px 0 0!important;
+ }
+ .public-nav nav .public-home-link{
+  display:inline-flex!important;
+  align-items:center;
+  justify-content:center;
+  min-width:76px;
+  min-height:38px;
+  padding:8px 16px!important;
+  border:1px solid #8c6a2d!important;
+  border-radius:11px!important;
+  background:linear-gradient(135deg,#2b2110,#101925)!important;
+  color:#f3ca69!important;
+  font-size:11px!important;
+ }
+ .public-menu-toggle{
+  display:inline-flex!important;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  min-height:38px;
+  padding:7px 14px;
+  border:1px solid #28708d;
+  border-radius:11px;
+  background:linear-gradient(145deg,#102c3d,#091722);
+  color:#8fe4ff;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.8px;
+  box-shadow:inset 0 1px #ffffff12,0 5px 16px #0003;
+ }
+ .public-menu-toggle span{font-size:17px;line-height:1}
+ .public-menu-links{
+  display:none!important;
+  position:absolute!important;
+  z-index:80;
+  top:calc(100% + 9px);
+  right:0;
+  width:min(230px,75vw);
+  padding:8px!important;
+  border:1px solid #28617b;
+  border-radius:15px;
+  background:linear-gradient(155deg,#122333f7,#070e17fa);
+  box-shadow:0 16px 38px #000b,0 0 22px #31bde51c;
+  backdrop-filter:blur(18px);
+ }
+ .public-menu-links.is-open{display:grid!important;gap:5px}
+ .public-menu-links a{
+  display:flex!important;
+  align-items:center;
+  min-height:43px;
+  padding:10px 13px!important;
+  border:1px solid transparent;
+  border-radius:9px;
+  color:#d8e8f4!important;
+  font-size:11px!important;
+ }
+ .public-menu-links a:hover{border-color:#28617b;background:#0e2635;color:#8fe4ff!important}
+}
