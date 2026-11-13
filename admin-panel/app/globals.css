@@ -916,3 +916,12 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #7bdc
  .studio-features{font-size:9px!important}
  .hero-art{display:none!important}
 }
+
+
+/* App Studio project panel and workspace-specific visibility */
+.dashboard-content[data-workspace="app"] #app-projects{display:block!important;grid-column:1/-1}
+.dashboard-content[data-workspace="app"] #websites{display:none!important}
+.dashboard-content[data-workspace="website"] #app-projects{display:none!important}
+.dashboard-content[data-workspace="website"] #websites{display:block!important}
+.dashboard-content[data-workspace="website"] .metric-grid{display:none!important}
+@media(max-width:720px){.dashboard-content[data-workspace="app"] #app-projects{padding:16px 12px!important}}
