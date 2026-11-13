@@ -925,3 +925,41 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #7bdc
 .dashboard-content[data-workspace="website"] #websites{display:block!important}
 .dashboard-content[data-workspace="website"] .metric-grid{display:none!important}
 @media(max-width:720px){.dashboard-content[data-workspace="app"] #app-projects{padding:16px 12px!important}}
+
+
+/* Separate visual identities for the two studios. Scoped to admin workspace only. */
+/* Website Studio: clean creator/editorial workspace in midnight teal. */
+.dashboard-content[data-workspace="website"]{--studio-accent:#65d8e8;--studio-line:#286477;--studio-panel:#0b1c25}
+.dashboard-content[data-workspace="website"] .workspace-context{background:linear-gradient(110deg,#0d3542,#10242e);border-color:#327b8c;color:#8ceafa}
+.dashboard-content[data-workspace="website"] .welcome-panel{background:radial-gradient(ellipse at 95% 0%,#1b687044,transparent 50%),linear-gradient(135deg,#0b2029,#0a111a);border:1px solid #285767;border-radius:18px}
+.dashboard-content[data-workspace="website"] .welcome-panel h1 em,
+.dashboard-content[data-workspace="website"] .section-kicker{color:#79dce8}
+.dashboard-content[data-workspace="website"] .panel-card{background:linear-gradient(150deg,#10232c,#0a141d);border-color:#285363;border-radius:16px}
+.dashboard-content[data-workspace="website"] .panel-icon{color:#85e7ee;border-color:#367b88;background:#102f39}
+.dashboard-content[data-workspace="website"] .panel-heading h2 em{color:#78dce6}
+.dashboard-content[data-workspace="website"] .inline-form button{background:linear-gradient(110deg,#146273,#1b8490);border-color:#4aa6b1;color:#f0ffff}
+.dashboard-content[data-workspace="website"] .data-row{border-color:#244653}
+.dashboard-content[data-workspace="website"] .draft-pill{border-color:#387b85;color:#9be7e9;background:#102b33}
+/* App Studio: premium black/gold engineering and release workspace. */
+.dashboard-content[data-workspace="app"]{--studio-accent:#edc56e;--studio-line:#765c32;--studio-panel:#17130d}
+.dashboard-content[data-workspace="app"] .workspace-context{background:linear-gradient(110deg,#352714,#17130d);border-color:#8d6c37;color:#f2d18a}
+.dashboard-content[data-workspace="app"] .welcome-panel{background:radial-gradient(ellipse at 95% 0%,#9b702e33,transparent 52%),linear-gradient(135deg,#211a10,#0d1118);border:1px solid #72572f;border-radius:18px}
+.dashboard-content[data-workspace="app"] .welcome-panel h1 em,
+.dashboard-content[data-workspace="app"] .section-kicker{color:#eac36f}
+.dashboard-content[data-workspace="app"] .panel-card{background:linear-gradient(150deg,#1b1914,#0d1219);border-color:#67502e;border-radius:16px}
+.dashboard-content[data-workspace="app"] .panel-icon{color:#f0cc7d;border-color:#92703a;background:#302515}
+.dashboard-content[data-workspace="app"] .panel-heading h2 em{color:#eac36f}
+.dashboard-content[data-workspace="app"] .inline-form button{background:linear-gradient(110deg,#8d6428,#bd9142);border-color:#d0a85e;color:#120e08}
+.dashboard-content[data-workspace="app"] .data-row{border-color:#4b3b25}
+.dashboard-content[data-workspace="app"] .draft-pill{border-color:#8c6c38;color:#f0d18e;background:#2a2114}
+.dashboard-content[data-workspace="app"] .metric-card{border-color:#66502e}
+.dashboard-content[data-workspace="app"] .metric-card.metric-gold{background:linear-gradient(145deg,#2b2112,#11131a)}
+/* Distinct studio sidebars without changing shared owner authentication or stored records. */
+.dashboard-content[data-workspace="website"] .side-nav a.nav-active{background:#123440;color:#9beaf1;border-color:#347d8b}
+.dashboard-content[data-workspace="app"] .side-nav a.nav-active{background:#302515;color:#f1d18a;border-color:#8b6a36}
+@media(max-width:720px){
+ .dashboard-content[data-workspace="website"] .welcome-panel,
+ .dashboard-content[data-workspace="app"] .welcome-panel{padding:18px 14px}
+ .dashboard-content[data-workspace="website"] .panel-card,
+ .dashboard-content[data-workspace="app"] .panel-card{margin-bottom:12px}
+}
