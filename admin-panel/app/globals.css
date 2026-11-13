@@ -1241,3 +1241,19 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #7bdc
 @media(prefers-reduced-motion:reduce){
  .public-home:after{animation:none!important}
 }
+
+
+/* FIX: studio category tabs were clipped by the card's overflow box */
+.hero-workspace-card{overflow:visible!important;isolation:isolate!important}
+.hero-workspace-card:before{z-index:-1!important;pointer-events:none!important}
+.studio-card-top{position:relative!important;z-index:4!important;display:flex!important;align-items:center!important;min-height:48px!important;margin-top:-46px!important;margin-bottom:7px!important;overflow:visible!important}
+.studio-label{position:relative!important;z-index:5!important;display:inline-flex!important;align-items:center!important;min-height:44px!important;line-height:1.25!important;white-space:normal!important;overflow:visible!important}
+.choice-icon{position:relative!important;z-index:6!important;flex-shrink:0!important}
+.choice-arrow{z-index:6!important}
+.hero-workspaces{padding-top:8px!important;row-gap:28px!important}
+.hero-workspace-card:focus-visible{outline:3px solid #fff2a6!important;outline-offset:5px!important}
+@media(max-width:760px){
+ .hero-workspaces{padding-top:8px!important}
+ .studio-card-top{margin-top:-40px!important;min-height:44px!important}
+ .studio-label{min-height:40px!important}
+}
