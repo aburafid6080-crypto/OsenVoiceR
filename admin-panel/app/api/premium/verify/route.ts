@@ -11,7 +11,7 @@ const supabaseUrl = (() => {
     const parsed = new URL(rawSupabaseUrl.trim());
     return parsed.protocol + "//" + parsed.host;
   } catch {
-    return rawSupabaseUrl.trim().replace(/\\/+$/, "");
+    return rawSupabaseUrl.trim().replace(/\/+$/, "");
   }
 })();
 const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
