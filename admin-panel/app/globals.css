@@ -112,3 +112,119 @@ button{background:linear-gradient(105deg,#a3edff,#4fc7f5 48%,#168acb);color:#031
 .stats .card:hover,.section:hover{border-color:#4abde9;box-shadow:0 18px 48px #0007,0 0 28px #29bfff20}
 @media(max-width:760px){.login{margin-top:clamp(24px,6vh,54px)!important}.shell{padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env(safe-area-inset-right))}}
 @media(prefers-reduced-motion:reduce){body:before,.mark,.login{animation:none!important}.login button:after{animation:none!important}}
+
+
+/* OSEN TURBOPLAY — BLACK / SKY BLUE / GOLD OWNER THEME */
+:root{
+  color-scheme:dark;
+  --bg:#05070c;
+  --panel:#0d121b;
+  --line:#26384a;
+  --gold:#e6b957;
+  --blue:#78d8ff;
+  --muted:#9eafc1;
+}
+html{background:#05070c}
+body{
+  background:
+    radial-gradient(ellipse at 12% 12%,#12334b55,transparent 38%),
+    radial-gradient(ellipse at 88% 78%,#b88b3515,transparent 34%),
+    linear-gradient(145deg,#05070c,#080e17 58%,#05070c)!important;
+  color:#f4f7fb;
+}
+body:before{
+  background:
+    radial-gradient(ellipse at 16% 38%,#43c8ff18,transparent 34%),
+    radial-gradient(ellipse at 82% 58%,#d5a84b12,transparent 36%)!important;
+  animation:osenAmbientDrift 18s ease-in-out infinite!important;
+}
+.top{border-bottom-color:#294052}
+.top:after{background:linear-gradient(90deg,transparent,#76d8ff88,#e6b957,transparent);opacity:.8}
+.mark{
+  border:1px solid #d7ad59!important;
+  color:#e9c875!important;
+  background:linear-gradient(145deg,#1c2630,#080d14)!important;
+  box-shadow:0 0 0 5px #e6b95712,0 0 22px #5bcfff1b,inset 0 1px #fff3!important;
+}
+.brand b span,em,footer span{color:var(--gold)!important}
+.secure,.eyebrow,article small,label,.login-kicker{color:var(--blue)!important}
+.card{
+  background:linear-gradient(145deg,#111a25f5,#090e16f8 76%)!important;
+  border:1px solid #294052!important;
+  box-shadow:0 18px 48px #0008,inset 0 1px #ffffff09!important;
+  backdrop-filter:blur(12px);
+}
+.section{position:relative;overflow:hidden}
+.section:before{
+  content:"";position:absolute;left:24px;right:24px;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,#6dd5ff66,#dfb45c88,transparent);
+  pointer-events:none;
+}
+.section h2{letter-spacing:-.45px}
+.section h2 em{color:var(--gold)!important}
+.welcome h1 em{color:var(--blue)!important}
+.welcome p,.section p,article p{color:#a5b6c8}
+input{
+  border:1px solid #2b4358;
+  background:linear-gradient(100deg,#070c13,#0b1420);
+}
+input:focus{border-color:var(--blue)!important;box-shadow:0 0 0 3px #62ceff20,0 0 18px #62ceff12!important}
+button{
+  color:#10131a!important;
+  border:1px solid #f2d18a!important;
+  background:linear-gradient(105deg,#f0cb76 0%,#d7a94e 52%,#9bdfff 100%)!important;
+  box-shadow:0 7px 22px #d4a64a20,inset 0 1px #fff9;
+}
+button:hover:not(:disabled){filter:brightness(1.08);box-shadow:0 10px 28px #61cfff2b,0 0 16px #d6ac5520}
+.ghost,.mini{
+  color:var(--blue)!important;
+  border:1px solid #3b718d!important;
+  background:linear-gradient(110deg,#0a1a27,#111925)!important;
+  box-shadow:inset 0 1px #ffffff0a;
+}
+.ghost:hover:not(:disabled),.mini:hover:not(:disabled){
+  border-color:var(--gold)!important;color:var(--gold)!important;
+}
+.user{border-top-color:#263b4e}
+.user code{color:#c7e5f5}
+.on{color:#6fe3b2!important}
+.off{color:#ff9b9f!important}
+.notice{
+  border-color:#3a7896;color:#a9e9ff;
+  background:linear-gradient(110deg,#0a1d2a,#171b20);
+  box-shadow:inset 3px 0 #e3b85e;
+}
+.login{
+  border-color:#526078!important;
+  background:linear-gradient(145deg,#131c28fa,#080d15fc 72%)!important;
+  box-shadow:0 28px 90px #000b,0 0 42px #55cfff12,0 0 32px #e6b9570b,inset 0 1px #ffffff12!important;
+}
+.login-shield{
+  border-color:var(--gold)!important;color:var(--gold)!important;
+  background:linear-gradient(145deg,#222319,#0a1018)!important;
+}
+.login h1 em{color:var(--blue)!important}
+.login label{color:#b9dff0!important}
+.login input{border-color:#35536a!important}
+.login input:focus{border-color:var(--blue)!important}
+.login button{
+  color:#11151b!important;
+  border-color:#f2d18a!important;
+  background:linear-gradient(105deg,#f1cb73,#d7a84d 58%,#9cdefb)!important;
+  box-shadow:0 9px 26px #c99a3a25,inset 0 1px #fff9!important;
+}
+.login-live{color:var(--gold)!important}
+.login-footnote span{color:var(--gold)!important}
+.stats article strong{letter-spacing:-.7px}
+.stats article:first-child{border-color:#57472c!important}
+.stats article:nth-child(2){border-color:#2d5269!important}
+footer{color:#91a4b6}
+@media(max-width:620px){
+  .section:before{left:18px;right:18px}
+  .user{flex-wrap:wrap}
+  .user>*{min-width:0}
+}
+@media(prefers-reduced-motion:reduce){
+  body:before{animation:none!important}
+  .card,button:not(:disabled){transition:none!important}
+}
