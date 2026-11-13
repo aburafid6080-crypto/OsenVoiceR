@@ -57,3 +57,25 @@ button:not(:disabled):active{transform:translateY(1px) scale(.99)}
 /* Small phones and narrow browser windows */
 @media(max-width:380px){.shell{padding:12px 10px}.brand{gap:10px}.brand b{font-size:11px;letter-spacing:1.4px}.brand small{font-size:7px;letter-spacing:1px}.secure{font-size:7px}.login{padding:21px 16px}.login h1{font-size:30px}.login-subtitle{font-size:12px}.login-footnote{font-size:7px;letter-spacing:1px}.user{flex-wrap:wrap}.user code{flex-basis:100%}}
 @media(prefers-reduced-motion:reduce){.login,.login-orbit,.mark,.login-live i,.login button:after{animation:none!important}.card,button:not(:disabled){transition:none!important}}
+
+
+/* OSEN TURBOPLAY ambient motion + responsive polish */
+@keyframes osenAmbientDrift{0%{transform:translate3d(-3%,0,0) scale(1);opacity:.42}50%{transform:translate3d(3%,2%,0) scale(1.08);opacity:.72}100%{transform:translate3d(-3%,0,0) scale(1);opacity:.42}}
+@keyframes osenHeaderIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes osenFieldIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+@keyframes osenShieldFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+body{position:relative;isolation:isolate;overflow-x:hidden}
+body:before{content:"";position:fixed;z-index:-1;pointer-events:none;inset:-18%;background:radial-gradient(ellipse at 18% 38%,#d8a84b12,transparent 32%),radial-gradient(ellipse at 82% 58%,#28527a16,transparent 34%);animation:osenAmbientDrift 16s ease-in-out infinite}
+.top{animation:osenHeaderIn .55s ease-out both}
+.login-head{animation:osenFieldIn .55s .12s both}
+.login h1{animation:osenFieldIn .55s .2s both}
+.login-subtitle{animation:osenFieldIn .55s .27s both}
+.login form label:nth-of-type(1),.login form input:nth-of-type(1){animation:osenFieldIn .5s .34s both}
+.login form label:nth-of-type(2),.login form input:nth-of-type(2){animation:osenFieldIn .5s .42s both}
+.login form button{animation:osenFieldIn .55s .5s both}
+.login-shield{animation:osenShieldFloat 4s ease-in-out infinite}
+.login-footnote{animation:osenFieldIn .55s .58s both}
+@media(min-width:761px){.login{margin-top:clamp(54px,9vh,110px);margin-bottom:clamp(40px,8vh,90px)}}
+@media(max-width:760px){body{background-attachment:scroll}.shell{min-height:100svh;padding-left:max(13px,env(safe-area-inset-left));padding-right:max(13px,env(safe-area-inset-right));padding-bottom:max(14px,env(safe-area-inset-bottom))}.top{gap:10px}.brand{min-width:0}.brand>div:last-child{min-width:0}.brand b{white-space:nowrap}.login{width:100%;max-width:490px;margin:clamp(28px,7vh,64px) auto 28px}.shell>footer{margin-top:auto}.stats{grid-template-columns:minmax(0,1fr)}.formrow input{width:100%}}
+@media(max-width:420px){.top{align-items:flex-start}.brand b{font-size:11px;letter-spacing:1.1px}.brand small{font-size:7px;letter-spacing:1px}.secure{font-size:7px;white-space:nowrap}.login{margin-top:clamp(22px,5vh,42px);padding:23px 17px}.login-head{gap:10px}.login-shield{width:38px;height:38px}.login-kicker{font-size:8px}.login-live{font-size:8px}.login h1{font-size:clamp(28px,8vw,34px)}.login-subtitle{font-size:12px}.login input{height:47px}.login button{height:48px}.shell>footer{font-size:7px;letter-spacing:1px}}
+@media(prefers-reduced-motion:reduce){body:before,.top,.login-head,.login h1,.login-subtitle,.login form label,.login form input,.login form button,.login-shield,.login-footnote{animation:none!important}}
