@@ -1912,3 +1912,33 @@ img,svg,video,canvas{max-width:100%}
   .nexus-login-page .login-security{margin-top:5px}
   .nexus-login-page .login-benefits{display:none}
 }
+
+
+/* OSEN AUREX — signature gold monogram */
+.brand-mark{
+  color:#fff0b4!important;
+  font-family:Georgia,serif!important;
+  font-size:27px!important;
+  font-weight:900!important;
+  text-shadow:0 1px 0 #8a6322,0 0 16px #e9bd5b88;
+  border-color:#f0cf78!important;
+  background:linear-gradient(145deg,#5b421b,#171109 62%,#090a0c)!important;
+  box-shadow:0 0 0 4px #d8b15e12,0 0 24px #d8b15e35!important;
+}
+.aurex-mark{
+  font-family:Georgia,serif!important;
+  font-weight:900!important;
+  font-style:italic;
+  color:#fff0b4!important;
+  text-shadow:0 2px 0 #79551e,0 0 18px #e8bd5877;
+  background:linear-gradient(145deg,#62491f,#171109 70%,#090a0c)!important;
+  border-color:#efcf7b!important;
+}
+.login-visual-caption>span{
+  font-family:Georgia,serif;
+  font-size:24px!important;
+  font-weight:900;
+  font-style:italic;
+  color:#fff0b4!important;
+  text-shadow:0 2px 0 #79551e,0 0 16px #e8bd5877;
+}
