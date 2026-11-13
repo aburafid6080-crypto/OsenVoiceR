@@ -371,3 +371,53 @@ button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.45;curs
  .dashboard-content[data-active="premium"] .nexus-footer{margin:18px 0 8px!important;padding:10px 4px!important;display:flex!important;flex-wrap:wrap!important;gap:6px 12px!important;font-size:7px!important}
  .nexus-shell{padding-bottom:88px!important}
 }
+
+
+/* GLOBAL LAYOUT NORMALIZATION — apply consistently to every owner-console page */
+*,*::before,*::after{box-sizing:border-box}
+html,body{width:100%;max-width:100%;overflow-x:clip}
+.nexus-shell{width:100%;max-width:1600px;min-width:0;overflow-x:clip}
+.nexus-workspace{width:100%;min-width:0;grid-template-columns:218px minmax(0,1fr)}
+.dashboard-content{width:100%;max-width:100%;min-width:0;overflow:visible}
+.dashboard-content>*{min-width:0;max-width:100%}
+.dashboard-content .welcome-panel{
+ width:100%;min-width:0;max-width:100%;padding:18px 20px 20px!important;
+ margin:0 0 16px!important;align-items:center!important;overflow:visible!important;
+ border:1px solid #24475d;border-radius:16px;
+ background:radial-gradient(ellipse at 95% 0%,#0b52752b,transparent 48%),linear-gradient(145deg,#0d1925,#080e16)
+}
+.dashboard-content .welcome-panel>div:first-child{min-width:0;max-width:100%}
+.dashboard-content .welcome-panel .section-kicker{
+ display:block;position:static;max-width:100%;overflow:visible!important;
+ white-space:normal;overflow-wrap:anywhere;line-height:1.6;margin:0 0 6px
+}
+.dashboard-content .welcome-panel h1{
+ max-width:100%;min-width:0;overflow-wrap:anywhere;line-height:1.14;margin:7px 0 8px!important
+}
+.dashboard-content .welcome-panel p{max-width:780px;overflow-wrap:anywhere}
+.dashboard-content .content-grid,
+.dashboard-content .metric-grid{width:100%;min-width:0;max-width:100%}
+.dashboard-content .content-grid>section,
+.dashboard-content .metric-grid>article{min-width:0;max-width:100%}
+.dashboard-content .panel-card{overflow-wrap:anywhere}
+.dashboard-content .inline-form{min-width:0}
+.dashboard-content .inline-form input{min-width:0;max-width:100%}
+.dashboard-content .data-row{min-width:0;max-width:100%;overflow-wrap:anywhere}
+@media(max-width:1100px){
+ .nexus-shell{padding-left:22px!important;padding-right:22px!important}
+ .nexus-workspace{grid-template-columns:minmax(0,1fr)!important}
+}
+@media(max-width:720px){
+ .nexus-shell{padding-left:14px!important;padding-right:14px!important}
+ .nexus-workspace{width:100%;gap:12px!important}
+ .dashboard-content .welcome-panel{padding:17px 15px 18px!important;margin-bottom:12px!important}
+ .dashboard-content .welcome-panel .section-kicker{font-size:8px;letter-spacing:1.25px}
+ .dashboard-content .welcome-panel h1{font-size:clamp(23px,6vw,30px)!important;letter-spacing:-.8px}
+ .dashboard-content .welcome-panel p{font-size:11px;line-height:1.65}
+ .dashboard-content .content-grid{grid-template-columns:minmax(0,1fr)!important}
+ .dashboard-content .content-grid>section{grid-column:1!important}
+ .dashboard-content .panel-card{width:100%;padding:18px 15px!important}
+ .dashboard-content .inline-form{width:100%;display:grid!important;grid-template-columns:minmax(0,1fr)!important}
+ .dashboard-content .inline-form button{width:100%!important}
+ .dashboard-content .data-row{grid-template-columns:minmax(0,1fr)!important;gap:9px!important}
+}
