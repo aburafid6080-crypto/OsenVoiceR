@@ -73,7 +73,7 @@ export default function Home(){
     </div>
     <div className="login-panel-wrap">
      <div className="login-panel">
-      <div className="login-panel-brand"><span className="aurex-mark">A</span><div><b>OSEN <em>AUREX</em></b><small>ADMINISTRATION PORTAL</small></div></div>
+      <div className="login-panel-brand"><span className="aurex-mark">R</span><div><b>OSEN <em>AUREX</em></b><small>ADMINISTRATION PORTAL</small></div></div>
       <div className="login-panel-kicker"><i/> WELCOME BACK · OWNER</div>
       <h1>Owner <em>Login.</em></h1>
       <p>Sign in to access your private workspace and manage your projects.</p>
