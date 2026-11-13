@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 export const runtime="nodejs";
 const rawUrl=process.env.SUPABASE_URL||process.env.NEXT_PUBLIC_SUPABASE_URL||"";
-const url=(()=>{try{const p=new URL(rawUrl.trim());return p.protocol+"//"+p.host}catch{return rawUrl.trim().replace(/\\/+$/,"")}})();
+const url=(()=>{try{const p=new URL(rawUrl.trim());return p.protocol+"//"+p.host}catch{return rawUrl.trim().replace(/\/+$/,"")}})();
 const anon=process.env.SUPABASE_ANON_KEY||process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY||"";
 const service=process.env.SUPABASE_SERVICE_ROLE_KEY||"";
 const owner=(process.env.ADMIN_EMAIL||"").toLowerCase();
 function config(){if(!url||!anon||!service||!owner)throw new Error("Server environment is incomplete. Configure Supabase URL, anon key, service role key and owner email.");}
 async function authorize(req:NextRequest){
- config();const token=req.headers.get("authorization")?.replace(/^Bearer\\s+/i,"");if(!token)throw new Error("Sign in required.");
+ config();const token=req.headers.get("authorization")?.replace(/^Bearer\s+/i,"");if(!token)throw new Error("Sign in required.");
  const response=await fetch(url+"/auth/v1/user",{headers:{apikey:anon,Authorization:"Bearer "+token},cache:"no-store"});if(!response.ok)throw new Error("Invalid login session.");
  const user=await response.json();if(String(user.email||"").toLowerCase()!==owner)throw new Error("Owner access only.");return user;
 }
