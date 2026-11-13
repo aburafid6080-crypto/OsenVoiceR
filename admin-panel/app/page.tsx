@@ -30,6 +30,6 @@ export default function Home() {
 <div className="user"><b>Voice & Booster Controls</b><span>Requires Android remote-config integration</span></div>
 <div className="user"><b>Hosting & Domain API</b><span>Connect provider account to publish sites</span></div>
 <div className="user"><b>Audit Logs & Analytics</b><span>Next implementation phase</span></div>
-</div></section>{notice&&<div className="notice">{notice}</div></>}
+</div></section>{notice&&<div className="notice">{notice}</div>}</>}
  <footer>OSEN TURBOPLAY • ADMIN PANEL <span>Owner access only</span></footer></main>;
 }
