@@ -42,7 +42,7 @@ export default function Home(){
    <button className="public-login" onClick={()=>setShowLogin(true)}>OWNER LOGIN ↗</button>
   </header>
   <section className="public-hero" id="home">
-   <div className="hero-copy"><span className="hero-eyebrow"><i/> WELCOME TO OSEN NEXUS</span><h1>Control. Manage.<br/><em>Grow.</em></h1><p>Two dedicated studios. Create websites in one workspace and build Android apps in the other — with your owner controls in one secure place.</p>
+   <div className="hero-copy"><span className="hero-eyebrow"><i/> WELCOME TO OSEN NEXUS</span><h1>Welcome to <em>OSEN NEXUS</em></h1><p>Manage Your Projects　•　Build Your Dreams　•　All in One Place</p>
     <div className="hero-workspaces">
      <button className="hero-workspace-card website-choice" type="button" onClick={()=>{setWorkspace("website");setWebsiteBuilderPending(true);setShowLogin(true)}}>
       <span className="studio-card-top"><span className="choice-icon">◎</span><span className="studio-label">STUDIO 01 · WEB PLATFORM</span><span className="choice-arrow">↗</span></span>
