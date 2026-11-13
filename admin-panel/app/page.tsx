@@ -68,7 +68,7 @@ export default function Home(){
        <circle cx="260" cy="266" r="192" fill="#e5b64b" opacity=".08" filter="url(#nxGlow)"/>
       </svg>
      </div>
-     <div className="login-visual-caption"><span>♛</span><b>OSEN <i>AUREX</i></b><small>THE ULTIMATE CONTROL CENTER</small></div>
+     <div className="login-visual-caption"><span className="aurex-mark">A</span><b>OSEN <i>AUREX</i></b><small>THE ULTIMATE CONTROL CENTER</small></div>
      <div className="login-art-tag">PRIVATE OWNER ACCESS <span>✦</span></div>
     </div>
     <div className="login-panel-wrap">
