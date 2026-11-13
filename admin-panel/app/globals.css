@@ -823,3 +823,28 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #7bdc
  .side-nav{left:6px!important;right:6px!important;height:62px!important}
  .side-nav>a{flex-basis:56px!important;min-width:54px!important;font-size:6px!important}
 }
+
+
+/* Independent OSEN NEXUS workspace selector */
+.workspace-picker{width:min(1080px,100%);margin:clamp(30px,7vh,78px) auto 0;padding:clamp(18px,4vw,42px)}
+.picker-heading{text-align:center;margin:0 auto 30px;max-width:650px}
+.picker-heading h1{font-size:clamp(30px,5vw,48px);letter-spacing:-1.5px;margin:12px 0}
+.picker-heading h1 em{font-style:normal;color:var(--gold)}
+.picker-heading p{color:var(--muted);font-size:13px;line-height:1.7}
+.picker-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.workspace-tile{appearance:none;text-align:left;display:flex;flex-direction:column;align-items:flex-start;min-height:290px;padding:clamp(22px,3vw,34px);border:1px solid #31516a;border-radius:20px;background:radial-gradient(ellipse at 90% 0%,#16415a66,transparent 55%),linear-gradient(145deg,#111e2c,#080e16);color:#eef8ff;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s}
+.workspace-tile:hover{transform:translateY(-4px);border-color:#72d8ff;box-shadow:0 18px 48px #0008,0 0 24px #42c5f322}
+.app-tile{background:radial-gradient(ellipse at 90% 0%,#80612b44,transparent 55%),linear-gradient(145deg,#211c15,#090e15);border-color:#66502e}
+.app-tile:hover{border-color:#e8bf70;box-shadow:0 18px 48px #0008,0 0 24px #d8ae5522}
+.tile-icon{width:52px;height:52px;display:grid;place-items:center;border:1px solid #4b91ae;border-radius:15px;background:#0d2938;color:#7edcff;font-size:27px;margin-bottom:25px}
+.app-tile .tile-icon{border-color:#8b6b37;background:#302515;color:#edc879}
+.tile-kicker{font-size:9px;letter-spacing:1.7px;color:#8fdfff;font-weight:800}
+.app-tile .tile-kicker{color:#e5bd70}
+.workspace-tile strong{font-size:clamp(19px,2.4vw,25px);letter-spacing:.3px;margin:10px 0}
+.workspace-tile small{font-size:12px;line-height:1.7;color:#9aafbf;max-width:340px}
+.tile-cta{margin-top:auto;padding-top:26px;color:#8bdfff;font-size:10px;font-weight:900;letter-spacing:1px}
+.app-tile .tile-cta{color:#e7c477}
+.picker-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:28px;padding:17px 3px;border-top:1px solid #263b4c;color:#8299aa;font-size:9px;letter-spacing:1px}
+.picker-foot button,.workspace-switch{border:1px solid #35556b;border-radius:8px;background:#0a1925;color:#9cddf5;padding:9px 12px;font-size:9px;font-weight:800;cursor:pointer}
+.workspace-switch{width:100%;margin-bottom:14px;text-align:left}
+@media(max-width:640px){.workspace-picker{margin:12px auto 0;padding:16px}.picker-heading{margin-bottom:22px}.picker-grid{grid-template-columns:1fr;gap:13px}.workspace-tile{min-height:225px;padding:22px;border-radius:16px}.tile-icon{margin-bottom:18px}.picker-foot{flex-wrap:wrap}.picker-foot span:nth-child(2){display:none}}
