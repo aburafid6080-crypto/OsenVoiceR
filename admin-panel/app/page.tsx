@@ -10,7 +10,7 @@ const OWNER="Abu Rafid";
 const nav=[["overview","Overview","◈"],["premium","Premium","◇"],["users","Users","▣"],["app-control","App control","⚙"],["websites","Websites","◎"],["activity","Activity log","≋"],["integrations","Integrations","⌘"]];
 export default function Home(){
  const[email,setEmail]=useState("");const[password,setPassword]=useState("");const[token,setToken]=useState("");
- const[busy,setBusy]=useState(false);const[showLogin,setShowLogin]=useState(false);const[activeSection,setActiveSection]=useState("overview");const[notice,setNotice]=useState("");const[noticeError,setNoticeError]=useState(false);
+ const[busy,setBusy]=useState(false);const[showLogin,setShowLogin]=useState(false);const[mobileMenuOpen,setMobileMenuOpen]=useState(false);const[activeSection,setActiveSection]=useState("overview");const[notice,setNotice]=useState("");const[noticeError,setNoticeError]=useState(false);
  const[enabled,setEnabled]=useState(false);const[users,setUsers]=useState<User[]>([]);const[logs,setLogs]=useState<Log[]>([]);
  const[newId,setNewId]=useState("");const[newPass,setNewPass]=useState("");const[userSearch,setUserSearch]=useState("");
  const[maintenance,setMaintenance]=useState(false);const[forceUpdate,setForceUpdate]=useState(false);const[announcement,setAnnouncement]=useState("");
@@ -33,7 +33,7 @@ export default function Home(){
   {!token?(!showLogin?<div className="public-home">
   <header className="public-nav">
    <a className="public-brand" href="#home"><span className="public-crown">♛</span><span><b>OSEN <em>NEXUS</em></b><small>PRIVATE OWNER CONSOLE</small></span></a>
-   <nav><a className="public-active" href="#home">Home</a><a href="#features">Features</a><a href="#platform">Platform</a><a href="#security">Security</a></nav>
+   <nav aria-label="Main navigation"><a className="public-active public-home-link" href="#home" onClick={()=>setMobileMenuOpen(false)}>Home</a><button type="button" className="public-menu-toggle" aria-expanded={mobileMenuOpen} aria-label={mobileMenuOpen?"Close menu":"Open menu"} onClick={()=>setMobileMenuOpen(v=>!v)}><span>{mobileMenuOpen?"✕":"☰"}</span><b>{mobileMenuOpen?"CLOSE":"MENU"}</b></button><div className={"public-menu-links"+(mobileMenuOpen?" is-open":"")}><a href="#features" onClick={()=>setMobileMenuOpen(false)}>Features</a><a href="#platform" onClick={()=>setMobileMenuOpen(false)}>Platform</a><a href="#security" onClick={()=>setMobileMenuOpen(false)}>Security</a></div></nav>
    <button className="public-login" onClick={()=>setShowLogin(true)}>OWNER LOGIN ↗</button>
   </header>
   <section className="public-hero" id="home">
