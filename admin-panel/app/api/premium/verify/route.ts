@@ -3,7 +3,17 @@ import { pbkdf2Sync, timingSafeEqual } from "node:crypto";
 
 export const runtime = "nodejs";
 
-const supabaseUrl = process.env.SUPABASE_URL || "";
+const rawSupabaseUrl =
+  process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+
+const supabaseUrl = (() => {
+  try {
+    const parsed = new URL(rawSupabaseUrl.trim());
+    return parsed.protocol + "//" + parsed.host;
+  } catch {
+    return rawSupabaseUrl.trim().replace(/\\/+$/, "");
+  }
+})();
 const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 
 async function db(path: string, init: RequestInit = {}) {
