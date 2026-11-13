@@ -41,7 +41,7 @@ export default function Home(){
     <div className="hero-actions"><button className="hero-primary" onClick={()=>setShowLogin(true)}>↗　GO TO DASHBOARD</button><a className="hero-secondary" href="#features">✦　EXPLORE FEATURES</a></div>
     <div className="hero-trust"><span><i/> OWNER-ONLY ACCESS</span><span>BLACK · SKY BLUE · GOLD</span></div>
    </div>
-   <div className="hero-art" aria-label="Original OSEN Nexus gaming-inspired artwork">
+   <div className="hero-art" id="features" aria-label="Original OSEN Nexus gaming-inspired artwork">
     <div className="art-orbit orbit-one"/><div className="art-orbit orbit-two"/>
     <div className="art-core"><span className="core-crown">♛</span><b>OSEN</b><strong>NEXUS</strong><small>CONTROL CENTER</small></div>
     <div className="art-card art-left"><span>✦</span><b>APP CONTROL</b><small>ONE PRIVATE WORKSPACE</small></div>
