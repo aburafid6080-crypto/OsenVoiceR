@@ -1190,3 +1190,54 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #7bdc
 .public-brand small:after,.nexus-brand small:after{content:"ADMIN PANEL";display:block;color:#80ddf7;font-size:9px;letter-spacing:2.2px;margin-top:4px}
 .public-brand small,.nexus-brand small{font-size:0!important}
 .public-brand small:after,.nexus-brand small:after{font-size:9px!important}
+
+
+/* OSEN NEXUS — layout balance and responsive polish */
+.public-home{width:100%;max-width:none;margin:0 auto;overflow:hidden}
+.public-nav{width:min(100%,1600px);margin:0 auto;padding-left:clamp(18px,4vw,64px)!important;padding-right:clamp(18px,4vw,64px)!important}
+.public-hero{width:min(100%,1600px);margin:0 auto;grid-template-columns:minmax(0,1.58fr) minmax(300px,.92fr)!important;gap:clamp(12px,2vw,34px)!important;padding-left:clamp(22px,3vw,48px)!important;padding-right:clamp(22px,3vw,48px)!important}
+.hero-copy{width:100%;min-width:0}
+.hero-workspaces{width:100%;max-width:none!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:clamp(12px,1.5vw,24px)!important}
+.hero-workspace-card{width:100%;min-width:0;min-height:440px!important;padding:24px clamp(15px,1.7vw,27px) 19px!important}
+.studio-title{font-size:clamp(21px,2vw,32px)!important;line-height:1.15!important}
+.studio-desc{max-width:330px!important}
+.studio-features{padding-left:2%!important;overflow-wrap:anywhere}
+.studio-cta{width:100%;display:block;white-space:normal;line-height:1.35}
+.hero-art{width:100%;min-width:0;min-height:560px!important}
+.art-core{width:min(78%,300px)!important;height:430px!important}
+.art-left{left:0!important}
+.art-right{right:0!important}
+.public-footer{width:min(100%,1600px);margin-left:auto!important;margin-right:auto!important;padding-left:clamp(18px,4vw,64px)!important;padding-right:clamp(18px,4vw,64px)!important}
+.public-login:focus-visible,.hero-workspace-card:focus-visible,.studio-cta:focus-visible,.back-home-btn:focus-visible{outline:3px solid #fff2a6;outline-offset:4px}
+.hero-workspace-card{overflow:hidden!important}
+.hero-workspace-card:before{pointer-events:none}
+@media(max-width:1050px){
+ .public-hero{grid-template-columns:minmax(0,1.25fr) minmax(240px,.75fr)!important;padding-left:22px!important;padding-right:22px!important}
+ .hero-workspace-card{min-height:410px!important;padding:22px 14px 16px!important}
+ .studio-label{padding:8px 12px!important;font-size:10px!important}
+ .hero-art{min-height:490px!important}
+ .art-core{height:370px!important}
+}
+@media(max-width:760px){
+ .public-nav{width:100%;padding:8px 12px!important}
+ .public-hero{width:100%;display:flex!important;flex-direction:column!important;gap:8px!important;padding:25px 14px 18px!important}
+ .hero-copy{width:100%}
+ .hero-workspaces{grid-template-columns:1fr!important;max-width:540px!important;margin:20px auto 0!important;gap:23px!important}
+ .hero-workspace-card{min-height:320px!important;padding:20px 18px 17px!important}
+ .hero-art{width:100%;min-height:320px!important;height:320px!important;margin:10px auto 0!important}
+ .art-core{width:155px!important;height:275px!important}
+ .art-left{left:3%!important}
+ .art-right{right:3%!important}
+ .public-footer{width:100%;padding:15px 12px!important}
+}
+@media(max-width:390px){
+ .public-brand b{font-size:16px!important}
+ .public-login{min-width:102px!important;font-size:8px!important}
+ .hero-copy h1{font-size:31px!important}
+ .studio-label{font-size:9px!important;padding:7px 9px!important}
+ .hero-workspace-card{padding-left:14px!important;padding-right:14px!important}
+ .studio-features{font-size:11px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .public-home:after{animation:none!important}
+}
