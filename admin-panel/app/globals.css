@@ -1656,3 +1656,42 @@ img,svg,video,canvas{max-width:100%}
 @media(max-width:720px){.login-stage{display:flex;flex-direction:column;gap:0;padding:20px 14px 14px}.login-visual{width:100%;min-height:270px;height:270px;border-radius:20px}.login-visual:before{inset:8px;border-radius:14px}.login-character{height:100%;width:78%}.login-visual-caption{left:17px;bottom:15px;grid-template-columns:30px auto;gap:7px}.login-visual-caption>span{width:30px;height:30px;font-size:17px;border-radius:9px}.login-visual-caption b{font-size:11px}.login-visual-caption small{font-size:5px;letter-spacing:1px}.login-art-tag{top:15px;right:15px;padding:8px 9px;font-size:6px}.login-panel-wrap{max-width:520px;margin-top:14px}.login-panel{padding:23px 20px;border-radius:19px}.login-panel-brand{margin-bottom:24px}.login-panel-brand>span{width:39px;height:39px;font-size:22px}.login-panel-brand b{font-size:12px}.login-panel h1{font-size:31px}.login-panel>p{font-size:10px}.login-panel form{margin-top:20px}.login-field{height:48px}.login-submit{height:49px}.login-security{font-size:6px;letter-spacing:.65px}.login-benefits{gap:9px;margin-top:13px}.login-benefits span{font-size:6px;letter-spacing:.3px}.login-page-footer{padding:10px 15px 16px;font-size:6px}}
 @media(max-width:380px){.login-visual{height:225px;min-height:225px}.login-panel{padding:19px 16px}.login-benefits{flex-direction:column;align-items:center}.login-page-footer{font-size:5px}}
 @media(prefers-reduced-motion:reduce){.login-character{animation:none}.login-spinner{animation:none}}
+
+
+/* MOBILE LOGIN VISIBILITY + CHARACTER LAYER FIX */
+.nexus-login-page .login-visual{isolation:isolate}
+.nexus-login-page .login-character{z-index:2;display:flex!important;align-items:flex-end;justify-content:center;visibility:visible!important;opacity:1!important;pointer-events:none}
+.nexus-login-page .login-character svg{display:block!important;visibility:visible!important;opacity:1!important;width:100%!important;height:100%!important;max-width:520px;overflow:visible;filter:drop-shadow(0 0 15px #e8bd5870)}
+.nexus-login-page .login-visual-grid{z-index:0;pointer-events:none}
+.nexus-login-page .login-orbit{z-index:1;pointer-events:none}
+.nexus-login-page .login-visual-caption,.nexus-login-page .login-art-tag{z-index:3}
+.nexus-login-page .login-panel-wrap{position:relative;z-index:4}
+.nexus-login-page .login-submit{display:block!important;visibility:visible!important;opacity:1!important;width:100%;min-height:50px;position:relative;z-index:5}
+@media(max-width:720px){
+ .nexus-login-page{min-height:100svh;overflow-x:hidden;overflow-y:auto}
+ .nexus-login-page .login-stage{width:100%;gap:0;padding:10px 12px 12px}
+ .nexus-login-page .login-visual{height:178px;min-height:178px;flex:0 0 178px}
+ .nexus-login-page .login-character{height:100%;width:74%;bottom:0}
+ .nexus-login-page .login-character svg{height:100%!important;width:100%!important}
+ .nexus-login-page .login-visual-caption{left:13px;bottom:10px}
+ .nexus-login-page .login-art-tag{top:11px;right:11px}
+ .nexus-login-page .login-panel-wrap{margin-top:10px}
+ .nexus-login-page .login-panel{padding:17px 17px 16px}
+ .nexus-login-page .login-panel-brand{margin-bottom:15px}
+ .nexus-login-page .login-panel-kicker{font-size:7px}
+ .nexus-login-page .login-panel h1{font-size:27px;margin:11px 0 6px}
+ .nexus-login-page .login-panel>p{font-size:9px;line-height:1.5}
+ .nexus-login-page .login-panel form{gap:7px;margin-top:12px}
+ .nexus-login-page .login-panel label{margin-top:4px;font-size:7px}
+ .nexus-login-page .login-field{height:42px}
+ .nexus-login-page .login-submit{height:46px;min-height:46px;margin-top:7px}
+ .nexus-login-page .login-security{margin-top:12px;font-size:5.5px}
+ .nexus-login-page .login-benefits{margin-top:9px;gap:7px}
+ .nexus-login-page .login-benefits span{font-size:5.5px}
+ .nexus-login-page .login-page-footer{padding:7px 13px 10px}
+}
+@media(max-width:380px){
+ .nexus-login-page .login-visual{height:155px;min-height:155px;flex-basis:155px}
+ .nexus-login-page .login-panel{padding:15px 14px}
+ .nexus-login-page .login-benefits{flex-direction:row;align-items:center}
+}
