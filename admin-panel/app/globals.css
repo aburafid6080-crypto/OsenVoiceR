@@ -1942,3 +1942,35 @@ img,svg,video,canvas{max-width:100%}
   color:#fff0b4!important;
   text-shadow:0 2px 0 #79551e,0 0 16px #e8bd5877;
 }
+
+
+/* OSEN AUREX — embossed 3D R login monogram */
+.nexus-login-page .aurex-mark{
+  position:relative;
+  isolation:isolate;
+  border:1px solid #ffe6a0!important;
+  background:linear-gradient(145deg,#fff1b8 0%,#d9aa48 18%,#785019 42%,#f4d47b 58%,#8b6224 78%,#f9e5a5 100%)!important;
+  color:#211605!important;
+  -webkit-text-fill-color:#211605;
+  text-shadow:
+    0 1px 0 #fff0b8,
+    0 2px 0 #c18d32,
+    0 3px 0 #875b1b,
+    0 4px 0 #4d3412,
+    0 6px 8px #000!important;
+  box-shadow:
+    inset 0 2px 3px #fff8c8,
+    inset 0 -4px 6px #4a2d0b,
+    0 5px 0 #50350f,
+    0 8px 16px #000b,
+    0 0 24px #e8bd5855!important;
+  transform:perspective(180px) rotateX(8deg);
+}
+.nexus-login-page .login-visual-caption>span.aurex-mark{
+  color:#211605!important;
+  font-size:24px!important;
+}
+.nexus-login-page .login-panel-brand>span.aurex-mark{
+  color:#211605!important;
+  font-size:27px!important;
+}
