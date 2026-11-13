@@ -692,3 +692,134 @@ html,body{width:100%;max-width:100%;overflow-x:clip}
  .public-footer>span:nth-child(2){flex-basis:100%;order:3;font-size:7px}
  .public-footer button{font-size:8px}
 }
+
+
+/* OSEN NEXUS RESPONSIVE DESIGN SYSTEM — final PC / tablet / phone pass.
+   Visual-only: preserves all existing sections, routes, buttons and app behavior. */
+.public-home{width:100%;max-width:100%;min-width:0;margin:0 auto;padding:0 0 22px}
+.public-nav{min-width:0;max-width:100%;padding:0 8px}
+.public-brand{min-width:0}
+.public-brand b{white-space:nowrap}
+.public-nav nav{min-width:0}
+.public-login{transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.public-login:hover{transform:translateY(-1px);border-color:#e4bd61;box-shadow:0 7px 20px #0005}
+.public-hero{isolation:isolate;min-width:0;max-width:100%;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:clamp(18px,3vw,48px);padding:clamp(30px,4vw,58px) clamp(22px,3vw,48px);border-radius:0 0 2px 2px}
+.hero-copy{min-width:0}
+.hero-copy h1{max-width:720px;text-wrap:balance}
+.hero-copy p{max-width:590px}
+.hero-art{position:relative;min-width:0;width:100%;max-width:680px;justify-self:center;min-height:350px;height:clamp(350px,34vw,480px);overflow:visible;isolation:isolate}
+.art-core{z-index:3}
+.art-orbit{pointer-events:none}
+.art-card{z-index:4}
+.hero-actions a,.hero-actions button{transition:transform .18s ease,filter .18s ease,box-shadow .18s ease}
+.hero-actions a:hover,.hero-actions button:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.public-footer{min-width:0}
+.public-footer span,.public-footer button{min-width:0}
+.dashboard-content .welcome-panel,
+.dashboard-content .metric-card,
+.dashboard-content .panel-card{backdrop-filter:blur(8px)}
+.dashboard-content .panel-card{transition:border-color .2s ease,box-shadow .2s ease}
+.dashboard-content .panel-card:hover{box-shadow:0 16px 34px #0005}
+.dashboard-content input{max-width:100%}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #7bdcff;outline-offset:3px}
+
+/* Wide desktop */
+@media(min-width:1200px){
+ .nexus-shell{padding-left:clamp(30px,3vw,52px);padding-right:clamp(30px,3vw,52px)}
+ .public-nav{height:82px}
+ .public-hero{min-height:490px}
+ .hero-copy h1{font-size:clamp(58px,5.1vw,82px)}
+ .hero-art{height:clamp(390px,35vw,500px)}
+ .nexus-workspace{grid-template-columns:236px minmax(0,1fr);gap:30px}
+}
+
+/* Tablet: spacious stacked dashboard with a compact bottom workspace dock */
+@media(min-width:721px) and (max-width:1100px){
+ .nexus-shell{padding-left:24px!important;padding-right:24px!important}
+ .nexus-workspace{display:flex!important;flex-direction:column!important;gap:17px!important}
+ .side-nav{position:fixed!important;left:14px!important;right:14px!important;top:auto!important;bottom:max(12px,env(safe-area-inset-bottom))!important;height:70px!important;min-height:0!important;z-index:100!important;display:flex!important;flex-direction:row!important;justify-content:space-between!important;overflow-x:auto!important;overflow-y:hidden!important;padding:7px!important}
+ .side-nav>a{flex:1 0 90px!important;max-width:130px!important;min-width:80px!important;flex-direction:column!important;justify-content:center!important;gap:5px!important;padding:6px!important;font-size:9px!important}
+ .side-nav>a span{width:auto!important;font-size:17px!important}
+ .nav-caption,.sidebar-bottom{display:none!important}
+ .nexus-shell{padding-bottom:105px!important}
+ .dashboard-content .welcome-panel{padding:22px!important}
+ .dashboard-content .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .dashboard-content .content-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .dashboard-content .content-grid>.span-two{grid-column:1/-1!important}
+ .public-hero{grid-template-columns:minmax(0,1fr) minmax(280px,.85fr);gap:18px;padding:32px 22px}
+ .hero-copy h1{font-size:clamp(43px,6vw,62px)}
+ .hero-art{height:330px;min-height:300px}
+}
+
+/* Phones */
+@media(max-width:720px){
+ .nexus-shell{padding-left:13px!important;padding-right:13px!important}
+ .public-home{padding-bottom:16px}
+ .public-nav{grid-template-columns:minmax(0,1fr) auto!important;grid-template-areas:"brand login" "links links"!important;gap:9px 8px!important;padding:9px 0 10px!important}
+ .public-brand{gap:9px}
+ .public-crown{width:39px;height:39px;border-radius:12px;font-size:24px}
+ .public-brand b{font-size:13px;letter-spacing:1px}
+ .public-brand small{font-size:6px;letter-spacing:1.25px}
+ .public-login{min-height:39px;padding:0 11px!important;font-size:8px!important}
+ .public-nav nav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;width:100%;padding-top:9px!important;border-top:1px solid #1d394b}
+ .public-nav nav>a{min-width:0!important;width:100%;min-height:40px;padding:8px 10px!important;font-size:10px!important}
+ .public-hero{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:0!important;padding:22px 14px 14px!important;border-radius:0 0 16px 16px}
+ .hero-copy{width:100%;max-width:none}
+ .hero-eyebrow{padding:8px 11px;font-size:8px;letter-spacing:1px}
+ .hero-copy h1{font-size:clamp(38px,10.5vw,52px)!important;line-height:1.01!important;letter-spacing:-2px!important;margin:16px 0 12px!important}
+ .hero-copy p{font-size:12px!important;line-height:1.7!important;max-width:100%}
+ .hero-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;margin-top:18px!important}
+ .hero-primary,.hero-secondary{display:flex;justify-content:center;align-items:center;min-width:0;min-height:46px!important;padding:7px 5px!important;text-align:center;font-size:8px!important;letter-spacing:.15px!important}
+ .hero-trust{display:flex;flex-wrap:wrap;gap:8px 12px!important;margin-top:15px!important;font-size:7px!important;letter-spacing:.7px}
+ .hero-art{width:100%;height:clamp(205px,58vw,270px)!important;min-height:205px!important;margin:5px auto 0!important;overflow:hidden!important}
+ .art-core{width:clamp(118px,34vw,150px)!important;height:clamp(118px,34vw,150px)!important}
+ .art-left{left:0!important;top:15%!important}
+ .art-right{right:0!important;bottom:9%!important}
+ .art-card{max-width:37%;overflow:hidden}
+ .public-footer{display:flex!important;align-items:center;justify-content:space-between!important;gap:9px!important;margin-top:14px;padding:14px 4px 18px!important;font-size:7px!important}
+ .public-footer>span:first-child{font-size:8px}
+ .public-footer>span:nth-child(2){flex-basis:100%;order:3;text-align:center;font-size:6px}
+ .public-footer button{font-size:7px!important}
+ .nexus-workspace{padding-top:11px!important}
+ .dashboard-content .welcome-panel{padding:17px 15px!important;border-radius:16px!important}
+ .dashboard-content .welcome-panel h1{font-size:clamp(22px,6vw,29px)!important;overflow-wrap:normal!important}
+ .dashboard-content .welcome-panel p{font-size:11px!important}
+ .dashboard-content .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+ .dashboard-content .metric-card{min-width:0;padding:13px 11px!important;min-height:128px}
+ .dashboard-content .metric-card>span{font-size:7px;line-height:1.45}
+ .dashboard-content .metric-card>strong{font-size:21px}
+ .dashboard-content .content-grid{grid-template-columns:minmax(0,1fr)!important;gap:11px!important}
+ .dashboard-content .content-grid>section{grid-column:1!important;min-width:0}
+ .dashboard-content .panel-card{padding:17px 14px!important;border-radius:15px!important}
+ .dashboard-content .panel-heading h2{font-size:17px!important}
+ .dashboard-content .panel-card>p{font-size:11px!important;line-height:1.65}
+ .dashboard-content .inline-form{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:9px!important}
+ .dashboard-content .inline-form input{width:100%!important;min-height:45px!important}
+ .dashboard-content .inline-form button{width:100%!important;min-height:44px!important}
+ .dashboard-content .data-row,.dashboard-content .site-row{grid-template-columns:minmax(0,1fr) auto!important;gap:8px!important}
+ .dashboard-content .data-row code,.dashboard-content .site-row code{grid-column:1/-1!important;overflow-wrap:anywhere}
+ .dashboard-content .data-row>b{grid-column:1/-1!important}
+ .dashboard-content .data-row>small{display:none!important}
+ .nexus-footer{gap:8px!important;font-size:6px!important}
+ .side-nav{padding:5px 4px!important}
+ .side-nav>a{flex:1 0 62px!important;min-width:58px!important;max-width:90px!important;font-size:7px!important}
+}
+
+/* Small phones: prevent cramped owner controls and button wrapping */
+@media(max-width:390px){
+ .nexus-shell{padding-left:10px!important;padding-right:10px!important}
+ .public-nav{column-gap:6px!important}
+ .public-crown{width:35px;height:35px}
+ .public-brand b{font-size:11px}
+ .public-brand small{font-size:5px}
+ .public-login{padding:0 8px!important;font-size:7px!important}
+ .public-hero{padding-left:11px!important;padding-right:11px!important}
+ .hero-copy h1{font-size:37px!important}
+ .hero-primary,.hero-secondary{font-size:7px!important}
+ .hero-art{height:205px!important;min-height:205px!important}
+ .dashboard-content .metric-card{padding:11px 9px!important}
+ .dashboard-content .metric-card>span{font-size:6px}
+ .dashboard-content .metric-card>strong{font-size:19px}
+ .side-nav{left:6px!important;right:6px!important;height:62px!important}
+ .side-nav>a{flex-basis:56px!important;min-width:54px!important;font-size:6px!important}
+}
