@@ -848,3 +848,18 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #7bdc
 .picker-foot button,.workspace-switch{border:1px solid #35556b;border-radius:8px;background:#0a1925;color:#9cddf5;padding:9px 12px;font-size:9px;font-weight:800;cursor:pointer}
 .workspace-switch{width:100%;margin-bottom:14px;text-align:left}
 @media(max-width:640px){.workspace-picker{margin:12px auto 0;padding:16px}.picker-heading{margin-bottom:22px}.picker-grid{grid-template-columns:1fr;gap:13px}.workspace-tile{min-height:225px;padding:22px;border-radius:16px}.tile-icon{margin-bottom:18px}.picker-foot{flex-wrap:wrap}.picker-foot span:nth-child(2){display:none}}
+
+
+/* Workspace isolation: Website Center and Android App Center show only their own tools */
+.workspace-context{display:inline-flex;align-items:center;gap:8px;margin-bottom:12px;padding:7px 11px;border:1px solid #385c70;border-radius:999px;background:#0b1b28;color:#8bdfff;font-size:9px;font-weight:900;letter-spacing:1.4px}
+.dashboard-content[data-workspace="website"] .metric-grid,
+.dashboard-content[data-workspace="website"] #premium,
+.dashboard-content[data-workspace="website"] #app-control,
+.dashboard-content[data-workspace="website"] #users,
+.dashboard-content[data-workspace="website"] #activity,
+.dashboard-content[data-workspace="website"] #integrations{display:none!important}
+.dashboard-content[data-workspace="app"] #websites{display:none!important}
+.dashboard-content[data-workspace="website"] .content-grid{display:block!important}
+.dashboard-content[data-workspace="website"] #websites{display:block!important;width:100%}
+.workspace-switch:hover{border-color:#e6bf70;color:#f5d68d}
+@media(max-width:720px){.workspace-context{font-size:8px;margin-bottom:8px}.dashboard-content[data-workspace="website"] #websites{padding:16px 12px!important}}
