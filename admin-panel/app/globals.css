@@ -656,3 +656,20 @@ html,body{width:100%;max-width:100%;overflow-x:clip}
  }
  .public-menu-links a:hover{border-color:#28617b;background:#0e2635;color:#8fe4ff!important}
 }
+
+
+/* PUBLIC HOME NAV: keep only Home + Features; hide decorative card grids. */
+.public-nav nav{display:flex!important;align-items:center;justify-content:center;gap:12px}
+.public-nav nav>a{display:inline-flex;align-items:center;justify-content:center;min-width:82px;min-height:38px;padding:9px 16px;border:1px solid #24465a;border-radius:10px;color:#c5d8e5;text-decoration:none;font-size:10px;font-weight:800;letter-spacing:.35px}
+.public-nav nav>a:hover,.public-nav nav>a.public-active{border-color:#8c6a2d;background:linear-gradient(135deg,#2b2110,#101925);color:#f3ca69}
+.public-nav nav>a.public-feature-link{border-color:#28708d;background:linear-gradient(145deg,#102c3d,#091722);color:#8fe4ff}
+.public-stats,.feature-tiles{display:none!important}
+.public-features{grid-template-columns:minmax(0,1fr)!important}
+.features-intro{max-width:760px}
+@media(max-width:720px){
+ .public-nav{grid-template-columns:minmax(0,1fr) auto!important;grid-template-areas:"brand login" "links links"!important}
+ .public-nav nav{grid-area:links!important;display:grid!important;grid-template-columns:1fr 1fr;gap:9px!important;justify-content:stretch!important}
+ .public-nav nav>a{width:100%;min-height:42px;font-size:10px!important}
+ .public-features{padding:18px 3px 22px!important}
+ .features-intro h2{font-size:30px!important}
+}
