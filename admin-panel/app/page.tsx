@@ -4,7 +4,7 @@ type User = { user_id:string; premium:boolean; updated_at?:string };
 type Site = { id:string; name:string; domain:string|null; status:string; created_at:string };
 type Log = { id:number; actor_email:string; action:string; details:Record<string,unknown>; created_at:string };
 const rawUrl=process.env.NEXT_PUBLIC_SUPABASE_URL??"";
-const supabaseUrl=(()=>{try{const u=new URL(rawUrl.trim());return u.protocol+"//"+u.host}catch{return rawUrl.trim().replace(/\\/+$/,"")}})();
+const supabaseUrl=(()=>{try{const u=new URL(rawUrl.trim());return u.protocol+"//"+u.host}catch{return rawUrl.trim().replace(/\/+$/,"")}})();
 const anonKey=process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY??"";
 const OWNER="Abu Rafid";
 const nav=[["overview","Overview","◈"],["premium","Premium","◇"],["users","Users","▣"],["app-control","App control","⚙"],["websites","Websites","◎"],["activity","Activity log","≋"],["integrations","Integrations","⌘"]];
