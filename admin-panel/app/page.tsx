@@ -10,7 +10,7 @@ const OWNER="Abu Rafid";
 const nav=[["overview","Overview","◈"],["premium","Premium","◇"],["users","Users","▣"],["app-control","App control","⚙"],["websites","Websites","◎"],["activity","Activity log","≋"],["integrations","Integrations","⌘"]];
 export default function Home(){
  const[email,setEmail]=useState("");const[password,setPassword]=useState("");const[token,setToken]=useState("");
- const[busy,setBusy]=useState(false);const[activeSection,setActiveSection]=useState("overview");const[notice,setNotice]=useState("");const[noticeError,setNoticeError]=useState(false);
+ const[busy,setBusy]=useState(false);const[showLogin,setShowLogin]=useState(false);const[activeSection,setActiveSection]=useState("overview");const[notice,setNotice]=useState("");const[noticeError,setNoticeError]=useState(false);
  const[enabled,setEnabled]=useState(false);const[users,setUsers]=useState<User[]>([]);const[logs,setLogs]=useState<Log[]>([]);
  const[newId,setNewId]=useState("");const[newPass,setNewPass]=useState("");const[userSearch,setUserSearch]=useState("");
  const[maintenance,setMaintenance]=useState(false);const[forceUpdate,setForceUpdate]=useState(false);const[announcement,setAnnouncement]=useState("");
@@ -24,13 +24,50 @@ export default function Home(){
  async function api(action:string,extra:Record<string,unknown>={}){const r=await fetch("/api/admin",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({action,...extra})});const d=await r.json();if(!r.ok)throw new Error(d.error||"Request failed");return d;}
  async function run(action:string,extra:Record<string,unknown>={},success="Changes saved."){setBusy(true);setNotice("");setNoticeError(false);try{await api(action,extra);await loadDashboard();setNotice(success)}catch(e){setNotice(e instanceof Error?e.message:"Action failed");setNoticeError(true)}finally{setBusy(false)}}
  async function login(e:React.FormEvent){e.preventDefault();setBusy(true);setNotice("");setNoticeError(false);try{if(!supabaseUrl||!anonKey)throw new Error("Admin website environment is not configured.");const r=await fetch(supabaseUrl+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"Content-Type":"application/json",apikey:anonKey},body:JSON.stringify({email,password})});const d=await r.json();if(!r.ok)throw new Error(d.msg||d.message||"Login failed");await loadDashboard(d.access_token);setToken(d.access_token);setPassword("")}catch(e){setNotice(e instanceof Error?e.message:"Could not sign in");setNoticeError(true)}finally{setBusy(false)}}
- function logout(){setToken("");setUsers([]);setSites([]);setLogs([]);setEnabled(false);setNotice("")}
+ function logout(){setToken("");setShowLogin(false);setUsers([]);setSites([]);setLogs([]);setEnabled(false);setNotice("")}
  const filteredUsers=useMemo(()=>users.filter(u=>u.user_id.toLowerCase().includes(userSearch.toLowerCase())),[users,userSearch]);
  const filteredSites=useMemo(()=>sites.filter(s=>s.name.toLowerCase().includes(siteSearch.toLowerCase())),[sites,siteSearch]);
  const premiumCount=users.filter(u=>u.premium).length;
  return <main className="nexus-shell">
   <header className="nexus-topbar"><a className="nexus-brand" href="#overview"><span className="brand-mark">O</span><span><b>OSEN <i>NEXUS</i></b><small>PRIVATE OWNER CONSOLE</small></span></a><div className="topbar-right"><span className="secure-state"><i/> SECURE ADMIN</span>{token&&<div className="owner-chip"><span className="owner-avatar">AR</span><span><b>{OWNER}</b><small>OWNER</small></span><button className="logout-btn" onClick={logout}>LOG OUT</button></div>}</div></header>
-  {!token?<section className="login-wrap"><div className="login-card"><div className="login-kicker"><span>✦</span> RESTRICTED ACCESS <span className="login-secure">SECURE</span></div><h1>Welcome <em>back.</em></h1><p>Sign in to your private OSEN NEXUS control center.</p><form onSubmit={login}><label htmlFor="admin-email">ADMIN EMAIL</label><input id="admin-email" type="email" autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Enter owner email" required/><label htmlFor="admin-password">PASSWORD</label><input id="admin-password" type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter password" required/><button className="primary-btn" disabled={busy}>{busy?"VERIFYING…":"SECURE LOGIN　→"}</button></form><div className="login-note">PRIVATE OWNER ACCESS ONLY · OSEN NEXUS</div>{notice&&<div className={noticeError?"alert error":"alert"}>{notice}</div>}</div></section>:<div className="nexus-workspace">
+  {!token?(!showLogin?<div className="public-home">
+  <header className="public-nav">
+   <a className="public-brand" href="#home"><span className="public-crown">♛</span><span><b>OSEN <em>NEXUS</em></b><small>PRIVATE OWNER CONSOLE</small></span></a>
+   <nav><a className="public-active" href="#home">Home</a><a href="#features">Features</a><a href="#platform">Platform</a><a href="#security">Security</a></nav>
+   <button className="public-login" onClick={()=>setShowLogin(true)}>OWNER LOGIN ↗</button>
+  </header>
+  <section className="public-hero" id="home">
+   <div className="hero-copy"><span className="hero-eyebrow"><i/> WELCOME TO OSEN NEXUS</span><h1>Control. Manage.<br/><em>Grow.</em></h1><p>Your private workspace to manage OSEN apps, premium access and website projects — all from one secure place.</p>
+    <div className="hero-actions"><button className="hero-primary" onClick={()=>setShowLogin(true)}>↗　GO TO DASHBOARD</button><a className="hero-secondary" href="#features">✦　EXPLORE FEATURES</a></div>
+    <div className="hero-trust"><span><i/> OWNER-ONLY ACCESS</span><span>BLACK · SKY BLUE · GOLD</span></div>
+   </div>
+   <div className="hero-art" aria-label="Original OSEN Nexus gaming-inspired artwork">
+    <div className="art-orbit orbit-one"/><div className="art-orbit orbit-two"/>
+    <div className="art-core"><span className="core-crown">♛</span><b>OSEN</b><strong>NEXUS</strong><small>CONTROL CENTER</small></div>
+    <div className="art-card art-left"><span>✦</span><b>APP CONTROL</b><small>ONE PRIVATE WORKSPACE</small></div>
+    <div className="art-card art-right"><span>🐟</span><b>NEXUS FISH</b><small>YOUR DIGITAL COMPANION</small></div>
+    <div className="art-spark spark-a">✧</div><div className="art-spark spark-b">✦</div><div className="art-spark spark-c">✧</div>
+   </div>
+  </section>
+  <section className="public-stats" id="platform">
+   <article><span className="stat-symbol blue">◎</span><div><b>PRIVATE</b><small>Owner Workspace</small></div></article>
+   <article><span className="stat-symbol gold">◇</span><div><b>PREMIUM</b><small>Access Management</small></div></article>
+   <article><span className="stat-symbol violet">▦</span><div><b>PROJECTS</b><small>Website Manager</small></div></article>
+   <article><span className="stat-symbol green">⬡</span><div><b>SECURE</b><small>Admin Controls</small></div></article>
+  </section>
+  <section className="public-features" id="features">
+   <div className="features-intro"><span className="hero-eyebrow">✦　THE NEXUS WORKSPACE</span><h2>Powerful tools.<br/><em>One control center.</em></h2><p>Choose a workspace area to sign in and continue managing your OSEN platform.</p><button className="hero-primary" onClick={()=>setShowLogin(true)}>OPEN OWNER CONSOLE　→</button></div>
+   <div className="feature-tiles">
+    <button onClick={()=>{setActiveSection("premium");setShowLogin(true)}}><span className="tile-icon gold">♛</span><b>Premium Access</b><small>Manage premium settings</small></button>
+    <button onClick={()=>{setActiveSection("users");setShowLogin(true)}}><span className="tile-icon blue">♙</span><b>User Management</b><small>Review access records</small></button>
+    <button onClick={()=>{setActiveSection("app-control");setShowLogin(true)}}><span className="tile-icon green">⚙</span><b>App Control</b><small>Remote app configuration</small></button>
+    <button onClick={()=>{setActiveSection("websites");setShowLogin(true)}}><span className="tile-icon violet">▦</span><b>Website Projects</b><small>Organize project drafts</small></button>
+    <button onClick={()=>{setActiveSection("activity");setShowLogin(true)}}><span className="tile-icon blue">≋</span><b>Activity Log</b><small>Review admin activity</small></button>
+    <button onClick={()=>{setActiveSection("integrations");setShowLogin(true)}}><span className="tile-icon gold">⌘</span><b>Integrations</b><small>Connect platform services</small></button>
+   </div>
+  </section>
+  <footer className="public-footer"><span>♛　OSEN NEXUS</span><span>CONTROL WITH CONFIDENCE · BUILT FOR YOUR WORKFLOW</span><button onClick={()=>setShowLogin(true)}>SECURE OWNER LOGIN ↗</button></footer>
+ </div>:<section className="login-wrap"><div className="login-card"><div className="login-kicker"><span>✦</span> RESTRICTED ACCESS <span className="login-secure">SECURE</span></div><h1>Welcome <em>back.</em></h1><p>Sign in to your private OSEN NEXUS control center.</p><form onSubmit={login}><label htmlFor="admin-email">ADMIN EMAIL</label><input id="admin-email" type="email" autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Enter owner email" required/><label htmlFor="admin-password">PASSWORD</label><input id="admin-password" type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter password" required/><button className="primary-btn" disabled={busy}>{busy?"VERIFYING…":"SECURE LOGIN　→"}</button></form><div className="login-note">PRIVATE OWNER ACCESS ONLY · OSEN NEXUS</div>{notice&&<div className={noticeError?"alert error":"alert"}>{notice}</div>}</div></section>):<div className="nexus-workspace">
    <aside className="side-nav"><div className="nav-caption">WORKSPACE</div>{nav.map(([id,label,ico])=><a key={id} href={"#"+id} aria-current={activeSection===id?"page":undefined} className={activeSection===id?"nav-active":""} onClick={()=>setActiveSection(id)}><span>{ico}</span>{label}</a>)}<div className="sidebar-bottom"><i/> SYSTEM READY<small>Owner-only workspace</small></div></aside>
    <div className="dashboard-content" data-active={activeSection}>
     <section id="overview" className="welcome-panel"><div><div className="section-kicker">CONTROL CENTER　/　OVERVIEW</div><h1>Welcome back, <em>{OWNER}.</em></h1><p>Your private workspace to manage OSEN apps, access and website projects.</p></div><div className="welcome-status"><i/> PRIVATE WORKSPACE</div></section>
