@@ -72,13 +72,17 @@ async function db(path: string, init: RequestInit = {}) {
 export async function GET(req: NextRequest) {
   try {
     await authorize(req);
-    const [settings, users] = await Promise.all([
+    const [settings, users, configs, sites] = await Promise.all([
       db("app_settings?select=premium_enabled&id=eq.main"),
       db("premium_users?select=user_id,premium,updated_at&order=updated_at.desc"),
+      db("app_config?select=maintenance_mode,force_update,announcement&id=eq.main").catch(() => []),
+      db("website_projects?select=id,name,domain,status,created_at&order=created_at.desc").catch(() => []),
     ]);
     return NextResponse.json({
       settings: settings?.[0] || { premium_enabled: false },
       users: users || [],
+      config: configs?.[0] || { maintenance_mode: false, force_update: false, announcement: "" },
+      sites: sites || [],
     });
   } catch (error) {
     return NextResponse.json(
@@ -147,6 +151,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true });
     }
 
+    if (body.action === "set_app_config") {
+      const patch: Record<string, unknown> = {};
+      if (typeof body.maintenance_mode === "boolean") patch.maintenance_mode = body.maintenance_mode;
+      if (typeof body.force_update === "boolean") patch.force_update = body.force_update;
+      if (typeof body.announcement === "string" && body.announcement.length <= 500) patch.announcement = body.announcement;
+      if (!Object.keys(patch).length) throw new Error("No valid settings supplied.");
+      await db("app_config?id=eq.main", { method: "PATCH", body: JSON.stringify(patch) });
+      return NextResponse.json({ ok: true });
+    }
+    if (body.action === "create_site_project") {
+      if (typeof body.name !== "string" || !body.name.trim() || body.name.trim().length > 80) throw new Error("Project name must be 1–80 characters.");
+      const created = await db("website_projects", { method: "POST", body: JSON.stringify({ name: body.name.trim(), status: "draft" }) });
+      return NextResponse.json({ ok: true, project: Array.isArray(created) ? created[0] : created });
+    }
     return NextResponse.json({ error: "Unknown action." }, { status: 400 });
   } catch (error) {
     return NextResponse.json(
