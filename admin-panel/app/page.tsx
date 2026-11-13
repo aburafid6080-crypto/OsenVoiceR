@@ -8,7 +8,7 @@ const supabaseUrl=(()=>{try{const u=new URL(rawUrl.trim());return u.protocol+"//
 const anonKey=process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY??"";
 const OWNER="Abu Rafid";
 const appNav=[["overview","Overview","◈"],["premium","Premium","◇"],["users","Users","▣"],["app-control","App control","⚙"],["activity","Activity log","≋"],["integrations","Integrations","⌘"]];
-const websiteNav=[["websites","Website projects","◎"],["activity","Activity log","≋"],["integrations","Hosting integrations","⌘"]];
+const websiteNav=[["websites","Website projects","◎"]];
 export default function Home(){
  const[email,setEmail]=useState("");const[password,setPassword]=useState("");const[token,setToken]=useState("");
  const[busy,setBusy]=useState(false);const[showLogin,setShowLogin]=useState(false);const[workspace,setWorkspace]=useState<"chooser"|"website"|"app">("chooser");const[mobileMenuOpen,setMobileMenuOpen]=useState(false);const[activeSection,setActiveSection]=useState("overview");const[notice,setNotice]=useState("");const[noticeError,setNoticeError]=useState(false);
