@@ -22,14 +22,15 @@ async function audit(user:any,action:string,details:Record<string,unknown>={}){
 export async function GET(req:NextRequest){
  try{
   await authorize(req);
-  const [settings,users,configs,sites,logs]=await Promise.all([
+  const [settings,users,configs,sites,appProjects,logs]=await Promise.all([
    db("app_settings?select=premium_enabled&id=eq.main"),
    db("premium_users?select=user_id,premium,updated_at&order=updated_at.desc"),
    db("app_config?select=maintenance_mode,force_update,announcement&id=eq.main").catch(()=>[]),
    db("website_projects?select=id,name,domain,status,created_at&order=created_at.desc").catch(()=>[]),
+   db("app_projects?select=id,name,package_name,platform,status,created_at&order=created_at.desc").catch(()=>[]),
    db("admin_audit_logs?select=id,actor_email,action,details,created_at&order=created_at.desc&limit=25").catch(()=>[])
   ]);
-  return NextResponse.json({settings:settings?.[0]||{premium_enabled:false},users:users||[],config:configs?.[0]||{maintenance_mode:false,force_update:false,announcement:""},sites:sites||[],logs:logs||[]});
+  return NextResponse.json({settings:settings?.[0]||{premium_enabled:false},users:users||[],config:configs?.[0]||{maintenance_mode:false,force_update:false,announcement:""},sites:sites||[],appProjects:appProjects||[],logs:logs||[]});
  }catch(error){return NextResponse.json({error:error instanceof Error?error.message:"Unauthorized"},{status:401});}
 }
 export async function POST(req:NextRequest){
@@ -64,6 +65,11 @@ export async function POST(req:NextRequest){
    if(!Object.keys(patch).length)throw new Error("No valid settings supplied.");
    await db("app_config?id=eq.main",{method:"PATCH",body:JSON.stringify({...patch,updated_at:new Date().toISOString()})});
    await audit(user,"set_app_config",patch);return NextResponse.json({ok:true});
+  }
+  if(body.action==="create_app_project"){
+   if(typeof body.name!=="string"||!body.name.trim()||body.name.trim().length>80)throw new Error("App project name must be 1–80 characters.");
+   const created=await db("app_projects",{method:"POST",body:JSON.stringify({name:body.name.trim(),platform:"android",status:"planning"})});
+   await audit(user,"create_app_project",{name:body.name.trim()});return NextResponse.json({ok:true,project:Array.isArray(created)?created[0]:created});
   }
   if(body.action==="create_site_project"){
    if(typeof body.name!=="string"||!body.name.trim()||body.name.trim().length>80)throw new Error("Project name must be 1–80 characters.");
