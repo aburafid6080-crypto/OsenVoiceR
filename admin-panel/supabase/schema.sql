@@ -51,3 +51,17 @@ alter table public.app_config enable row level security;
 alter table public.website_projects enable row level security;
 alter table public.admin_audit_logs enable row level security;
 -- No anon/authenticated policies: service-role access is server-only.
+
+ 
+-- Separate Android App Studio project records (independent from website_projects).
+create table if not exists public.app_projects (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  package_name text,
+  platform text not null default 'android' check (platform = 'android'),
+  status text not null default 'planning' check (status in ('planning','building','testing','ready','published','paused')),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+alter table public.app_projects enable row level security;
+-- No anon/authenticated policies: server service-role access only.
