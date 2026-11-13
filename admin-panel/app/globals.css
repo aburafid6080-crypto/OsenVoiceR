@@ -205,3 +205,27 @@ button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.45;curs
  .dashboard-content[data-active="activity"] .panel-card,
  .dashboard-content[data-active="integrations"] .panel-card{padding:20px 16px}
 }
+
+
+/* FIX: consistent branded action buttons (prevents browser-default grey buttons) */
+.inline-form button{
+ flex:0 0 auto;min-height:43px;padding:0 17px;border:1px solid #b18a43;border-radius:10px;
+ background:linear-gradient(110deg,#e8c36f 0%,#d7a94f 48%,#8bdcf3 100%);
+ color:#10131a;font-size:9px;font-weight:900;letter-spacing:.75px;
+ box-shadow:0 5px 17px #d9b45b20;transition:filter .18s,transform .18s,box-shadow .18s;
+}
+.inline-form button:hover:not(:disabled){filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 8px 22px #d9b45b30}
+.inline-form button:disabled{opacity:.42;filter:saturate(.55);cursor:not-allowed}
+.inline-form input{background:#070e16;color:#eff7fc}
+.inline-form input::placeholder{color:#718496}
+@media(min-width:721px){
+ .content-grid{align-items:stretch}
+ .panel-card{height:100%}
+ .content-grid>section:not(.span-two){min-height:205px}
+ .content-grid>#app-control{min-height:300px}
+ .content-grid>#premium{display:flex;flex-direction:column}
+ .content-grid>#premium .inline-form{margin-top:auto;padding-top:14px}
+}
+@media(max-width:720px){
+ .inline-form button{min-height:44px;width:100%;font-size:9px}
+}
