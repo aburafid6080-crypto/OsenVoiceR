@@ -421,3 +421,83 @@ html,body{width:100%;max-width:100%;overflow-x:clip}
  .dashboard-content .inline-form button{width:100%!important}
  .dashboard-content .data-row{grid-template-columns:minmax(0,1fr)!important;gap:9px!important}
 }
+
+
+/* OVERVIEW PAGE VISUAL POLISH ONLY — no navigation, content, or behavior changes */
+.dashboard-content[data-active="overview"] .welcome-panel{
+ position:relative;isolation:isolate;
+ border-color:#24516b!important;
+ background:
+  radial-gradient(ellipse at 88% 5%,#0c9ac52b,transparent 42%),
+  radial-gradient(ellipse at 4% 100%,#d5a63c12,transparent 36%),
+  linear-gradient(120deg,#101d2a 0%,#09121d 58%,#0b1925 100%)!important;
+ box-shadow:inset 0 1px #ffffff0b,0 12px 30px #0003!important
+}
+.dashboard-content[data-active="overview"] .welcome-panel:after{
+ content:"NEXUS";position:absolute;z-index:-1;right:24px;bottom:-17px;
+ font-size:clamp(52px,8vw,104px);font-weight:950;letter-spacing:-5px;
+ color:#78c9f008;pointer-events:none
+}
+.dashboard-content[data-active="overview"] .welcome-panel h1 em,
+.dashboard-content[data-active="overview"] .panel-heading h2 em{color:#e7bd62}
+.dashboard-content[data-active="overview"] .metric-card{
+ position:relative;isolation:isolate;overflow:hidden;
+ border-color:#23445a!important;
+ background:linear-gradient(145deg,#111e2b 0%,#0a121c 78%)!important;
+ box-shadow:inset 0 1px #ffffff08,0 10px 24px #0002!important;
+ transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease
+}
+.dashboard-content[data-active="overview"] .metric-card:after{
+ content:"";position:absolute;z-index:-1;width:125px;height:125px;right:-65px;bottom:-78px;
+ border-radius:50%;background:#27b9ef12;filter:blur(5px);pointer-events:none
+}
+.dashboard-content[data-active="overview"] .metric-card:hover{
+ transform:translateY(-2px);border-color:#3d8cac!important;
+ box-shadow:0 14px 28px #0004,0 0 18px #29b9ef0b!important
+}
+.dashboard-content[data-active="overview"] .metric-card.metric-gold{
+ border-color:#6c5429!important;
+ background:radial-gradient(circle at 100% 100%,#e7b84b18,transparent 48%),linear-gradient(145deg,#211b12,#0d131b 78%)!important
+}
+.dashboard-content[data-active="overview"] .metric-card>span,
+.dashboard-content[data-active="overview"] .panel-card .section-kicker{
+ color:#7ddfff!important;letter-spacing:1.35px
+}
+.dashboard-content[data-active="overview"] .content-grid{
+ align-items:start!important;grid-auto-rows:max-content!important
+}
+.dashboard-content[data-active="overview"] .content-grid>.panel-card{
+ align-self:start!important;height:auto!important;min-height:0!important;
+ border-color:#23475d!important;
+ background:radial-gradient(ellipse at 100% 0%,#0d63801a,transparent 42%),linear-gradient(145deg,#101d2a,#09111a 85%)!important;
+ box-shadow:inset 0 1px #ffffff08,0 12px 28px #0003!important
+}
+.dashboard-content[data-active="overview"] .panel-heading{align-items:center}
+.dashboard-content[data-active="overview"] .panel-icon{
+ border-color:#28617b!important;background:#0a2332!important;color:#8be2ff!important
+}
+.dashboard-content[data-active="overview"] .inline-form input{
+ background:#070e17!important;border-color:#29475d!important;color:#edf7ff!important
+}
+.dashboard-content[data-active="overview"] .inline-form input:focus{
+ border-color:#55cbed!important;box-shadow:0 0 0 3px #37bce51b!important;outline:0
+}
+.dashboard-content[data-active="overview"] .inline-form button,
+.dashboard-content[data-active="overview"] .metric-card .primary-btn{
+ background:linear-gradient(105deg,#edc66d,#e1ad43 58%,#91e2ed)!important;
+ color:#09111a!important;border:1px solid #eac56b!important;
+ box-shadow:0 5px 16px #d7a94320!important
+}
+.dashboard-content[data-active="overview"] .outline-btn{
+ border-color:#28617b!important;background:#0a1b28!important;color:#8cdef8!important
+}
+.dashboard-content[data-active="overview"] .setting-row{
+ border-color:#203b50!important
+}
+@media(max-width:720px){
+ .dashboard-content[data-active="overview"] .welcome-panel:after{right:8px;font-size:54px}
+ .dashboard-content[data-active="overview"] .metric-grid{gap:9px!important}
+ .dashboard-content[data-active="overview"] .metric-card{border-radius:13px!important}
+ .dashboard-content[data-active="overview"] .content-grid{gap:11px!important}
+ .dashboard-content[data-active="overview"] .content-grid>.panel-card{border-radius:15px!important}
+}
