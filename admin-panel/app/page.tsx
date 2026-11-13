@@ -68,7 +68,7 @@ export default function Home(){
        <circle cx="260" cy="266" r="192" fill="#e5b64b" opacity=".08" filter="url(#nxGlow)"/>
       </svg>
      </div>
-     <div className="login-visual-caption"><span className="aurex-mark">A</span><b>OSEN <i>AUREX</i></b><small>THE ULTIMATE CONTROL CENTER</small></div>
+     <div className="login-visual-caption"><span className="aurex-mark">R</span><b>OSEN <i>AUREX</i></b><small>THE ULTIMATE CONTROL CENTER</small></div>
      <div className="login-art-tag">PRIVATE OWNER ACCESS <span>✦</span></div>
     </div>
     <div className="login-panel-wrap">
@@ -90,7 +90,7 @@ export default function Home(){
      <div className="login-benefits"><span><b>✦</b> ADVANCED CONTROL</span><span><b>♢</b> ULTIMATE SECURITY</span><span><b>◇</b> PREMIUM EXPERIENCE</span></div>
     </div>
    </div>
-   <footer className="login-page-footer"><span>Ⓐ OSEN AUREX</span><span>OWNER ACCESS ONLY · © 2026</span></footer>
+   <footer className="login-page-footer"><span>Ⓡ OSEN AUREX</span><span>OWNER ACCESS ONLY · © 2026</span></footer>
   </section>:workspace==="chooser"?<section className="workspace-picker">
    <div className="picker-heading"><span className="section-kicker">ADMIN PANEL · PRIVATE OWNER</span><h1>Choose your <em>workspace</em></h1><p>Website projects and Android app controls stay in separate work areas.</p></div>
    <div className="picker-grid">
