@@ -673,3 +673,22 @@ html,body{width:100%;max-width:100%;overflow-x:clip}
  .public-features{padding:18px 3px 22px!important}
  .features-intro h2{font-size:30px!important}
 }
+
+
+/* PUBLIC HOME finishing pass: remove the empty lower promo block and keep a clean footer. */
+.public-features{display:none!important}
+.public-footer{
+ display:flex;align-items:center;justify-content:space-between;gap:16px;
+ padding:20px 4px!important;margin-top:22px;
+ border-top:1px solid #1c3b4e;
+ color:#8da8ba;font-size:9px;letter-spacing:1.1px;
+}
+.public-footer>span:first-child{color:#f1c75f;font-weight:900;letter-spacing:1.3px}
+.public-footer>span:nth-child(2){text-align:center}
+.public-footer button{border:0;background:transparent;color:#80ddff;font-size:9px;font-weight:800;letter-spacing:.8px;cursor:pointer}
+.public-footer button:hover{color:#f4c75d}
+@media(max-width:720px){
+ .public-footer{flex-wrap:wrap;justify-content:center;gap:9px 15px;padding:15px 4px 20px!important;text-align:center}
+ .public-footer>span:nth-child(2){flex-basis:100%;order:3;font-size:7px}
+ .public-footer button{font-size:8px}
+}
