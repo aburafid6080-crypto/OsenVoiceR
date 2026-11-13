@@ -333,3 +333,5 @@ button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.45;curs
  .public-features{grid-template-columns:1fr;gap:17px;padding:22px 2px}.features-intro h2{font-size:34px;margin:12px 0 8px}.features-intro p{font-size:11px;margin-bottom:13px}.feature-tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.feature-tiles button{min-height:116px;padding:12px 7px}.tile-icon{width:37px;height:37px;font-size:19px}.feature-tiles b{font-size:10px}.feature-tiles small{font-size:8px}
  .public-footer{flex-wrap:wrap;font-size:7px}.public-footer span:nth-child(2){order:3;width:100%}
 }
+
+.back-home-btn{display:block;width:100%;margin-top:13px;padding:11px;border:1px solid #29485c;border-radius:9px;background:#0a1722;color:#91dfff;font-size:9px;font-weight:800;letter-spacing:1px}.back-home-btn:hover{border-color:#d8b15e;color:#edc15d}
