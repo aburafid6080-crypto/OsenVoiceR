@@ -150,3 +150,58 @@ button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.45;curs
  .primary-btn{box-shadow:0 5px 18px #34b9ed22}
  .primary-btn:hover:not(:disabled){filter:brightness(1.08);transform:translateY(-1px)}
 }
+
+
+/* Real section navigation: show only the selected workspace page */
+.dashboard-content[data-active="premium"] .metric-grid,
+.dashboard-content[data-active="users"] .metric-grid,
+.dashboard-content[data-active="app-control"] .metric-grid,
+.dashboard-content[data-active="websites"] .metric-grid,
+.dashboard-content[data-active="activity"] .metric-grid,
+.dashboard-content[data-active="integrations"] .metric-grid{display:none}
+.dashboard-content[data-active="premium"] .content-grid>section:not(#premium),
+.dashboard-content[data-active="users"] .content-grid>section:not(#users),
+.dashboard-content[data-active="app-control"] .content-grid>section:not(#app-control),
+.dashboard-content[data-active="websites"] .content-grid>section:not(#websites),
+.dashboard-content[data-active="activity"] .content-grid>section:not(#activity),
+.dashboard-content[data-active="integrations"] .content-grid>section:not(#integrations){display:none}
+.dashboard-content[data-active="premium"] .content-grid,
+.dashboard-content[data-active="users"] .content-grid,
+.dashboard-content[data-active="app-control"] .content-grid,
+.dashboard-content[data-active="websites"] .content-grid,
+.dashboard-content[data-active="activity"] .content-grid,
+.dashboard-content[data-active="integrations"] .content-grid{grid-template-columns:minmax(0,1fr);min-height:55vh;align-content:start}
+.dashboard-content[data-active="premium"] .content-grid>section,
+.dashboard-content[data-active="users"] .content-grid>section,
+.dashboard-content[data-active="app-control"] .content-grid>section,
+.dashboard-content[data-active="websites"] .content-grid>section,
+.dashboard-content[data-active="activity"] .content-grid>section,
+.dashboard-content[data-active="integrations"] .content-grid>section{grid-column:1}
+.dashboard-content[data-active="premium"] .welcome-panel,
+.dashboard-content[data-active="users"] .welcome-panel,
+.dashboard-content[data-active="app-control"] .welcome-panel,
+.dashboard-content[data-active="websites"] .welcome-panel,
+.dashboard-content[data-active="activity"] .welcome-panel,
+.dashboard-content[data-active="integrations"] .welcome-panel{padding:4px 0 18px}
+.dashboard-content[data-active="premium"] .welcome-panel .welcome-status,
+.dashboard-content[data-active="users"] .welcome-panel .welcome-status,
+.dashboard-content[data-active="app-control"] .welcome-panel .welcome-status,
+.dashboard-content[data-active="websites"] .welcome-panel .welcome-status,
+.dashboard-content[data-active="activity"] .welcome-panel .welcome-status,
+.dashboard-content[data-active="integrations"] .welcome-panel .welcome-status{display:none}
+.dashboard-content .content-grid>section{animation:nexus-section-in .22s ease both}
+@keyframes nexus-section-in{from{opacity:.35;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:720px){
+ .dashboard-content[data-active="premium"] .content-grid,
+ .dashboard-content[data-active="users"] .content-grid,
+ .dashboard-content[data-active="app-control"] .content-grid,
+ .dashboard-content[data-active="websites"] .content-grid,
+ .dashboard-content[data-active="activity"] .content-grid,
+ .dashboard-content[data-active="integrations"] .content-grid{min-height:58vh}
+ .dashboard-content[data-active="premium"] .panel-card,
+ .dashboard-content[data-active="users"] .panel-card,
+ .dashboard-content[data-active="app-control"] .panel-card,
+ .dashboard-content[data-active="websites"] .panel-card,
+ .dashboard-content[data-active="activity"] .panel-card,
+ .dashboard-content[data-active="integrations"] .panel-card{padding:20px 16px}
+}
