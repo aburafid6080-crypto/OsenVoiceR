@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 type User = { user_id:string; premium:boolean; updated_at?:string };
 type Site = { id:string; name:string; domain:string|null; status:string; created_at:string };
 type AppProject = { id:string; name:string; package_name:string|null; platform:string; status:string; created_at:string };
@@ -32,6 +32,19 @@ export default function Home(){
  const filteredUsers=useMemo(()=>users.filter(u=>u.user_id.toLowerCase().includes(userSearch.toLowerCase())),[users,userSearch]);
  const filteredSites=useMemo(()=>sites.filter(s=>s.name.toLowerCase().includes(siteSearch.toLowerCase())),[sites,siteSearch]);
  const filteredAppProjects=useMemo(()=>appProjects.filter(p=>p.name.toLowerCase().includes(appSearch.toLowerCase())),[appProjects,appSearch]);
+ useEffect(()=>{
+  function handleWorkspaceBack(event:PopStateEvent){
+   const state=event.state as {osenAdmin?:boolean;workspace?:"website"|"app"}|null;
+   if(state?.osenAdmin){
+    if(state.workspace==="website"||state.workspace==="app")setWorkspace(state.workspace);
+   }else{
+    setWorkspace("chooser");
+    setMobileMenuOpen(false);
+   }
+  }
+  window.addEventListener("popstate",handleWorkspaceBack);
+  return()=>window.removeEventListener("popstate",handleWorkspaceBack);
+ },[]);
  const premiumCount=users.filter(u=>u.premium).length;
  const currentNav=workspace==="website"?websiteNav:appNav;
  return <main className="nexus-shell">
@@ -71,12 +84,12 @@ export default function Home(){
   </section>:workspace==="chooser"?<section className="workspace-picker">
    <div className="picker-heading"><span className="section-kicker">ADMIN PANEL · PRIVATE OWNER</span><h1>Choose your <em>workspace</em></h1><p>Website projects and Android app controls stay in separate work areas.</p></div>
    <div className="picker-grid">
-    <button className="workspace-tile website-tile" onClick={()=>{setWorkspace("website");setActiveSection("websites");loadDashboard(token,"website").catch(e=>{setNotice(e instanceof Error?e.message:"Could not load Website Studio");setNoticeError(true)})}}><span className="tile-icon">◎</span><span className="tile-kicker">01 / WEB PLATFORM</span><strong>WEBSITE CENTER</strong><small>Build and manage websites, projects, domains and hosting.</small><span className="tile-cta">OPEN WEBSITE CENTER ↗</span></button>
-    <button className="workspace-tile app-tile" onClick={()=>{setWorkspace("app");setActiveSection("overview");loadDashboard(token,"app").catch(e=>{setNotice(e instanceof Error?e.message:"Could not load App Studio");setNoticeError(true)})}}><span className="tile-icon">▣</span><span className="tile-kicker">02 / ANDROID PLATFORM</span><strong>ANDROID APP CENTER</strong><small>Manage app access, Premium, Voice and Game Booster controls.</small><span className="tile-cta">OPEN APP CENTER ↗</span></button>
+    <button className="workspace-tile website-tile" onClick={()=>{window.history.pushState({osenAdmin:true,workspace:"website"},"","#website-center");setWorkspace("website");setActiveSection("websites");loadDashboard(token,"website").catch(e=>{setNotice(e instanceof Error?e.message:"Could not load Website Studio");setNoticeError(true)})}}><span className="tile-icon">◎</span><span className="tile-kicker">01 / WEB PLATFORM</span><strong>WEBSITE CENTER</strong><small>Build and manage websites, projects, domains and hosting.</small><span className="tile-cta">OPEN WEBSITE CENTER ↗</span></button>
+    <button className="workspace-tile app-tile" onClick={()=>{window.history.pushState({osenAdmin:true,workspace:"app"},"","#app-center");setWorkspace("app");setActiveSection("overview");loadDashboard(token,"app").catch(e=>{setNotice(e instanceof Error?e.message:"Could not load App Studio");setNoticeError(true)})}}><span className="tile-icon">▣</span><span className="tile-kicker">02 / ANDROID PLATFORM</span><strong>ANDROID APP CENTER</strong><small>Manage app access, Premium, Voice and Game Booster controls.</small><span className="tile-cta">OPEN APP CENTER ↗</span></button>
    </div>
    <div className="picker-foot"><span>Ⓡ OSEN AUREX</span><span>ONE OWNER · TWO WORKSPACES</span><button onClick={logout}>LOG OUT</button></div>
   </section>:<div className="nexus-workspace">
-   <aside className="side-nav"><button className="workspace-switch" onClick={()=>setWorkspace("chooser")}>← ALL WORKSPACES</button><div className="nav-caption">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div>{currentNav.map(([id,label,ico])=><a key={id} href={"#"+id} aria-current={activeSection===id?"page":undefined} className={activeSection===id?"nav-active":""} onClick={()=>setActiveSection(id)}><span>{ico}</span>{label}</a>)}<div className="sidebar-bottom"><i/> SYSTEM READY<small>Owner-only workspace</small></div></aside>
+   <aside className="side-nav"><button className="workspace-switch" onClick={()=>{if(window.history.state?.osenAdmin)window.history.back();else{setWorkspace("chooser");window.history.replaceState(null,"",window.location.pathname)}}}>← ALL WORKSPACES</button><div className="nav-caption">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div>{currentNav.map(([id,label,ico])=><a key={id} href={"#"+id} aria-current={activeSection===id?"page":undefined} className={activeSection===id?"nav-active":""} onClick={()=>setActiveSection(id)}><span>{ico}</span>{label}</a>)}<div className="sidebar-bottom"><i/> SYSTEM READY<small>Owner-only workspace</small></div></aside>
    <div className="dashboard-content" data-active={activeSection} data-workspace={workspace}>
     <section id="overview" className="welcome-panel"><div className="workspace-context">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div><div><div className="section-kicker">CONTROL CENTER　/　{(currentNav.find(([id])=>id===activeSection)?.[1]||"OVERVIEW").toUpperCase()}</div><h1>{activeSection==="overview"?"Welcome back,":activeSection==="premium"?"Premium":"Manage"} <em>{activeSection==="overview"?OWNER:activeSection==="premium"?"Access":" "+(currentNav.find(([id])=>id===activeSection)?.[1]||"Workspace")}.</em></h1><p>{activeSection==="premium"?"Manage global Premium availability and securely update the app verification password.":activeSection==="overview"?"Your private workspace to manage OSEN apps, access and website projects.":`Manage ${currentNav.find(([id])=>id===activeSection)?.[1]||"workspace"} settings from your private OSEN AUREX console.`}</p></div><div className="welcome-status"><i/> PRIVATE WORKSPACE</div></section>
     <div className="metric-grid">
