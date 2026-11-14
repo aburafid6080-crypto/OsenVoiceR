@@ -3270,3 +3270,53 @@ body:has(.nexus-login-page){margin:0!important}
 @media(prefers-reduced-motion:reduce){
  .nexus-login-page .login-character img{animation:none!important}
 }
+
+
+/* Screenshot-driven fix: show the transparent conical-hat character */
+.nexus-login-page .login-visual{
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:hidden!important;
+}
+.nexus-login-page .login-character{
+  position:absolute!important;
+  top:0!important;right:0!important;bottom:0!important;left:27%!important;
+  width:73%!important;height:100%!important;
+  display:flex!important;align-items:flex-end!important;justify-content:center!important;
+  z-index:14!important;visibility:visible!important;opacity:1!important;
+  overflow:visible!important;pointer-events:none!important;
+}
+.nexus-login-page .login-character img{
+  display:block!important;
+  width:auto!important;height:90%!important;max-width:96%!important;max-height:90%!important;
+  object-fit:contain!important;object-position:center bottom!important;
+  visibility:visible!important;opacity:1!important;
+  -webkit-mask-image:none!important;mask-image:none!important;
+  filter:drop-shadow(0 10px 20px rgba(0,0,0,.76)) drop-shadow(0 0 22px rgba(255,183,35,.55))!important;
+  animation:aurex-character-float 7s ease-in-out infinite!important;
+}
+.nexus-login-page .login-left-brand{
+  position:absolute!important;left:4%!important;top:25%!important;bottom:auto!important;
+  width:25%!important;max-width:25%!important;
+  display:flex!important;flex-direction:column!important;align-items:flex-start!important;
+  z-index:20!important;
+}
+.nexus-login-page .login-orbit{z-index:2!important;pointer-events:none!important}
+.nexus-login-page .login-visual-caption{z-index:22!important}
+.nexus-login-page .login-art-tag{z-index:22!important}
+@media(max-width:720px){
+  .nexus-login-page .login-visual{position:relative!important;min-height:260px!important}
+  .nexus-login-page .login-character{
+    top:0!important;right:0!important;bottom:0!important;left:23%!important;
+    width:77%!important;height:100%!important;
+  }
+  .nexus-login-page .login-character img{
+    height:88%!important;max-height:88%!important;max-width:94%!important;
+  }
+  .nexus-login-page .login-left-brand{
+    left:3%!important;top:23%!important;width:24%!important;max-width:24%!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .nexus-login-page .login-character img{animation:none!important}
+}
