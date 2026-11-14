@@ -2088,3 +2088,41 @@ img,svg,video,canvas{max-width:100%}
     object-position:center bottom;
   }
 }
+
+
+/* Character hero fix: blend the portrait into the black-and-gold stage */
+.nexus-login-page .login-visual{isolation:isolate;overflow:hidden}
+.nexus-login-page .login-character{
+  width:min(100%,620px)!important;
+  height:100%!important;
+  display:flex!important;
+  align-items:flex-end!important;
+  justify-content:center!important;
+  overflow:visible!important;
+}
+.nexus-login-page .login-character img{
+  width:100%!important;
+  height:100%!important;
+  max-width:620px!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  border-radius:0!important;
+  /* soften the rectangular portrait edges into the existing dark stage */
+  -webkit-mask-image:radial-gradient(ellipse 78% 82% at 50% 48%,#000 61%,rgba(0,0,0,.92) 72%,transparent 100%);
+  mask-image:radial-gradient(ellipse 78% 82% at 50% 48%,#000 61%,rgba(0,0,0,.92) 72%,transparent 100%);
+  filter:contrast(1.06) saturate(.82) drop-shadow(0 16px 24px #000d) drop-shadow(0 0 28px #d9a83b66)!important;
+}
+.nexus-login-page .login-visual-caption,
+.nexus-login-page .login-art-tag{z-index:5!important}
+@media(max-width:720px){
+  .nexus-login-page .login-visual{
+    flex-basis:255px!important;height:255px!important;min-height:255px!important;
+  }
+  .nexus-login-page .login-character{width:100%!important;height:100%!important}
+  .nexus-login-page .login-character img{
+    width:100%!important;height:100%!important;max-width:none!important;
+    object-fit:contain!important;object-position:center bottom!important;
+    -webkit-mask-image:radial-gradient(ellipse 80% 84% at 50% 48%,#000 64%,rgba(0,0,0,.9) 76%,transparent 100%);
+    mask-image:radial-gradient(ellipse 80% 84% at 50% 48%,#000 64%,rgba(0,0,0,.9) 76%,transparent 100%);
+  }
+}
