@@ -2706,3 +2706,26 @@ img,svg,video,canvas{max-width:100%}
  .nexus-login-page .login-back-portrait{animation:aurex-gold-breathe 9s ease-in-out infinite!important}
  .nexus-login-page .login-orbit{animation:aurex-orbit-turn 34s linear infinite!important}
 }
+
+
+/* Final reference polish: no bottom feature buttons */
+.nexus-login-page .login-feature-strip{display:none!important}
+.nexus-login-page .login-stage{padding-bottom:clamp(22px,3vw,46px)!important}
+.nexus-login-page .login-page-footer{
+  display:flex!important;align-items:center!important;justify-content:space-between!important;
+  width:100%!important;max-width:1720px!important;margin:0 auto!important;
+  padding:18px clamp(18px,3vw,48px)!important;
+  color:#d4b56b!important;border-top:1px solid #b9872744!important;
+  background:linear-gradient(90deg,#050402,#100b03 50%,#050402)!important;
+  letter-spacing:.12em!important;text-transform:uppercase!important;
+}
+.nexus-login-page .login-panel{backdrop-filter:blur(8px)!important}
+.nexus-login-page .login-submit{transition:transform .35s ease,filter .35s ease,box-shadow .35s ease!important}
+.nexus-login-page .login-submit:hover{
+ transform:translateY(-2px)!important;filter:brightness(1.08)!important;
+ box-shadow:0 0 18px #ffcb36,0 0 42px #ffb51c99,inset 0 2px #fff!important;
+}
+@media(max-width:720px){
+ .nexus-login-page .login-stage{padding-bottom:12px!important}
+ .nexus-login-page .login-page-footer{margin-top:8px!important;padding:14px 12px!important;gap:10px!important}
+}
