@@ -12,7 +12,7 @@ const appNav=[["overview","Overview","◈"],["app-projects","App projects","▣"
 const websiteNav=[["websites","Website projects","◎"]];
 export default function Home(){
  const[email,setEmail]=useState("");const[password,setPassword]=useState("");const[token,setToken]=useState("");
- const[busy,setBusy]=useState(false);const[workspace,setWorkspace]=useState<"chooser"|"website"|"app">("chooser");const[mobileMenuOpen,setMobileMenuOpen]=useState(false);const[activeSection,setActiveSection]=useState("overview");const[notice,setNotice]=useState("");const[noticeError,setNoticeError]=useState(false);
+ const[busy,setBusy]=useState(false);const[workspace,setWorkspace]=useState<"home"|"chooser"|"website"|"app">("home");const[mobileMenuOpen,setMobileMenuOpen]=useState(false);const[activeSection,setActiveSection]=useState("overview");const[notice,setNotice]=useState("");const[noticeError,setNoticeError]=useState(false);
  const[enabled,setEnabled]=useState(false);const[users,setUsers]=useState<User[]>([]);const[logs,setLogs]=useState<Log[]>([]);
  const[newId,setNewId]=useState("");const[newPass,setNewPass]=useState("");const[userSearch,setUserSearch]=useState("");
  const[maintenance,setMaintenance]=useState(false);const[forceUpdate,setForceUpdate]=useState(false);const[announcement,setAnnouncement]=useState("");
@@ -27,18 +27,18 @@ export default function Home(){
  }
  async function api(action:string,extra:Record<string,unknown>={}){const websiteActions=["create_site_project","set_site_status","delete_site_project"];const endpoint=websiteActions.includes(action)?"/api/website-admin":"/api/admin";const r=await fetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({action,...extra})});const d=await r.json();if(!r.ok)throw new Error(d.error||"Request failed");return d;}
  async function run(action:string,extra:Record<string,unknown>={},success="Changes saved."){setBusy(true);setNotice("");setNoticeError(false);try{await api(action,extra);await loadDashboard();setNotice(success)}catch(e){setNotice(e instanceof Error?e.message:"Action failed");setNoticeError(true)}finally{setBusy(false)}}
- async function login(e:React.FormEvent){e.preventDefault();setBusy(true);setNotice("");setNoticeError(false);try{if(!supabaseUrl||!anonKey)throw new Error("Admin website environment is not configured.");const r=await fetch(supabaseUrl+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"Content-Type":"application/json",apikey:anonKey},body:JSON.stringify({email,password})});const d=await r.json();if(!r.ok)throw new Error(d.msg||d.message||"Login failed");await loadDashboard(d.access_token,workspace);setToken(d.access_token);setActiveSection("overview");setPassword("")}catch(e){setNotice(e instanceof Error?e.message:"Could not sign in");setNoticeError(true)}finally{setBusy(false)}}
+ async function login(e:React.FormEvent){e.preventDefault();setBusy(true);setNotice("");setNoticeError(false);try{if(!supabaseUrl||!anonKey)throw new Error("Admin website environment is not configured.");const r=await fetch(supabaseUrl+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"Content-Type":"application/json",apikey:anonKey},body:JSON.stringify({email,password})});const d=await r.json();if(!r.ok)throw new Error(d.msg||d.message||"Login failed");await loadDashboard(d.access_token,"app");await loadDashboard(d.access_token,"website");setToken(d.access_token);setWorkspace("home");window.history.replaceState({osenAdmin:true,workspace:"home"},"",window.location.pathname);setActiveSection("overview");setPassword("")}catch(e){setNotice(e instanceof Error?e.message:"Could not sign in");setNoticeError(true)}finally{setBusy(false)}}
  function logout(){setToken("");setUsers([]);setSites([]);setAppProjects([]);setLogs([]);setEnabled(false);setNotice("")}
  const filteredUsers=useMemo(()=>users.filter(u=>u.user_id.toLowerCase().includes(userSearch.toLowerCase())),[users,userSearch]);
  const filteredSites=useMemo(()=>sites.filter(s=>s.name.toLowerCase().includes(siteSearch.toLowerCase())),[sites,siteSearch]);
  const filteredAppProjects=useMemo(()=>appProjects.filter(p=>p.name.toLowerCase().includes(appSearch.toLowerCase())),[appProjects,appSearch]);
  useEffect(()=>{
   function handleWorkspaceBack(event:PopStateEvent){
-   const state=event.state as {osenAdmin?:boolean;workspace?:"website"|"app"}|null;
+   const state=event.state as {osenAdmin?:boolean;workspace?:"home"|"chooser"|"website"|"app"}|null;
    if(state?.osenAdmin){
-    if(state.workspace==="website"||state.workspace==="app")setWorkspace(state.workspace);
+    if(state.workspace==="home"||state.workspace==="chooser"||state.workspace==="website"||state.workspace==="app")setWorkspace(state.workspace);
    }else{
-    setWorkspace("chooser");
+    setWorkspace("home");
     setMobileMenuOpen(false);
    }
   }
@@ -47,8 +47,52 @@ export default function Home(){
  },[]);
  const premiumCount=users.filter(u=>u.premium).length;
  const currentNav=workspace==="website"?websiteNav:appNav;
+ function openWorkspace(target:"website"|"app"){window.history.pushState({osenAdmin:true,workspace:target},"",target==="website"?"#website-center":"#app-center");setWorkspace(target);setActiveSection(target==="website"?"websites":"overview");loadDashboard(token,target).catch(e=>{setNotice(e instanceof Error?e.message:"Could not load workspace");setNoticeError(true)})}
  return <main className="nexus-shell">
   {token&&<header className="nexus-topbar"><a className="nexus-brand" href="#overview"><span className="brand-mark">R</span><span><b>OSEN <i>AUREX</i></b><small>ADMIN PANEL · PRIVATE OWNER</small></span></a><div className="topbar-right"><span className="secure-state"><i/> SECURE ADMIN</span>{token&&<div className="owner-chip"><span className="owner-avatar">AR</span><span><b>{OWNER}</b><small>OWNER</small></span><button className="logout-btn" onClick={logout}>LOG OUT</button></div>}</div></header>}
+  {token&&workspace==="home"?<section className="aurex-dashboard">
+   <aside className="aurex-sidebar">
+    <div className="aurex-side-brand"><span>R</span><b>OSEN AUREX<small>ADMIN PANEL</small></b></div>
+    <button className="aurex-side-link active" onClick={()=>setWorkspace("home")}>⌂　Dashboard</button>
+    <button className="aurex-side-link" onClick={()=>openWorkspace("website")}>◎　Website Center</button>
+    <button className="aurex-side-link" onClick={()=>openWorkspace("app")}>▣　Android App Center</button>
+    <button className="aurex-side-link" onClick={()=>{openWorkspace("app");setActiveSection("users")}}>♙　Users Management</button>
+    <button className="aurex-side-link" onClick={()=>{openWorkspace("app");setActiveSection("premium")}}>♛　Premium Control</button>
+    <button className="aurex-side-link" onClick={()=>{openWorkspace("app");setActiveSection("activity")}}>▥　Analytics / Activity</button>
+    <button className="aurex-side-link" onClick={()=>{openWorkspace("app");setActiveSection("app-control")}}>⚙　Settings</button>
+    <button className="aurex-side-link" onClick={()=>{openWorkspace("app");setActiveSection("integrations")}}>⬡　Security & Integrations</button>
+    <button className="aurex-logout" onClick={logout}>⇥　LOG OUT</button>
+    <div className="aurex-side-tag">OSEN AUREX<small>Powering Your Digital World</small></div>
+   </aside>
+   <div className="aurex-main">
+    <header className="aurex-welcome"><div><span className="aurex-crown">♛</span><div><b>Welcome Back, <em>{OWNER}</em></b><small>Manage your workspace with power and ease.</small></div></div><span className="aurex-online">● Online</span><span className="aurex-profile">AR　 ADMIN</span></header>
+    <div className="aurex-stats">
+     <article><span>♟</span><b>{users.length}</b><strong>Total Users</strong><small>Live records</small></article>
+     <article><span>◎</span><b>{sites.length}</b><strong>Website Projects</strong><small>Saved projects</small></article>
+     <article><span>▣</span><b>{appProjects.length}</b><strong>App Projects</strong><small>Saved projects</small></article>
+     <article><span>♛</span><b>{premiumCount}</b><strong>Premium Users</strong><small>{enabled?"Premium enabled":"Premium disabled"}</small></article>
+    </div>
+    <div className="aurex-dash-grid">
+     <section className="aurex-panel aurex-activity"><header><b>▥　Latest Activity</b><button onClick={()=>{openWorkspace("app");setActiveSection("activity")}}>VIEW ALL　→</button></header>
+      {logs.length?logs.slice(0,5).map(log=><div className="aurex-activity-row" key={log.id}><i/> <span>{log.action.replaceAll("_"," ")}</span><small>{new Date(log.created_at).toLocaleString()}</small></div>):<p className="aurex-empty">No admin activity recorded yet.</p>}
+     </section>
+     <section className="aurex-panel aurex-quick"><header><b>ϟ　Quick Actions</b></header>
+      <div className="aurex-action-grid">
+       <button onClick={()=>openWorkspace("website")}><span>◎</span>Manage<br/>Website　›</button>
+       <button onClick={()=>openWorkspace("app")}><span>▣</span>Manage<br/>Android App　›</button>
+       <button onClick={()=>{openWorkspace("app");setActiveSection("premium")}}><span>♛</span>Premium<br/>Control　›</button>
+       <button onClick={()=>{openWorkspace("app");setActiveSection("app-control")}}><span>⚙</span>Settings　›</button>
+      </div>
+     </section>
+     <section className="aurex-panel aurex-status"><header><b>⬡　System Status</b><span>● LIVE DATA</span></header>
+      <div className="aurex-status-grid"><div><b>{enabled?"ON":"OFF"}</b><small>Premium System</small></div><div><b>{maintenance?"ON":"OFF"}</b><small>Maintenance Mode</small></div><div><b>{sites.length}</b><small>Website Projects</small></div><div><b>{appProjects.length}</b><small>App Projects</small></div></div>
+      <p>Hosting, analytics tracking and Android build services are not connected unless configured in Integrations.</p>
+     </section>
+    </div>
+    {notice&&<div className={noticeError?"alert error":"alert"} role="status">{notice}</div>}
+    <footer className="aurex-footer">© 2026 <b>OSEN AUREX.</b> All Rights Reserved. <em>Dream Big · Play Better</em><span>♛ Powered by Passion</span></footer>
+   </div>
+  </section>:null}
   {!token?<section className="nexus-login-page">
    <div className="login-ambient login-ambient-one"/><div className="login-ambient login-ambient-two"/>
    <div className="login-stage">
@@ -89,7 +133,7 @@ export default function Home(){
    </div>
    <div className="picker-foot"><span>Ⓡ OSEN AUREX</span><span>ONE OWNER · TWO WORKSPACES</span><button onClick={logout}>LOG OUT</button></div>
   </section>:<div className="nexus-workspace">
-   <aside className="side-nav"><button className="workspace-switch" onClick={()=>{if(window.history.state?.osenAdmin)window.history.back();else{setWorkspace("chooser");window.history.replaceState(null,"",window.location.pathname)}}}>← ALL WORKSPACES</button><div className="nav-caption">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div>{currentNav.map(([id,label,ico])=><a key={id} href={"#"+id} aria-current={activeSection===id?"page":undefined} className={activeSection===id?"nav-active":""} onClick={()=>setActiveSection(id)}><span>{ico}</span>{label}</a>)}<div className="sidebar-bottom"><i/> SYSTEM READY<small>Owner-only workspace</small></div></aside>
+   <aside className="side-nav"><button className="workspace-switch" onClick={()=>{if(window.history.state?.osenAdmin)window.history.back();else{setWorkspace("home");window.history.replaceState({osenAdmin:true,workspace:"home"},"",window.location.pathname)}}}>← ALL WORKSPACES</button><div className="nav-caption">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div>{currentNav.map(([id,label,ico])=><a key={id} href={"#"+id} aria-current={activeSection===id?"page":undefined} className={activeSection===id?"nav-active":""} onClick={()=>setActiveSection(id)}><span>{ico}</span>{label}</a>)}<div className="sidebar-bottom"><i/> SYSTEM READY<small>Owner-only workspace</small></div></aside>
    <div className="dashboard-content" data-active={activeSection} data-workspace={workspace}>
     <section id="overview" className="welcome-panel"><div className="workspace-context">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div><div><div className="section-kicker">CONTROL CENTER　/　{(currentNav.find(([id])=>id===activeSection)?.[1]||"OVERVIEW").toUpperCase()}</div><h1>{activeSection==="overview"?"Welcome back,":activeSection==="premium"?"Premium":"Manage"} <em>{activeSection==="overview"?OWNER:activeSection==="premium"?"Access":" "+(currentNav.find(([id])=>id===activeSection)?.[1]||"Workspace")}.</em></h1><p>{activeSection==="premium"?"Manage global Premium availability and securely update the app verification password.":activeSection==="overview"?"Your private workspace to manage OSEN apps, access and website projects.":`Manage ${currentNav.find(([id])=>id===activeSection)?.[1]||"workspace"} settings from your private OSEN AUREX console.`}</p></div><div className="welcome-status"><i/> PRIVATE WORKSPACE</div></section>
     <div className="metric-grid">
