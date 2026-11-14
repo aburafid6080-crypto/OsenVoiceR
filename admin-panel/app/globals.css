@@ -3194,3 +3194,29 @@ body:has(.nexus-login-page){margin:0!important}
 @media(prefers-reduced-motion:reduce){
  .nexus-login-page .login-character{animation:none!important}
 }
+
+
+/* Character visibility hotfix: remove legacy masks and stacking conflicts */
+.nexus-login-page .login-visual{position:relative!important;isolation:isolate!important;overflow:hidden!important}
+.nexus-login-page .login-character{
+  position:absolute!important;inset:0!important;left:0!important;right:0!important;top:0!important;bottom:0!important;
+  width:100%!important;height:100%!important;max-width:none!important;
+  display:flex!important;align-items:flex-end!important;justify-content:center!important;
+  visibility:visible!important;opacity:1!important;overflow:visible!important;
+  z-index:20!important;pointer-events:none!important;
+  animation:nx-float 7s ease-in-out infinite!important;
+}
+.nexus-login-page .login-character img{
+  display:block!important;position:relative!important;
+  width:auto!important;height:98%!important;max-width:88%!important;max-height:98%!important;
+  object-fit:contain!important;object-position:center bottom!important;
+  visibility:visible!important;opacity:1!important;
+  -webkit-mask-image:none!important;mask-image:none!important;
+  filter:drop-shadow(0 10px 20px #000e) drop-shadow(0 0 24px #ffb51b99)!important;
+}
+.nexus-login-page .login-left-brand,.nexus-login-page .login-art-tag,.nexus-login-page .login-visual-caption{z-index:25!important}
+@media(max-width:720px){
+ .nexus-login-page .login-character{inset:0!important;width:100%!important;height:100%!important}
+ .nexus-login-page .login-character img{height:98%!important;max-height:98%!important;max-width:78%!important}
+}
+@media(prefers-reduced-motion:reduce){.nexus-login-page .login-character{animation:none!important}}
