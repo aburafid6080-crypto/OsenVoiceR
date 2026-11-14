@@ -3220,3 +3220,53 @@ body:has(.nexus-login-page){margin:0!important}
  .nexus-login-page .login-character img{height:98%!important;max-height:98%!important;max-width:78%!important}
 }
 @media(prefers-reduced-motion:reduce){.nexus-login-page .login-character{animation:none!important}}
+
+
+/* Final character asset placement: desktop and mobile */
+.nexus-login-page .login-visual{
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:hidden!important;
+}
+.nexus-login-page .login-character{
+  position:absolute!important;
+  inset:0!important;
+  display:flex!important;
+  align-items:flex-end!important;
+  justify-content:center!important;
+  width:100%!important;
+  height:100%!important;
+  z-index:12!important;
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:none!important;
+  overflow:visible!important;
+}
+.nexus-login-page .login-character img{
+  display:block!important;
+  width:auto!important;
+  height:88%!important;
+  max-width:54%!important;
+  max-height:88%!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  opacity:1!important;
+  visibility:visible!important;
+  position:relative!important;
+  z-index:12!important;
+  filter:drop-shadow(0 10px 24px rgba(0,0,0,.75)) drop-shadow(0 0 22px rgba(255,184,35,.48))!important;
+  animation:aurex-character-float 7s ease-in-out infinite!important;
+}
+@keyframes aurex-character-float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-9px)}
+}
+.nexus-login-page .login-left-brand,
+.nexus-login-page .login-visual-caption{position:relative!important;z-index:18!important}
+@media(max-width:720px){
+ .nexus-login-page .login-character{inset:0!important;height:100%!important}
+ .nexus-login-page .login-character img{height:86%!important;max-height:86%!important;max-width:58%!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .nexus-login-page .login-character img{animation:none!important}
+}
