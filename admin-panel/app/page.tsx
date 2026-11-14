@@ -67,12 +67,7 @@ export default function Home(){
      <div className="login-benefits"><span><b>✦</b> ADVANCED CONTROL</span><span><b>♢</b> ULTIMATE SECURITY</span><span><b>◇</b> PREMIUM EXPERIENCE</span></div>
     </div>
    </div>
-   <div className="login-feature-strip" aria-label="Platform features">
-    <div><b>🎮</b><span>GAME BOOSTER<small>MAX FPS</small></span></div>
-    <div><b>🎙</b><span>VOICE CHANGER<small>ALL EFFECTS</small></span></div>
-    <div><b>🚀</b><span>ULTRA PERFORMANCE<small>NO LAG</small></span></div>
-   </div>
-   <footer className="login-page-footer"><span>Ⓡ OSEN AUREX</span><span>OWNER ACCESS ONLY · © 2026</span></footer>
+  <footer className="login-page-footer"><span>Ⓡ OSEN AUREX</span><span>OWNER ACCESS ONLY · © 2026</span></footer>
   </section>:workspace==="chooser"?<section className="workspace-picker">
    <div className="picker-heading"><span className="section-kicker">ADMIN PANEL · PRIVATE OWNER</span><h1>Choose your <em>workspace</em></h1><p>Website projects and Android app controls stay in separate work areas.</p></div>
    <div className="picker-grid">
