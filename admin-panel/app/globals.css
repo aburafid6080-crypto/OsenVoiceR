@@ -2126,3 +2126,75 @@ img,svg,video,canvas{max-width:100%}
     mask-image:radial-gradient(ellipse 80% 84% at 50% 48%,#000 64%,rgba(0,0,0,.9) 76%,transparent 100%);
   }
 }
+
+
+/* OSEN AUREX premium slow-motion login animations */
+@keyframes aurex-character-drift{
+  0%,100%{transform:translate3d(0,0,0) scale(1)}
+  50%{transform:translate3d(0,-9px,0) scale(1.012)}
+}
+@keyframes aurex-gold-breathe{
+  0%,100%{opacity:.52;filter:blur(0);transform:scale(.98)}
+  50%{opacity:.95;filter:blur(1px);transform:scale(1.035)}
+}
+@keyframes aurex-orbit-turn{
+  from{transform:translate(-50%,-50%) rotate(0deg)}
+  to{transform:translate(-50%,-50%) rotate(360deg)}
+}
+@keyframes aurex-panel-enter{
+  from{opacity:0;transform:translate3d(0,18px,0)}
+  to{opacity:1;transform:translate3d(0,0,0)}
+}
+@keyframes aurex-caption-glow{
+  0%,100%{box-shadow:0 8px 28px #0009,0 0 12px #d7ad4a10}
+  50%{box-shadow:0 8px 32px #000b,0 0 25px #d7ad4a30}
+}
+.nexus-login-page .login-character{
+  animation:aurex-character-drift 7.5s ease-in-out infinite!important;
+  will-change:transform;
+}
+.nexus-login-page .login-character img{
+  animation:aurex-gold-breathe 8s ease-in-out infinite;
+  transform-origin:50% 75%;
+}
+.nexus-login-page .login-visual:after{
+  animation:aurex-gold-breathe 9s ease-in-out infinite;
+}
+.nexus-login-page .login-orbit{
+  transform-origin:center;
+  animation:aurex-orbit-turn 42s linear infinite;
+}
+.nexus-login-page .login-orbit-b{animation-duration:58s;animation-direction:reverse}
+.nexus-login-page .login-panel-wrap{
+  animation:aurex-panel-enter 1.1s cubic-bezier(.2,.75,.25,1) both;
+}
+.nexus-login-page .login-visual-caption{
+  animation:aurex-caption-glow 6.5s ease-in-out infinite;
+}
+.nexus-login-page .login-submit{
+  transition:transform .35s ease,filter .35s ease,box-shadow .35s ease;
+}
+.nexus-login-page .login-submit:hover{
+  transform:translateY(-2px);
+  filter:brightness(1.08);
+  box-shadow:0 14px 38px #d5a43d55,inset 0 1px #fff9;
+}
+.nexus-login-page .login-field{
+  transition:border-color .3s ease,box-shadow .3s ease;
+}
+.nexus-login-page .login-field:focus-within{
+  border-color:#eac66d;
+  box-shadow:0 0 0 3px #d7ad4a1c,0 0 20px #d7ad4a12;
+}
+@media(prefers-reduced-motion:reduce){
+  .nexus-login-page .login-character,
+  .nexus-login-page .login-character img,
+  .nexus-login-page .login-visual:after,
+  .nexus-login-page .login-orbit,
+  .nexus-login-page .login-panel-wrap,
+  .nexus-login-page .login-visual-caption{
+    animation:none!important;
+  }
+  .nexus-login-page .login-submit,
+  .nexus-login-page .login-field{transition:none!important}
+}
