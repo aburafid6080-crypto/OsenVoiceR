@@ -3700,3 +3700,82 @@ body:has(.nexus-login-page){margin:0!important}
  .aurex-sidebar{grid-template-columns:1fr!important}
  .aurex-side-link,.aurex-logout{font-size:12px!important;padding:11px 12px!important}
 }
+
+/* SIDEBAR REPAIR — remove stray clipped/overlay shapes and keep the menu readable */
+.aurex-dashboard>.aurex-sidebar{
+  position:sticky!important;top:0!important;align-self:start!important;
+  width:100%!important;min-width:0!important;max-width:100%!important;
+  min-height:calc(100dvh - 76px)!important;height:calc(100dvh - 76px)!important;
+  display:flex!important;flex-direction:column!important;align-items:stretch!important;
+  gap:7px!important;padding:20px 13px!important;
+  overflow-y:auto!important;overflow-x:hidden!important;
+  isolation:isolate!important;z-index:3!important;
+  clip-path:none!important;mask:none!important;
+  transform:none!important;filter:none!important;
+  border-radius:0 18px 18px 0!important;
+  border:1px solid #8c672d66!important;border-left:0!important;
+  background:linear-gradient(180deg,#101923 0%,#08111a 55%,#05090f 100%)!important;
+  box-shadow:8px 0 28px #0008,inset -1px 0 #d6a44733!important;
+}
+.aurex-dashboard>.aurex-sidebar::before,
+.aurex-dashboard>.aurex-sidebar::after{
+  content:none!important;display:none!important;clip-path:none!important;
+}
+.aurex-dashboard>.aurex-sidebar>*{
+  position:relative!important;z-index:1!important;
+  clip-path:none!important;mask:none!important;transform:none!important;
+}
+.aurex-dashboard>.aurex-sidebar>.aurex-side-brand{
+  flex:0 0 auto!important;min-height:72px!important;
+  margin:0 0 12px!important;padding:0 5px 16px!important;
+  border-bottom:1px solid #c99b4c55!important;
+}
+.aurex-dashboard>.aurex-sidebar>.aurex-side-link{
+  flex:0 0 auto!important;min-height:44px!important;width:100%!important;
+  display:flex!important;align-items:center!important;gap:9px!important;
+  padding:11px 12px!important;border:1px solid transparent!important;
+  border-radius:10px!important;background:transparent!important;
+  color:#eaf1f7!important;text-align:left!important;
+  white-space:normal!important;line-height:1.35!important;
+  box-shadow:none!important;transform:none!important;
+}
+.aurex-dashboard>.aurex-sidebar>.aurex-side-link:hover,
+.aurex-dashboard>.aurex-sidebar>.aurex-side-link.active{
+  color:#ffdc78!important;border-color:#d6a447!important;
+  background:linear-gradient(90deg,#b47b252b,#1a2430)!important;
+  box-shadow:inset 3px 0 #64d8ef,0 5px 15px #0005!important;
+}
+.aurex-dashboard>.aurex-sidebar>.aurex-logout{
+  flex:0 0 auto!important;margin-top:auto!important;min-height:42px!important;
+}
+.aurex-dashboard>.aurex-sidebar>.aurex-side-tag{
+  flex:0 0 auto!important;margin-top:10px!important;padding:12px 7px 4px!important;
+  border-top:1px solid #c99b4c44!important;font-size:12px!important;
+}
+@media(max-width:900px){
+ .aurex-dashboard>.aurex-sidebar{
+  position:relative!important;top:auto!important;align-self:stretch!important;
+  width:100%!important;height:auto!important;min-height:0!important;
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:7px!important;padding:12px!important;margin:0!important;
+  overflow:visible!important;border:1px solid #8c672d66!important;
+  border-radius:0 0 16px 16px!important;box-shadow:0 8px 22px #0007!important;
+ }
+ .aurex-dashboard>.aurex-sidebar>.aurex-side-brand{
+  grid-column:1/-1!important;min-height:56px!important;margin:0 0 5px!important;
+  padding:0 4px 12px!important;
+ }
+ .aurex-dashboard>.aurex-sidebar>.aurex-side-link{
+  min-width:0!important;min-height:43px!important;padding:10px 9px!important;
+  font-size:11px!important;
+ }
+ .aurex-dashboard>.aurex-sidebar>.aurex-logout,
+ .aurex-dashboard>.aurex-sidebar>.aurex-side-tag{grid-column:1/-1!important}
+ .aurex-dashboard>.aurex-sidebar>.aurex-side-tag{display:block!important}
+}
+@media(max-width:380px){
+ .aurex-dashboard>.aurex-sidebar{grid-template-columns:1fr!important}
+ .aurex-dashboard>.aurex-sidebar>.aurex-side-brand,
+ .aurex-dashboard>.aurex-sidebar>.aurex-logout,
+ .aurex-dashboard>.aurex-sidebar>.aurex-side-tag{grid-column:1!important}
+}
