@@ -17,15 +17,25 @@ export default function Home(){
  const[newId,setNewId]=useState("");const[newPass,setNewPass]=useState("");const[userSearch,setUserSearch]=useState("");
  const[maintenance,setMaintenance]=useState(false);const[forceUpdate,setForceUpdate]=useState(false);const[announcement,setAnnouncement]=useState("");
  const[sites,setSites]=useState<Site[]>([]);const[siteName,setSiteName]=useState("");const[siteSearch,setSiteSearch]=useState("");const[appProjects,setAppProjects]=useState<AppProject[]>([]);const[appName,setAppName]=useState("");const[appSearch,setAppSearch]=useState("");
+ async function readApiResponse(r:Response,fallback:string){
+  let d:any={};
+  try{d=await r.json()}catch{d={error:fallback}}
+  if(r.status===401){
+   if(token)logout();
+   throw new Error("Your admin session has expired. Please sign in again.");
+  }
+  if(!r.ok)throw new Error(d.error||fallback);
+  return d;
+ }
  async function loadDashboard(t=token,target=workspace){
   const endpoint=target==="website"?"/api/website-admin":"/api/admin";
-  const r=await fetch(endpoint,{headers:{Authorization:"Bearer "+t},cache:"no-store"});const d=await r.json();
-  if(!r.ok)throw new Error(d.error||"Could not load dashboard");
+  const r=await fetch(endpoint,{headers:{Authorization:"Bearer "+t},cache:"no-store"});
+  const d=await readApiResponse(r,"Could not load dashboard");
   if(target==="website"){setSites(d.sites||[]);return;}
   setEnabled(Boolean(d.settings?.premium_enabled));setUsers(d.users||[]);setMaintenance(Boolean(d.config?.maintenance_mode));
   setForceUpdate(Boolean(d.config?.force_update));setAnnouncement(d.config?.announcement||"");setAppProjects(d.appProjects||[]);setLogs(d.logs||[]);
  }
- async function api(action:string,extra:Record<string,unknown>={}){const websiteActions=["create_site_project","set_site_status","delete_site_project"];const endpoint=websiteActions.includes(action)?"/api/website-admin":"/api/admin";const r=await fetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({action,...extra})});const d=await r.json();if(!r.ok)throw new Error(d.error||"Request failed");return d;}
+ async function api(action:string,extra:Record<string,unknown>={}){const websiteActions=["create_site_project","set_site_status","delete_site_project"];const endpoint=websiteActions.includes(action)?"/api/website-admin":"/api/admin";const r=await fetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({action,...extra})});return readApiResponse(r,"Request failed");}
  async function run(action:string,extra:Record<string,unknown>={},success="Changes saved."){setBusy(true);setNotice("");setNoticeError(false);try{await api(action,extra);await loadDashboard();setNotice(success)}catch(e){setNotice(e instanceof Error?e.message:"Action failed");setNoticeError(true)}finally{setBusy(false)}}
  async function login(e:React.FormEvent){e.preventDefault();setBusy(true);setNotice("");setNoticeError(false);try{if(!supabaseUrl||!anonKey)throw new Error("Admin website environment is not configured.");const r=await fetch(supabaseUrl+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"Content-Type":"application/json",apikey:anonKey},body:JSON.stringify({email,password})});const d=await r.json();if(!r.ok)throw new Error(d.msg||d.message||"Login failed");await loadDashboard(d.access_token,"app");await loadDashboard(d.access_token,"website");setToken(d.access_token);setWorkspace("home");window.history.replaceState({osenAdmin:true,workspace:"home"},"",window.location.pathname);setActiveSection("overview");setPassword("")}catch(e){setNotice(e instanceof Error?e.message:"Could not sign in");setNoticeError(true)}finally{setBusy(false)}}
  function logout(){setToken("");setUsers([]);setSites([]);setAppProjects([]);setLogs([]);setEnabled(false);setNotice("")}
