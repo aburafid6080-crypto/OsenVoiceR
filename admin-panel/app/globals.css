@@ -3779,3 +3779,77 @@ body:has(.nexus-login-page){margin:0!important}
  .aurex-dashboard>.aurex-sidebar>.aurex-logout,
  .aurex-dashboard>.aurex-sidebar>.aurex-side-tag{grid-column:1!important}
 }
+
+/* OSEN AUREX — unified premium black & gold visual system */
+:root{--aurex-gold:#e7bd62;--aurex-gold-soft:#a87a32;--aurex-ink:#07090d;--aurex-panel:#10141c;--aurex-cyan:#67d7ed}
+html{scroll-behavior:smooth}
+body{background-color:#050609;background-image:radial-gradient(ellipse at 50% -20%,#4c351d44,transparent 48%),radial-gradient(ellipse at 100% 45%,#152b3a33,transparent 38%),linear-gradient(145deg,#050609,#090b10 60%,#050609)}
+button,a,.workspace-tile,.metric-card,.panel-card,.aurex-panel{transition:background-color .22s ease,border-color .22s ease,box-shadow .22s ease,transform .22s ease,color .22s ease}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--aurex-gold)!important;outline-offset:3px!important}
+.nexus-shell{padding-left:clamp(12px,3vw,34px);padding-right:clamp(12px,3vw,34px)}
+.nexus-topbar{border-color:#9b773b55}
+.brand-mark,.aurex-mark,.aurex-side-brand>span{border-color:var(--aurex-gold)!important;color:#ffe2a0!important;background:linear-gradient(145deg,#3b2a12,#0a0b0e 65%)!important;box-shadow:0 0 0 1px #f6cf7840,0 0 24px #e0ad4b2b,inset 0 1px #fff5!important}
+.nexus-brand i{color:var(--aurex-gold)!important}
+.nexus-workspace{grid-template-columns:230px minmax(0,1fr);gap:22px}
+.side-nav{border-color:#8c672d88!important;background:linear-gradient(180deg,#111821,#080b10)!important;box-shadow:0 18px 45px #0007,inset 0 1px #fff1}
+.side-nav>a{min-height:42px;border-radius:10px;transition:all .2s ease}
+.side-nav>a:hover,.side-nav>a.nav-active{border-color:#d3a44f!important;background:linear-gradient(100deg,#6d4b1c66,#111820)!important;box-shadow:inset 3px 0 #eac36d,0 7px 20px #0005!important;transform:translateX(2px)}
+.sidebar-bottom{border-color:#99743c66!important;color:#7ee5bf!important}
+.welcome-panel{position:relative;padding:clamp(18px,3vw,34px);border:1px solid #9a743b88;border-radius:18px;background:radial-gradient(ellipse at 90% 0%,#c18a3030,transparent 48%),linear-gradient(130deg,#211a11,#11141a 60%,#0a0d12);box-shadow:0 18px 48px #0006;overflow:hidden}
+.welcome-panel:after{content:"AUREX";position:absolute;right:18px;bottom:-16px;color:#fff;opacity:.025;font-size:clamp(54px,10vw,110px);font-weight:900;letter-spacing:-5px;pointer-events:none}
+.welcome-panel>*{position:relative;z-index:1}
+.welcome-panel h1 em,.panel-heading h2 em{color:var(--aurex-gold)!important}
+.welcome-status{border-color:#8b6a36!important;background:#17160f!important;color:#f2d18b!important}
+.metric-card,.panel-card{border-color:#765b3370!important;background:linear-gradient(145deg,#171820,#0b0e14)!important;box-shadow:0 14px 34px #0006,inset 0 1px #ffffff08!important}
+.metric-card:hover,.panel-card:hover{border-color:#c49a4f!important;box-shadow:0 18px 42px #0008,0 0 22px #d6a44712!important;transform:translateY(-2px)}
+.metric-card.metric-gold{border-color:#b18a4c!important;background:linear-gradient(145deg,#211b12,#0d1016)!important}
+.metric-card>span,.section-kicker,.nav-caption{color:#e7bd62!important}
+.primary-btn,.login-submit{border-color:#f0ca75!important;background:linear-gradient(110deg,#f2d58d,#c18a35 55%,#8d6024)!important;color:#15100a!important;box-shadow:0 8px 25px #c28b322b,inset 0 1px #fff8!important}
+.primary-btn:hover,.login-submit:hover{filter:brightness(1.08);transform:translateY(-2px);box-shadow:0 12px 30px #c28b3240!important}
+.outline-btn,.logout-btn,.danger-btn{border-color:#9c773d!important;color:#f0cd83!important;background:linear-gradient(145deg,#211a11,#0d1118)!important}
+.outline-btn:hover,.logout-btn:hover{background:#3a2a16!important;color:#fff0c8!important}
+.inline-form input,.login-field input,.search-input,.site-builder-create input,.site-builder-create select,.site-editor-input{border-color:#65502f!important;background:#080c12!important}
+.content-grid{gap:16px}
+.panel-card{border-radius:16px}
+.aurex-dashboard{background:transparent!important}
+.aurex-main{min-width:0}
+.aurex-welcome,.aurex-panel{border-color:#8e6b3d77!important;background:linear-gradient(145deg,#181a20,#0b0e13)!important;box-shadow:0 16px 42px #0006!important}
+.aurex-stats>article{border-color:#8b6a3a88!important;background:linear-gradient(145deg,#211a11,#0d1117)!important;box-shadow:0 12px 30px #0006!important}
+.aurex-side-link.active,.aurex-side-link:hover{border-color:#d7aa58!important;background:linear-gradient(100deg,#64451c66,#151a20)!important;box-shadow:inset 3px 0 #e7bd62,0 7px 20px #0005!important}
+.aurex-side-link{transition:all .2s ease!important}
+.aurex-side-link:hover{transform:translateX(2px)!important}
+.workspace-picker{position:relative;isolation:isolate}
+.picker-heading h1{color:#f4f1e9}
+.picker-heading h1 em{color:var(--aurex-gold)!important}
+.workspace-tile{border-color:#9d783e!important;background:radial-gradient(ellipse at 100% 0%,#a8792822,transparent 52%),linear-gradient(145deg,#1d1a15,#0b0e13)!important;box-shadow:0 18px 44px #0007,inset 0 1px #fff1!important}
+.workspace-tile:hover{transform:translateY(-5px)!important;border-color:#f0ca75!important;box-shadow:0 22px 55px #0009,0 0 30px #d6a44718!important}
+.tile-icon{color:#f0ca75!important;border-color:#a47b3d!important;background:#2a2013!important}
+.tile-cta{color:#f0ca75!important}
+.login-ambient-one{background:radial-gradient(circle,#a9772b30,transparent 68%)!important;animation:aurexGlow 8s ease-in-out infinite alternate}
+.login-ambient-two{background:radial-gradient(circle,#1e607055,transparent 68%)!important;animation:aurexGlow 10s ease-in-out infinite alternate-reverse}
+.login-stage{position:relative;isolation:isolate}
+.login-visual{border-color:#9a7138!important;background:radial-gradient(ellipse at 48% 34%,#9b6b2c33,transparent 43%),linear-gradient(145deg,#17140f,#07090e 72%)!important;box-shadow:0 24px 70px #0009,inset 0 1px #fff2!important}
+.login-visual-grid{opacity:.32!important}
+.login-back-portrait{opacity:.2!important;filter:blur(2px) saturate(.8)!important}
+.login-character{filter:drop-shadow(0 18px 26px #000d) drop-shadow(0 0 24px #d8a94a35)!important;animation:aurexCharacterFloat 5s ease-in-out infinite}
+.login-orbit{border-color:#d6a44755!important}
+.login-orbit-a{animation:aurexOrbit 24s linear infinite}
+.login-orbit-b{animation:aurexOrbit 32s linear infinite reverse}
+.login-panel{border-color:#a17a40!important;background:linear-gradient(145deg,#1b1a17f5,#0a0d13f5)!important;box-shadow:0 25px 80px #000a,0 0 35px #d6a44712,inset 0 1px #fff2!important;backdrop-filter:blur(18px)}
+.login-panel-brand .aurex-mark{box-shadow:0 0 22px #d6a4472c!important}
+.login-panel-kicker,.login-security{color:#e8c77f!important}
+.login-panel h1 em{color:var(--aurex-gold)!important}
+.login-field{border-color:#735832!important;background:#080c12!important}
+.login-field:focus-within{border-color:#e7bd62!important;box-shadow:0 0 0 3px #d8b15e18!important}
+.login-benefits span{border-color:#80623677!important;background:#14130f!important;color:#d8c18f!important}
+.login-page-footer{color:#a98b58!important}
+.login-spinner{border-color:#6b4c1f;border-top-color:#17100a!important}
+.site-editor,.site-live-preview{box-shadow:0 16px 38px #0007,inset 0 1px #fff1}
+.alert{border-radius:10px;animation:aurexFadeUp .3s ease both}
+@keyframes aurexGlow{from{transform:scale(.96);opacity:.55}to{transform:scale(1.08);opacity:1}}
+@keyframes aurexCharacterFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes aurexOrbit{to{transform:rotate(360deg)}}
+@keyframes aurexFadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:900px){.nexus-shell{padding-left:10px;padding-right:10px}.nexus-workspace{grid-template-columns:minmax(0,1fr)!important;gap:14px!important}.side-nav{position:relative!important;top:auto!important;min-height:0!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important;padding:12px!important}.side-nav .workspace-switch,.side-nav .nav-caption,.side-nav .sidebar-bottom{grid-column:1/-1!important}.side-nav>a{min-width:0!important;padding:11px 9px!important}.dashboard-content{width:100%;min-width:0}.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.content-grid{grid-template-columns:minmax(0,1fr)!important}.span-two{grid-column:auto!important}.login-stage{grid-template-columns:minmax(0,1fr)!important}.login-visual{min-height:360px!important}.login-character{max-height:340px!important}.login-panel-wrap{width:100%!important;max-width:560px!important;margin:0 auto!important}}
+@media(max-width:520px){.nexus-topbar{height:auto;min-height:68px;flex-wrap:wrap;padding:10px 0}.topbar-right{gap:8px}.secure-state{display:none}.nexus-brand b{font-size:12px}.owner-chip{padding:5px 6px}.aurex-stats,.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.metric-card{padding:13px!important}.panel-card{padding:15px!important}.inline-form{flex-direction:column!important;align-items:stretch!important}.inline-form>*{width:100%!important}.login-visual{min-height:300px!important}.login-character{max-height:290px!important}.login-panel{padding:22px!important}.login-benefits{flex-wrap:wrap!important;justify-content:center!important}.workspace-picker{padding:18px 12px!important}.picker-grid{grid-template-columns:minmax(0,1fr)!important}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
