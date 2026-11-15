@@ -116,7 +116,7 @@ export default function Home(){
      <div className="login-visual-grid"/>
      <div className="login-left-brand"><span className="login-crown">♛</span><strong>OSEN<br/><em>AUREX</em></strong><small>PLAY SMART · PLAY BETTER</small></div>
      <div className="login-orbit login-orbit-a"/><div className="login-orbit login-orbit-b"/>
-     <div className="login-character" aria-hidden="true"><img src="/aurex-gold-character.webp" alt="" loading="eager" fetchPriority="high" decoding="async" /></div>
+     <div className="login-character" aria-hidden="true"><img src="/aurex-character-hat.webp" alt="" loading="eager" fetchPriority="high" decoding="async" /></div>
      <div className="login-visual-caption"><span className="aurex-mark">R</span><b>OSEN <i>AUREX</i></b><small>THE ULTIMATE CONTROL CENTER</small></div>
      <div className="login-art-tag">PRIVATE OWNER ACCESS <span>✦</span></div>
     </div>
