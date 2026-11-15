@@ -5,7 +5,7 @@ Responsive owner-only Next.js admin panel. It is isolated under `admin-panel/`; 
 ## Setup
 1. Create a Supabase project and enable Email + Password authentication.
 2. Create the owner account using your own email in Supabase Auth. Do not share its password.
-3. Open Supabase SQL Editor and run `supabase/schema.sql`.
+3. Open Supabase SQL Editor and run `supabase/schema.sql`. When the admin panel is updated later, re-run the updated SQL file; its `ALTER TABLE ... ADD COLUMN IF NOT EXISTS` statements safely add new Website Studio fields to existing projects.
 4. Deploy this folder as a Next.js project on Vercel (set Root Directory to `admin-panel`).
 5. Add every variable from `.env.example` in Vercel Project Settings. Set `ADMIN_EMAIL` to the exact owner email. Keep `SUPABASE_SERVICE_ROLE_KEY` server-only; never add a NEXT_PUBLIC prefix to it.
 6. Redeploy after setting variables.
