@@ -65,4 +65,8 @@ create table if not exists public.app_projects (
 );
 alter table public.app_projects enable row level security;
 -- No anon/authenticated policies: server service-role access only.
-\n\n-- Website Studio builder fields (safe to run on an existing project).\nalter table public.website_projects add column if not exists template text not null default 'portfolio' check (template in ('portfolio','business','landing','creator'));\nalter table public.website_projects add column if not exists content jsonb not null default '{"headline":"Build something remarkable.","description":"Introduce your work, your ideas and what makes your project unique.","button_text":"Get started","accent":"#d8b15e"}'::jsonb;\n
+
+
+-- Website Studio builder fields (safe to run on an existing project).
+alter table public.website_projects add column if not exists template text not null default 'portfolio' check (template in ('portfolio','business','landing','creator'));
+alter table public.website_projects add column if not exists content jsonb not null default '{"headline":"Build something remarkable.","description":"Introduce your work, your ideas and what makes your project unique.","button_text":"Get started","accent":"#d8b15e"}'::jsonb;
