@@ -3976,3 +3976,18 @@ button:focus-visible,a:focus-visible{outline:2px solid #f0ca79!important;outline
 @keyframes aurexAnimeAtmosphere{from{background-position:0 0,0 0,0 0}to{background-position:0 0,106px 53px,-71px 71px}}
 @keyframes aurexAnimeEnter{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){body:before,.dashboard-content,.aurex-main{animation:none!important}}
+
+/* Sidebar Home shortcut */
+.workspace-home{
+ width:100%;min-height:40px;margin:10px 0 18px;padding:9px 13px;
+ display:flex;align-items:center;gap:8px;text-align:left;
+ border:1px solid #8b693d;border-radius:9px;
+ background:linear-gradient(110deg,#3b2a14,#11141a 72%);
+ color:#f5d58d;font-size:11px;font-weight:900;letter-spacing:.5px;
+ box-shadow:inset 0 1px #ffe8b233,0 5px 18px #0005;
+ transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
+}
+.workspace-home:hover{
+ transform:translateY(-1px);border-color:#f4cf7d;
+ box-shadow:0 0 18px #d9a64b2b,inset 0 1px #fff5;
+}
