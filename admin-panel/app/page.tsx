@@ -75,9 +75,6 @@ export default function Home(){
     <button className="aurex-side-link active" onClick={goHome}>⌂　Dashboard</button>
     <button className="aurex-side-link" onClick={()=>openWorkspace("website")}>◎　Website Center</button>
     <button className="aurex-side-link" onClick={()=>openWorkspace("app")}>▣　Android App Center</button>
-    <button className="aurex-side-link" onClick={()=>openWorkspace("app","users")}>♙　Users Management</button>
-    <button className="aurex-side-link" onClick={()=>openWorkspace("app","premium")}>♛　Premium Control</button>
-    <button className="aurex-side-link" onClick={()=>openWorkspace("app","activity")}>▥　Analytics / Activity</button>
     <button className="aurex-side-link" onClick={()=>openWorkspace("app","app-control")}>⚙　Settings</button>
     <button className="aurex-side-link" onClick={()=>openWorkspace("app","integrations")}>⬡　Security & Integrations</button>
     <button className="aurex-logout" onClick={logout}>⇥　LOG OUT</button>
@@ -152,7 +149,7 @@ export default function Home(){
    </div>
    <div className="picker-foot"><span>Ⓡ OSEN AUREX</span><span>ONE OWNER · TWO WORKSPACES</span><button onClick={logout}>LOG OUT</button></div>
   </section>:<div className="nexus-workspace">
-   <aside className="side-nav"><button className="workspace-switch" onClick={goHome}>← ALL WORKSPACES</button><div className="nav-caption">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div>{currentNav.map(([id,label,ico])=><a key={id} href={"#"+id} aria-current={activeSection===id?"page":undefined} className={activeSection===id?"nav-active":""} onClick={e=>{e.preventDefault();navigateSection(id)}}><span>{ico}</span>{label}</a>)}<div className="sidebar-bottom"><i/> SYSTEM READY<small>Owner-only workspace</small></div></aside>
+   <aside className="side-nav"><button className="workspace-switch" onClick={goHome}>← ALL WORKSPACES</button><button className="workspace-home" onClick={goHome}>⌂　HOME</button><div className="nav-caption">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div>{currentNav.map(([id,label,ico])=><a key={id} href={"#"+id} aria-current={activeSection===id?"page":undefined} className={activeSection===id?"nav-active":""} onClick={e=>{e.preventDefault();navigateSection(id)}}><span>{ico}</span>{label}</a>)}<div className="sidebar-bottom"><i/> SYSTEM READY<small>Owner-only workspace</small></div></aside>
    <div className="dashboard-content" data-active={activeSection} data-workspace={workspace}>
     <section id="overview" className="welcome-panel"><div className="workspace-context">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div><div><div className="section-kicker">CONTROL CENTER　/　{(currentNav.find(([id])=>id===activeSection)?.[1]||"OVERVIEW").toUpperCase()}</div><h1>{activeSection==="overview"?"Welcome back,":activeSection==="premium"?"Premium":"Manage"} <em>{activeSection==="overview"?OWNER:activeSection==="premium"?"Access":" "+(currentNav.find(([id])=>id===activeSection)?.[1]||"Workspace")}.</em></h1><p>{activeSection==="premium"?"Manage global Premium availability and securely update the app verification password.":activeSection==="overview"?"Your private workspace to manage OSEN apps, access and website projects.":`Manage ${currentNav.find(([id])=>id===activeSection)?.[1]||"workspace"} settings from your private OSEN AUREX console.`}</p></div><div className="welcome-status"><i/> PRIVATE WORKSPACE</div></section>
     <div className="metric-grid">
