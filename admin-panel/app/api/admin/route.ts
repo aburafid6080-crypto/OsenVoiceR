@@ -23,7 +23,7 @@ export async function GET(req:NextRequest){
  try{
   await authorize(req);
   const [settings,users,configs,appProjects,logs]=await Promise.all([
-   db("app_settings?select=premium_enabled&id=eq.main"),
+   db("app_settings?select=premium_enabled,premium_password_changed_at&id=eq.main"),
    db("premium_users?select=user_id,premium,updated_at&order=updated_at.desc"),
    db("app_config?select=maintenance_mode,force_update,announcement&id=eq.main").catch(()=>[]),
    db("app_projects?select=id,name,package_name,platform,status,created_at&order=created_at.desc").catch(()=>[]),
