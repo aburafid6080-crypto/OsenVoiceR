@@ -114,7 +114,6 @@ export default function Home(){
    <div className="login-stage">
     <div className="login-visual">
      <div className="login-visual-grid"/>
-     <div className="login-back-portrait" aria-hidden="true"><img src="/aurex-character-hat.webp" alt="" /></div>
      <div className="login-left-brand"><span className="login-crown">♛</span><strong>OSEN<br/><em>AUREX</em></strong><small>PLAY SMART · PLAY BETTER</small></div>
      <div className="login-orbit login-orbit-a"/><div className="login-orbit login-orbit-b"/>
      <div className="login-character" aria-hidden="true"><img src="/aurex-character-hat.webp" alt="" loading="eager" fetchPriority="high" decoding="async" /></div>
@@ -129,9 +128,9 @@ export default function Home(){
       <p>Sign in to access your private workspace and manage your projects.</p>
       <form onSubmit={login}>
        <label htmlFor="admin-email">OWNER EMAIL</label>
-       <div className="login-field"><span>✉</span><input id="admin-email" type="email" autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Enter your email address" required/></div>
+       <div className="login-field"><span>✉</span><input id="admin-email" type="email" autoComplete="off" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Enter your email address" required/></div>
        <label htmlFor="admin-password">PASSWORD</label>
-       <div className="login-field"><span>♙</span><input id="admin-password" type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter your password" required/></div>
+       <div className="login-field"><span>♙</span><input id="admin-password" type="password" autoComplete="new-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter your password" required/></div>
        <button className="login-submit" disabled={busy}>{busy?<><span className="login-spinner"/> VERIFYING ACCESS…</>:"SECURE LOGIN　↗"}</button>
       </form>
       <div className="login-security"><span>♢</span> ENCRYPTED OWNER AUTHENTICATION <i/> SECURE ACCESS</div>
