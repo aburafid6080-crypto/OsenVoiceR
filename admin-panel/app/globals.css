@@ -4695,3 +4695,25 @@ button:focus-visible,a:focus-visible{outline:2px solid #f0ca79!important;outline
  .nexus-login-page .login-visual{height:340px!important;min-height:340px!important}
  .nexus-login-page .login-panel{padding:22px 16px!important}
 }
+
+/* Keep all lettering clear of the login character artwork */
+.nexus-login-page .login-left-brand{display:none!important}
+.nexus-login-page .login-character{left:1%!important;width:62%!important;z-index:3!important}
+.nexus-login-page .login-visual-caption{
+ right:22px!important;left:auto!important;bottom:24px!important;
+ width:max-content!important;max-width:31%!important;
+ padding:12px 15px!important;box-sizing:border-box!important;
+ border:1px solid #d6a83f88!important;border-radius:14px!important;
+ background:linear-gradient(135deg,#080808eF,#171006eF)!important;
+ box-shadow:0 10px 30px #000b,0 0 22px #d7a83b22!important;
+ backdrop-filter:blur(10px)!important;
+}
+.nexus-login-page .login-visual-caption b{font-size:clamp(18px,2vw,27px)!important;white-space:nowrap!important}
+.nexus-login-page .login-visual-caption small{font-size:7px!important;letter-spacing:.8px!important;white-space:nowrap!important}
+@media(max-width:560px){
+ .nexus-login-page .login-character{width:68%!important}
+ .nexus-login-page .login-visual-caption{right:12px!important;bottom:13px!important;max-width:37%!important;padding:8px 9px!important}
+ .nexus-login-page .login-visual-caption b{font-size:16px!important}
+ .nexus-login-page .login-visual-caption small{font-size:5px!important;letter-spacing:.4px!important}
+ .nexus-login-page .login-visual-caption .aurex-mark{width:30px!important;height:30px!important}
+}
