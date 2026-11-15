@@ -162,57 +162,89 @@ private fun OsenVoiceR() {
             return
         }
 
-        try {
-            val originalBytes = recordingFile.readBytes()
-            val bytes = applyVoiceEffect(originalBytes, selectedEffect)
-            val minBuffer = AudioTrack.getMinBufferSize(
-                SAMPLE_RATE,
-                AudioFormat.CHANNEL_OUT_MONO,
-                AudioFormat.ENCODING_PCM_16BIT
-            )
-            val track = AudioTrack.Builder()
-                .setAudioAttributes(
-                    AudioAttributes.Builder()
-                        .setUsage(AudioAttributes.USAGE_MEDIA)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                        .build()
-                )
-                .setAudioFormat(
-                    AudioFormat.Builder()
-                        .setSampleRate(SAMPLE_RATE)
-                        .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
-                        .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-                        .build()
-                )
-                .setBufferSizeInBytes(maxOf(minBuffer, 8192))
-                .setTransferMode(AudioTrack.MODE_STREAM)
-                .build()
+        playbackActive = true
+        isPlaying = true
+        status = "Preparing ${selectedEffect.title} effect…"
 
-            audioTrack = track
-            playbackActive = true
-            isPlaying = true
-            status = "Playing ${selectedEffect.title} effect"
-            track.play()
+        // File I/O and PCM effect processing stay off the main thread so the UI
+        // remains responsive, including on lower-memory phones.
+        val effectToApply = selectedEffect
+        thread(name = "OsenVoice-Process") {
+            try {
+                val originalBytes = recordingFile.readBytes()
+                val bytes = applyVoiceEffect(originalBytes, effectToApply)
+                (context as? ComponentActivity)?.runOnUiThread {
+                    if (!playbackActive) return@runOnUiThread
+                    try {
+                        val minBuffer = AudioTrack.getMinBufferSize(
+                            SAMPLE_RATE,
+                            AudioFormat.CHANNEL_OUT_MONO,
+                            AudioFormat.ENCODING_PCM_16BIT
+                        )
+                        if (minBuffer <= 0) {
+                            stopPlayback()
+                            status = "Audio output is unavailable on this device"
+                            return@runOnUiThread
+                        }
+                        val track = AudioTrack.Builder()
+                            .setAudioAttributes(
+                                AudioAttributes.Builder()
+                                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                                    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                                    .build()
+                            )
+                            .setAudioFormat(
+                                AudioFormat.Builder()
+                                    .setSampleRate(SAMPLE_RATE)
+                                    .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
+                                    .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                                    .build()
+                            )
+                            .setBufferSizeInBytes(maxOf(minBuffer, 8192))
+                            .setTransferMode(AudioTrack.MODE_STREAM)
+                            .build()
 
-            thread {
-                try {
-                    var offset = 0
-                    while (offset < bytes.size && playbackActive) {
-                        val written = track.write(bytes, offset, minOf(4096, bytes.size - offset))
-                        if (written <= 0) break
-                        offset += written
-                    }
-                } catch (_: Exception) {
-                } finally {
-                    (context as? ComponentActivity)?.runOnUiThread {
+                        if (track.state != AudioTrack.STATE_INITIALIZED) {
+                            track.release()
+                            stopPlayback()
+                            status = "Could not initialize audio output"
+                            return@runOnUiThread
+                        }
+                        audioTrack = track
+                        status = "Playing ${effectToApply.title} effect"
+                        track.play()
+
+                        thread(name = "OsenVoice-Playback") {
+                            try {
+                                var offset = 0
+                                while (offset < bytes.size && playbackActive) {
+                                    val written = track.write(bytes, offset, minOf(4096, bytes.size - offset))
+                                    if (written <= 0) break
+                                    offset += written
+                                }
+                            } catch (_: Exception) {
+                            } finally {
+                                (context as? ComponentActivity)?.runOnUiThread {
+                                    if (playbackActive) {
+                                        stopPlayback()
+                                        status = "Playback finished"
+                                    }
+                                }
+                            }
+                        }
+                    } catch (_: Exception) {
                         stopPlayback()
-                        status = "Playback finished"
+                        status = "Could not start audio playback"
+                    }
+                }
+            } catch (_: Exception) {
+                (context as? ComponentActivity)?.runOnUiThread {
+                    if (playbackActive) {
+                        stopPlayback()
+                        status = "Could not process recording"
                     }
                 }
             }
-        } catch (_: Exception) {
-            stopPlayback()
-            status = "Could not play recording"
         }
     }
 
