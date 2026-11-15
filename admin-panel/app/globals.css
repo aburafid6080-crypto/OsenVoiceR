@@ -3991,3 +3991,30 @@ button:focus-visible,a:focus-visible{outline:2px solid #f0ca79!important;outline
  transform:translateY(-1px);border-color:#f4cf7d;
  box-shadow:0 0 18px #d9a64b2b,inset 0 1px #fff5;
 }
+
+/* Consistent page titles and section headings across every OSEN AUREX screen */
+.dashboard-content .welcome-panel h1,.workspace-picker .picker-heading h1,.dashboard-content .panel-heading h2,.nexus-login-page .login-panel h1,.aurex-dashboard .aurex-welcome b,.site-live-preview .preview-hero h2{
+ font-family:Georgia,"Times New Roman",serif!important;font-weight:900!important;line-height:1.12!important;letter-spacing:-.035em!important;overflow-wrap:anywhere;text-wrap:balance;
+}
+.dashboard-content .welcome-panel h1,.workspace-picker .picker-heading h1{
+ max-width:100%!important;margin:10px 0 12px!important;font-size:clamp(29px,3.2vw,48px)!important;color:#fff8e9!important;text-shadow:0 3px 20px #0009,0 0 24px #d7a64a20!important;
+}
+.dashboard-content .welcome-panel h1 em,.workspace-picker .picker-heading h1 em,.dashboard-content .panel-heading h2 em{
+ display:inline;font-style:normal!important;color:#f0c66e!important;background:linear-gradient(100deg,#fff0b2 0%,#e9bf68 48%,#b98235 100%)!important;background-clip:text!important;-webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;filter:drop-shadow(0 2px 9px #d4a34a35);
+}
+.dashboard-content .panel-heading{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:14px!important;flex-wrap:wrap!important;margin-bottom:14px!important}
+.dashboard-content .panel-heading>div{min-width:0;flex:1 1 220px}
+.dashboard-content .panel-heading h2{margin:5px 0 0!important;font-size:clamp(20px,2vw,29px)!important;color:#fff8e9!important;line-height:1.2!important;letter-spacing:-.025em!important}
+.dashboard-content .section-kicker{display:inline-block!important;font-size:clamp(8px,.72vw,10px)!important;line-height:1.5!important;letter-spacing:1.45px!important;font-weight:900!important;color:#e8bd69!important;overflow-wrap:anywhere}
+.dashboard-content .welcome-panel>p,.workspace-picker .picker-heading>p{max-width:780px!important;line-height:1.75!important;color:#b9c4ce!important}
+.dashboard-content .welcome-panel .section-kicker{color:#f0c66e!important}
+.dashboard-content .panel-heading .panel-icon,.dashboard-content .panel-heading .count-pill{flex:0 0 auto}
+.aurex-dashboard .aurex-welcome b{font-size:clamp(17px,1.5vw,23px)!important;color:#fff0cf}
+.aurex-dashboard .aurex-welcome b em{font-style:normal;color:#f0c66e}
+@media(max-width:720px){
+ .dashboard-content .welcome-panel h1,.workspace-picker .picker-heading h1{font-size:clamp(27px,7.5vw,36px)!important;line-height:1.15!important;letter-spacing:-.025em!important;margin:8px 0 10px!important}
+ .dashboard-content .panel-heading h2{font-size:clamp(19px,5.5vw,24px)!important}
+ .dashboard-content .panel-heading{align-items:flex-start!important;gap:9px!important}
+ .dashboard-content .section-kicker{font-size:8px!important;letter-spacing:1px!important}
+ .dashboard-content .welcome-panel>p,.workspace-picker .picker-heading>p{font-size:12px!important}
+}
