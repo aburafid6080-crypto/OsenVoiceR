@@ -21,7 +21,7 @@ async function audit(user:any,action:string,details:Record<string,unknown>={}){
 export async function GET(req:NextRequest){
  try{
   await authorize(req);
-  const sites=await db("website_projects?select=id,name,domain,status,created_at&order=created_at.desc").catch(()=>[]);
+  const sites=await db("website_projects?select=id,name,domain,status,created_at,template,content&order=created_at.desc").catch(()=>[]);
   return NextResponse.json({sites:sites||[]});
  }catch(error){return NextResponse.json({error:error instanceof Error?error.message:"Unauthorized"},{status:401});}
 }
@@ -30,10 +30,10 @@ export async function POST(req:NextRequest){
   const user=await authorize(req);const body=await req.json();
   if(body.action==="create_site_project"){
    if(typeof body.name!=="string"||!body.name.trim()||body.name.trim().length>80)throw new Error("Project name must be 1–80 characters.");
-   const created=await db("website_projects",{method:"POST",body:JSON.stringify({name:body.name.trim(),status:"draft"})});
+   const template=["portfolio","business","landing","creator"].includes(body.template)?body.template:"portfolio";\n   const created=await db("website_projects",{method:"POST",body:JSON.stringify({name:body.name.trim(),template,status:"draft",content:{headline:"Build something remarkable.",description:"Introduce your work, your ideas and what makes your project unique.",button_text:"Get started",accent:"#d8b15e"}})});
    await audit(user,"create_site_project",{name:body.name.trim()});return NextResponse.json({ok:true,project:Array.isArray(created)?created[0]:created});
   }
-  if(body.action==="set_site_status"){
+  if(body.action==="save_site_content"){\n   if(typeof body.id!=="string"||!/^[0-9a-f-]{36}$/i.test(body.id))throw new Error("Invalid project ID.");\n   const content=body.content;if(!content||typeof content!=="object"||Array.isArray(content))throw new Error("Invalid website content.");\n   const clean={headline:String(content.headline||"").trim().slice(0,100),description:String(content.description||"").trim().slice(0,500),button_text:String(content.button_text||"").trim().slice(0,32),accent:/^#[0-9a-f]{6}$/i.test(String(content.accent||""))?String(content.accent):"#d8b15e"};\n   if(!clean.headline)throw new Error("A page headline is required.");\n   const template=["portfolio","business","landing","creator"].includes(body.template)?body.template:"portfolio";\n   await db("website_projects?id=eq."+encodeURIComponent(body.id),{method:"PATCH",body:JSON.stringify({template,content:clean,updated_at:new Date().toISOString()})});\n   await audit(user,"save_site_content",{project_id:body.id,template});return NextResponse.json({ok:true});\n  }\n  if(body.action==="set_site_status"){
    if(typeof body.id!=="string"||!/^[0-9a-f-]{36}$/i.test(body.id)||!["draft","paused"].includes(body.status))throw new Error("Invalid project status.");
    await db("website_projects?id=eq."+encodeURIComponent(body.id),{method:"PATCH",body:JSON.stringify({status:body.status,updated_at:new Date().toISOString()})});
    await audit(user,"set_site_status",{project_id:body.id,status:body.status});return NextResponse.json({ok:true});
