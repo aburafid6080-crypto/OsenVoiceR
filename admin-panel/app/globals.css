@@ -3889,3 +3889,90 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .site-save-btn:disabled{opacity:.45;cursor:not-allowed}
 @media(max-width:760px){.site-template-options{grid-template-columns:repeat(2,minmax(0,1fr))}.preview-nav{padding:0 13px}.preview-nav span{font-size:7px}.preview-feature-row{grid-template-columns:1fr}.preview-feature-row span{padding:9px}}
 @media(max-width:390px){.site-template-options{grid-template-columns:1fr}.site-preview-toolbar{align-items:flex-start;flex-direction:column}.preview-nav span{display:none}}
+
+/* OSEN AUREX — unified anime-inspired black & gold visual system */
+:root{
+ --aurex-gold:#edc46c;--aurex-gold-hot:#ffe2a0;--aurex-ink:#07080c;
+ --aurex-panel:#111117;--aurex-line:#76572e;--aurex-glow:#d79c3c;
+}
+html{background:#06070b}
+body{
+ background:
+  radial-gradient(ellipse at 12% 8%,#a66b241b 0,transparent 30%),
+  radial-gradient(ellipse at 88% 28%,#73501b1b 0,transparent 34%),
+  radial-gradient(ellipse at 50% 100%,#29201630 0,transparent 45%),
+  repeating-linear-gradient(132deg,transparent 0 78px,#e5b75b08 79px,#e5b75b08 80px,transparent 81px 160px),
+  #06070b!important;
+}
+body:before{
+ content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.23;
+ background:linear-gradient(115deg,transparent 0 42%,#e6b65a0b 42.2%,transparent 42.6% 100%),radial-gradient(circle at 20% 30%,#f0c66b22 0 1px,transparent 2px),radial-gradient(circle at 75% 68%,#f0c66b18 0 1px,transparent 2px);
+ background-size:auto,53px 53px,71px 71px;
+ animation:aurexAnimeAtmosphere 18s linear infinite;
+}
+.nexus-shell,.aurex-dashboard,.login-stage,.workspace-picker{position:relative;z-index:1}
+.nexus-topbar{border-bottom-color:#76572e!important}
+.nexus-topbar:after{height:2px!important;background:linear-gradient(90deg,transparent,#8f6429,#ffe09a,#b47a2d,transparent)!important;box-shadow:0 0 15px #e4b65b66}
+.brand-mark,.aurex-mark{border-color:#e4b65b!important;color:#ffe3a0!important;background:linear-gradient(145deg,#382813,#111015)!important;box-shadow:0 0 16px #e5b65b35,inset 0 0 14px #e5b65b12!important}
+.nexus-brand i{color:#e9bf69!important}
+.side-nav,.aurex-sidebar{
+ background:linear-gradient(160deg,#15141aee,#090a0fee 72%)!important;
+ border-color:#78592f99!important;box-shadow:0 18px 55px #0009,inset 0 1px #ffe4a01c!important;
+}
+.side-nav>a,.aurex-side-link{transition:transform .22s ease,border-color .22s ease,background .22s ease,box-shadow .22s ease!important}
+.side-nav>a:hover,.side-nav>a.nav-active{
+ border-color:#e0b65f!important;color:#fff0ce!important;
+ background:linear-gradient(100deg,#69471955,#21180e 55%,#101116)!important;
+ box-shadow:inset 3px 0 #f5cf7b,0 0 22px #d9a64a1a!important;
+ transform:translateX(3px);
+}
+.side-nav>a span,.nav-caption,.section-kicker{color:#e4bb6b!important}
+.dashboard-content,.aurex-main{animation:aurexAnimeEnter .55s ease both}
+.welcome-panel h1,.picker-heading h1,.panel-heading h2,.aurex-welcome h1{
+ text-shadow:0 0 22px #d7a64a22;
+}
+.metric-card,.panel-card,.aurex-panel,.aurex-stats>article,.workspace-tile,.site-editor,.site-preview-shell,.integration-card,.login-panel,.login-visual{
+ position:relative;overflow:hidden;
+ border-color:#80603988!important;
+ background:linear-gradient(145deg,#1b1918f5,#0c0d12f8 68%,#111016)!important;
+ box-shadow:0 16px 42px #0008,inset 0 1px #ffe6ae14!important;
+}
+.metric-card:after,.panel-card:after,.aurex-panel:after,.workspace-tile:after,.login-panel:after{
+ content:"";position:absolute;top:0;left:-130%;width:65%;height:1px;
+ background:linear-gradient(90deg,transparent,#ffe5a5,transparent);
+ opacity:.6;pointer-events:none;transition:left .75s ease;
+}
+.metric-card:hover:after,.panel-card:hover:after,.aurex-panel:hover:after,.workspace-tile:hover:after,.login-panel:hover:after{left:150%}
+.metric-card,.workspace-tile,.panel-card,.aurex-panel{transition:transform .24s ease,border-color .24s ease,box-shadow .24s ease!important}
+.metric-card:hover,.workspace-tile:hover,.panel-card:hover,.aurex-panel:hover{
+ border-color:#d7ad60!important;box-shadow:0 20px 55px #000a,0 0 26px #d8a64b18,inset 0 1px #fff2!important;
+}
+.primary-btn,.login-submit,.site-create-submit,.site-save-btn{
+ border:1px solid #ffe09a!important;
+ background:linear-gradient(110deg,#ffe6a7,#d6a04b 55%,#98601f)!important;
+ color:#171009!important;font-weight:950!important;
+ box-shadow:0 8px 26px #c28b3233,inset 0 1px #fff9!important;
+ transition:transform .2s ease,filter .2s ease,box-shadow .2s ease!important;
+}
+.primary-btn:hover,.login-submit:hover,.site-create-submit:hover,.site-save-btn:hover{
+ transform:translateY(-2px) scale(1.012)!important;filter:brightness(1.08);
+ box-shadow:0 12px 34px #d6a44755,0 0 18px #f2cb7b25!important;
+}
+input,select,textarea,.login-field,.site-editor-input{
+ border-color:#6f552f!important;background:#090a0f!important;color:#f7edd9!important;
+}
+input:focus,select:focus,textarea:focus,.login-field:focus-within,.site-editor-input:focus{
+ border-color:#f0c66b!important;box-shadow:0 0 0 3px #e4b65b20,0 0 18px #d8a64b18!important;
+}
+button:focus-visible,a:focus-visible{outline:2px solid #f0ca79!important;outline-offset:3px!important}
+.count-pill,.draft-pill,.status-on,.welcome-status{border-color:#7c633c!important;color:#e9c77d!important}
+.login-visual{
+ background:radial-gradient(ellipse at 50% 38%,#b47a2c33,transparent 48%),repeating-linear-gradient(135deg,#e8b85b08 0 1px,transparent 1px 18px),linear-gradient(145deg,#21180f,#08090e 70%)!important;
+}
+.login-character{filter:drop-shadow(0 18px 28px #000e) drop-shadow(0 0 28px #dcae543e)!important}
+.login-panel{backdrop-filter:blur(20px)}
+.site-live-preview{background:linear-gradient(145deg,#1c1915,#090b10)!important}
+.alert{border-color:#a27b42!important;box-shadow:0 10px 35px #0008,0 0 20px #d6a44714!important}
+@keyframes aurexAnimeAtmosphere{from{background-position:0 0,0 0,0 0}to{background-position:0 0,106px 53px,-71px 71px}}
+@keyframes aurexAnimeEnter{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){body:before,.dashboard-content,.aurex-main{animation:none!important}}
