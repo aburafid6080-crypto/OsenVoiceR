@@ -37,7 +37,7 @@ export default function Home(){
  }
  async function api(action:string,extra:Record<string,unknown>={}){const websiteActions=["create_site_project","set_site_status","delete_site_project","save_site_content"];const endpoint=websiteActions.includes(action)?"/api/website-admin":"/api/admin";const r=await fetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({action,...extra})});return readApiResponse(r,"Request failed");}
  async function run(action:string,extra:Record<string,unknown>={},success="Changes saved."){setBusy(true);setNotice("");setNoticeError(false);try{await api(action,extra);await loadDashboard();setNotice(success);return true}catch(e){setNotice(e instanceof Error?e.message:"Action failed");setNoticeError(true);return false}finally{setBusy(false)}}
- async function login(e:React.FormEvent){e.preventDefault();setBusy(true);setNotice("");setNoticeError(false);try{if(!supabaseUrl||!anonKey)throw new Error("Admin website environment is not configured.");const r=await fetch(supabaseUrl+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"Content-Type":"application/json",apikey:anonKey},body:JSON.stringify({email,password})});const d=await r.json();if(!r.ok)throw new Error(d.msg||d.message||"Login failed");await loadDashboard(d.access_token,"app");await loadDashboard(d.access_token,"website");setToken(d.access_token);setWorkspace("home");window.history.replaceState({osenAdmin:true,workspace:"home"},"",window.location.pathname);setActiveSection("overview");setPassword("")}catch(e){setNotice(e instanceof Error?e.message:"Could not sign in");setNoticeError(true)}finally{setBusy(false)}}
+ async function login(e:React.FormEvent){e.preventDefault();setBusy(true);setNotice("");setNoticeError(false);try{if(!supabaseUrl||!anonKey)throw new Error("Admin website environment is not configured.");const r=await fetch(supabaseUrl+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"Content-Type":"application/json",apikey:anonKey},body:JSON.stringify({email,password})});const d=await r.json();if(!r.ok)throw new Error(d.msg||d.message||"Login failed");await loadDashboard(d.access_token,"app");await loadDashboard(d.access_token,"website");setToken(d.access_token);setWorkspace("home");window.history.replaceState({osenAdmin:true,workspace:"home",section:"overview"},"",window.location.pathname+"?workspace=home&section=overview");setActiveSection("overview");setPassword("")}catch(e){setNotice(e instanceof Error?e.message:"Could not sign in");setNoticeError(true)}finally{setBusy(false)}}
  function logout(){setToken("");setUsers([]);setSites([]);setAppProjects([]);setLogs([]);setEnabled(false);setNotice("")}
  const filteredUsers=useMemo(()=>users.filter(u=>u.user_id.toLowerCase().includes(userSearch.toLowerCase())),[users,userSearch]);
  const filteredSites=useMemo(()=>sites.filter(s=>s.name.toLowerCase().includes(siteSearch.toLowerCase())),[sites,siteSearch]);
@@ -45,30 +45,28 @@ export default function Home(){
  useEffect(()=>{
   const validSections=["overview","app-projects","premium","users","app-control","activity","integrations","websites"];
   function syncLocation(event?:PopStateEvent){
-   const state=(event?.state??window.history.state) as {osenAdmin?:boolean;workspace?:"home"|"chooser"|"website"|"app"}|null;
-   if(state?.osenAdmin){
-    if(state.workspace==="home"||state.workspace==="chooser"||state.workspace==="website"||state.workspace==="app")setWorkspace(state.workspace);
-    const section=window.location.hash.replace(/^#/,"");
-    if(validSections.includes(section))setActiveSection(section);
-    else if(state.workspace==="website")setActiveSection("websites");
-    else if(state.workspace==="app")setActiveSection("overview");
-    else setActiveSection("overview");
-   }else{
-    setWorkspace("home");
-    setActiveSection("overview");
-    setMobileMenuOpen(false);
-   }
+   const params=new URLSearchParams(window.location.search);
+   const urlWorkspace=params.get("workspace");
+   const urlSection=params.get("section");
+   const state=(event?.state??window.history.state) as {osenAdmin?:boolean;workspace?:"home"|"chooser"|"website"|"app";section?:string}|null;
+   const nextWorkspace=(urlWorkspace==="website"||urlWorkspace==="app"||urlWorkspace==="chooser"||urlWorkspace==="home")?urlWorkspace:state?.workspace;
+   if(nextWorkspace==="home"||nextWorkspace==="chooser"||nextWorkspace==="website"||nextWorkspace==="app")setWorkspace(nextWorkspace);
+   const section=urlSection||state?.section||"";
+   if(validSections.includes(section))setActiveSection(section);
+   else setActiveSection(nextWorkspace==="website"?"websites":"overview");
+   setMobileMenuOpen(false);
   }
   function handlePop(event:PopStateEvent){syncLocation(event)}
-  function handleHash(){const section=window.location.hash.replace(/^#/,"");if(validSections.includes(section))setActiveSection(section)}
   window.addEventListener("popstate",handlePop);
-  window.addEventListener("hashchange",handleHash);
-  return()=>{window.removeEventListener("popstate",handlePop);window.removeEventListener("hashchange",handleHash)};
+  syncLocation();
+  return()=>window.removeEventListener("popstate",handlePop);
  },[]);
  const premiumCount=users.filter(u=>u.premium).length;
  const currentNav=workspace==="website"?websiteNav:appNav;
- function goHome(){window.history.pushState({osenAdmin:true,workspace:"home"},"",window.location.pathname);setWorkspace("home");setActiveSection("overview");setMobileMenuOpen(false)}
- function openWorkspace(target:"website"|"app"){window.history.pushState({osenAdmin:true,workspace:target},"",target==="website"?"#website-center":"#app-center");setWorkspace(target);setActiveSection(target==="website"?"websites":"overview");setMobileMenuOpen(false);loadDashboard(token,target).catch(e=>{setNotice(e instanceof Error?e.message:"Could not load workspace");setNoticeError(true)})}
+ function writeAdminUrl(nextWorkspace:"home"|"chooser"|"website"|"app",section:string){const url=new URL(window.location.href);url.searchParams.set("workspace",nextWorkspace);url.searchParams.set("section",section);window.history.pushState({osenAdmin:true,workspace:nextWorkspace,section},"",url.pathname+url.search)}
+ function goHome(){writeAdminUrl("home","overview");setWorkspace("home");setActiveSection("overview");setMobileMenuOpen(false)}
+ function navigateSection(section:string){const nextWorkspace=workspace==="website"?"website":"app";writeAdminUrl(nextWorkspace,section);setActiveSection(section);setMobileMenuOpen(false)}
+ function openWorkspace(target:"website"|"app"){const section=target==="website"?"websites":"overview";writeAdminUrl(target,section);setWorkspace(target);setActiveSection(section);setMobileMenuOpen(false);loadDashboard(token,target).catch(e=>{setNotice(e instanceof Error?e.message:"Could not load workspace");setNoticeError(true)})}
  return <main className="nexus-shell">
   {token&&<header className="nexus-topbar"><a className="nexus-brand" href="#overview" onClick={e=>{e.preventDefault();goHome()}}><span className="brand-mark">R</span><span><b>OSEN <i>AUREX</i></b><small>ADMIN PANEL · PRIVATE OWNER</small></span></a><div className="topbar-right"><span className="secure-state"><i/> SECURE ADMIN</span>{token&&<div className="owner-chip"><span className="owner-avatar">AR</span><span><b>{OWNER}</b><small>OWNER</small></span><button className="logout-btn" onClick={logout}>LOG OUT</button></div>}</div></header>}
   {token&&workspace==="home"?<section className="aurex-dashboard">
@@ -149,12 +147,12 @@ export default function Home(){
   </section>:workspace==="home"?null:workspace==="chooser"?<section className="workspace-picker">
    <div className="picker-heading"><span className="section-kicker">ADMIN PANEL · PRIVATE OWNER</span><h1>Choose your <em>workspace</em></h1><p>Website projects and Android app controls stay in separate work areas.</p></div>
    <div className="picker-grid">
-    <button className="workspace-tile website-tile" onClick={()=>{window.history.pushState({osenAdmin:true,workspace:"website"},"","#website-center");setWorkspace("website");setActiveSection("websites");loadDashboard(token,"website").catch(e=>{setNotice(e instanceof Error?e.message:"Could not load Website Studio");setNoticeError(true)})}}><span className="tile-icon">◎</span><span className="tile-kicker">01 / WEB PLATFORM</span><strong>WEBSITE CENTER</strong><small>Build and manage websites, projects, domains and hosting.</small><span className="tile-cta">OPEN WEBSITE CENTER ↗</span></button>
-    <button className="workspace-tile app-tile" onClick={()=>{window.history.pushState({osenAdmin:true,workspace:"app"},"","#app-center");setWorkspace("app");setActiveSection("overview");loadDashboard(token,"app").catch(e=>{setNotice(e instanceof Error?e.message:"Could not load App Studio");setNoticeError(true)})}}><span className="tile-icon">▣</span><span className="tile-kicker">02 / ANDROID PLATFORM</span><strong>ANDROID APP CENTER</strong><small>Manage app access, Premium, Voice and Game Booster controls.</small><span className="tile-cta">OPEN APP CENTER ↗</span></button>
+    <button className="workspace-tile website-tile" onClick={()=>{openWorkspace("website")}}><span className="tile-icon">◎</span><span className="tile-kicker">01 / WEB PLATFORM</span><strong>WEBSITE CENTER</strong><small>Build and manage websites, projects, domains and hosting.</small><span className="tile-cta">OPEN WEBSITE CENTER ↗</span></button>
+    <button className="workspace-tile app-tile" onClick={()=>{openWorkspace("app")}}><span className="tile-icon">▣</span><span className="tile-kicker">02 / ANDROID PLATFORM</span><strong>ANDROID APP CENTER</strong><small>Manage app access, Premium, Voice and Game Booster controls.</small><span className="tile-cta">OPEN APP CENTER ↗</span></button>
    </div>
    <div className="picker-foot"><span>Ⓡ OSEN AUREX</span><span>ONE OWNER · TWO WORKSPACES</span><button onClick={logout}>LOG OUT</button></div>
   </section>:<div className="nexus-workspace">
-   <aside className="side-nav"><button className="workspace-switch" onClick={goHome}>← ALL WORKSPACES</button><div className="nav-caption">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div>{currentNav.map(([id,label,ico])=><a key={id} href={"#"+id} aria-current={activeSection===id?"page":undefined} className={activeSection===id?"nav-active":""} onClick={()=>setActiveSection(id)}><span>{ico}</span>{label}</a>)}<div className="sidebar-bottom"><i/> SYSTEM READY<small>Owner-only workspace</small></div></aside>
+   <aside className="side-nav"><button className="workspace-switch" onClick={goHome}>← ALL WORKSPACES</button><div className="nav-caption">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div>{currentNav.map(([id,label,ico])=><a key={id} href={"#"+id} aria-current={activeSection===id?"page":undefined} className={activeSection===id?"nav-active":""} onClick={e=>{e.preventDefault();navigateSection(id)}}><span>{ico}</span>{label}</a>)}<div className="sidebar-bottom"><i/> SYSTEM READY<small>Owner-only workspace</small></div></aside>
    <div className="dashboard-content" data-active={activeSection} data-workspace={workspace}>
     <section id="overview" className="welcome-panel"><div className="workspace-context">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div><div><div className="section-kicker">CONTROL CENTER　/　{(currentNav.find(([id])=>id===activeSection)?.[1]||"OVERVIEW").toUpperCase()}</div><h1>{activeSection==="overview"?"Welcome back,":activeSection==="premium"?"Premium":"Manage"} <em>{activeSection==="overview"?OWNER:activeSection==="premium"?"Access":" "+(currentNav.find(([id])=>id===activeSection)?.[1]||"Workspace")}.</em></h1><p>{activeSection==="premium"?"Manage global Premium availability and securely update the app verification password.":activeSection==="overview"?"Your private workspace to manage OSEN apps, access and website projects.":`Manage ${currentNav.find(([id])=>id===activeSection)?.[1]||"workspace"} settings from your private OSEN AUREX console.`}</p></div><div className="welcome-status"><i/> PRIVATE WORKSPACE</div></section>
     <div className="metric-grid">
