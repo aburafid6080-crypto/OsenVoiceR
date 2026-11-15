@@ -4144,3 +4144,73 @@ button:focus-visible,a:focus-visible{outline:2px solid #f0ca79!important;outline
  outline:none!important;
  box-shadow:none!important;
 }
+
+/* Overview dashboard: arrange all four control panels in a balanced 2x2 layout */
+.dashboard-content[data-active="overview"] .content-grid{
+ display:grid!important;
+ grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ align-items:stretch!important;
+ gap:18px!important;
+}
+.dashboard-content[data-active="overview"] .content-grid>#premium,
+.dashboard-content[data-active="overview"] .content-grid>#app-control,
+.dashboard-content[data-active="overview"] .content-grid>#users,
+.dashboard-content[data-active="overview"] .content-grid>#app-projects{
+ grid-column:auto!important;
+ min-width:0!important;
+ width:100%!important;
+ height:100%!important;
+ align-self:stretch!important;
+}
+.dashboard-content[data-active="overview"] .content-grid>#users .data-row{
+ grid-template-columns:minmax(0,1fr) auto auto!important;
+ gap:8px!important;
+}
+.dashboard-content[data-active="overview"] .content-grid>#users .data-row code{
+ min-width:0!important;overflow-wrap:anywhere!important;word-break:break-word!important;
+}
+.dashboard-content[data-active="overview"] .content-grid>#users .inline-form,
+.dashboard-content[data-active="overview"] .content-grid>#app-projects .inline-form{
+ align-items:stretch!important;
+}
+.dashboard-content[data-active="overview"] .content-grid>#app-control .setting-row{
+ grid-template-columns:minmax(0,1fr) auto auto!important;
+}
+.dashboard-content[data-active="overview"] .content-grid>.panel-card{
+ padding:clamp(17px,1.5vw,24px)!important;
+ background:linear-gradient(145deg,#111c29f7 0%,#0a111bfa 68%,#11100d 100%)!important;
+ border-color:#70552c!important;
+ box-shadow:0 14px 34px #0007,inset 0 1px #f6d17b14!important;
+}
+.dashboard-content[data-active="overview"] .content-grid>.panel-card:before{
+ background:linear-gradient(90deg,transparent,#e4b75e99,#66d8f277,transparent)!important;
+}
+.dashboard-content[data-active="overview"] .content-grid .panel-heading h2{
+ font-size:clamp(20px,1.65vw,27px)!important;
+}
+@media(max-width:1100px){
+ .dashboard-content[data-active="overview"] .content-grid{
+  grid-template-columns:minmax(0,1fr)!important;
+ }
+ .dashboard-content[data-active="overview"] .content-grid>#premium,
+ .dashboard-content[data-active="overview"] .content-grid>#app-control,
+ .dashboard-content[data-active="overview"] .content-grid>#users,
+ .dashboard-content[data-active="overview"] .content-grid>#app-projects{
+  grid-column:1!important;
+ }
+}
+@media(max-width:720px){
+ .dashboard-content[data-active="overview"] .content-grid{gap:13px!important}
+ .dashboard-content[data-active="overview"] .content-grid>#users .data-row{
+  grid-template-columns:minmax(0,1fr) auto!important;
+ }
+ .dashboard-content[data-active="overview"] .content-grid>#users .data-row small{
+  display:none!important;
+ }
+ .dashboard-content[data-active="overview"] .content-grid>#app-control .setting-row{
+  grid-template-columns:minmax(0,1fr) auto!important;
+ }
+ .dashboard-content[data-active="overview"] .content-grid>#app-control .setting-row button{
+  grid-column:1/-1!important;justify-self:start!important;
+ }
+}
