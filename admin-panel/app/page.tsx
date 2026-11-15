@@ -66,7 +66,7 @@ export default function Home(){
  function writeAdminUrl(nextWorkspace:"home"|"chooser"|"website"|"app",section:string){const url=new URL(window.location.href);url.searchParams.set("workspace",nextWorkspace);url.searchParams.set("section",section);window.history.pushState({osenAdmin:true,workspace:nextWorkspace,section},"",url.pathname+url.search)}
  function goHome(){writeAdminUrl("home","overview");setWorkspace("home");setActiveSection("overview");setMobileMenuOpen(false)}
  function navigateSection(section:string){const nextWorkspace=workspace==="website"?"website":"app";writeAdminUrl(nextWorkspace,section);setActiveSection(section);setMobileMenuOpen(false)}
- function openWorkspace(target:"website"|"app"){const section=target==="website"?"websites":"overview";writeAdminUrl(target,section);setWorkspace(target);setActiveSection(section);setMobileMenuOpen(false);loadDashboard(token,target).catch(e=>{setNotice(e instanceof Error?e.message:"Could not load workspace");setNoticeError(true)})}
+ function openWorkspace(target:"website"|"app",sectionOverride?:string){const section=sectionOverride||(target==="website"?"websites":"overview");writeAdminUrl(target,section);setWorkspace(target);setActiveSection(section);setMobileMenuOpen(false);loadDashboard(token,target).catch(e=>{setNotice(e instanceof Error?e.message:"Could not load workspace");setNoticeError(true)})}
  return <main className="nexus-shell">
   {token&&<header className="nexus-topbar"><a className="nexus-brand" href="#overview" onClick={e=>{e.preventDefault();goHome()}}><span className="brand-mark">R</span><span><b>OSEN <i>AUREX</i></b><small>ADMIN PANEL · PRIVATE OWNER</small></span></a><div className="topbar-right"><span className="secure-state"><i/> SECURE ADMIN</span>{token&&<div className="owner-chip"><span className="owner-avatar">AR</span><span><b>{OWNER}</b><small>OWNER</small></span><button className="logout-btn" onClick={logout}>LOG OUT</button></div>}</div></header>}
   {token&&workspace==="home"?<section className="aurex-dashboard">
@@ -75,11 +75,11 @@ export default function Home(){
     <button className="aurex-side-link active" onClick={goHome}>⌂　Dashboard</button>
     <button className="aurex-side-link" onClick={()=>openWorkspace("website")}>◎　Website Center</button>
     <button className="aurex-side-link" onClick={()=>openWorkspace("app")}>▣　Android App Center</button>
-    <button className="aurex-side-link" onClick={()=>{openWorkspace("app");setActiveSection("users")}}>♙　Users Management</button>
-    <button className="aurex-side-link" onClick={()=>{openWorkspace("app");setActiveSection("premium")}}>♛　Premium Control</button>
-    <button className="aurex-side-link" onClick={()=>{openWorkspace("app");setActiveSection("activity")}}>▥　Analytics / Activity</button>
-    <button className="aurex-side-link" onClick={()=>{openWorkspace("app");setActiveSection("app-control")}}>⚙　Settings</button>
-    <button className="aurex-side-link" onClick={()=>{openWorkspace("app");setActiveSection("integrations")}}>⬡　Security & Integrations</button>
+    <button className="aurex-side-link" onClick={()=>openWorkspace("app","users")}>♙　Users Management</button>
+    <button className="aurex-side-link" onClick={()=>openWorkspace("app","premium")}>♛　Premium Control</button>
+    <button className="aurex-side-link" onClick={()=>openWorkspace("app","activity")}>▥　Analytics / Activity</button>
+    <button className="aurex-side-link" onClick={()=>openWorkspace("app","app-control")}>⚙　Settings</button>
+    <button className="aurex-side-link" onClick={()=>openWorkspace("app","integrations")}>⬡　Security & Integrations</button>
     <button className="aurex-logout" onClick={logout}>⇥　LOG OUT</button>
     <div className="aurex-side-tag">OSEN AUREX<small>Powering Your Digital World</small></div>
    </aside>
