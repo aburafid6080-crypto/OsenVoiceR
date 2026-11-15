@@ -4717,3 +4717,27 @@ button:focus-visible,a:focus-visible{outline:2px solid #f0ca79!important;outline
  .nexus-login-page .login-visual-caption small{font-size:5px!important;letter-spacing:.4px!important}
  .nexus-login-page .login-visual-caption .aurex-mark{width:30px!important;height:30px!important}
 }
+
+/* Final polish: stop gold elements rotating, keep character still, compact top-left area */
+.nexus-login-page .login-left-brand{display:none!important}
+.nexus-login-page .login-orbit,.nexus-login-page .login-orbit-a,.nexus-login-page .login-orbit-b{
+ animation:none!important;transform:none!important;
+}
+.nexus-login-page .login-visual-caption{animation:none!important;transform:none!important}
+.nexus-login-page .login-character{
+ animation:none!important;transform:none!important;
+ left:0!important;bottom:0!important;top:4%!important;
+ width:67%!important;height:96%!important;
+}
+.nexus-login-page .login-character img{
+ object-fit:contain!important;object-position:center bottom!important;
+ width:100%!important;height:100%!important;
+}
+.nexus-login-page .login-art-tag{
+ top:14px!important;right:14px!important;padding:5px 8px!important;
+ font-size:6px!important;transform:scale(.86)!important;transform-origin:top right!important;
+}
+@media(max-width:560px){
+ .nexus-login-page .login-character{width:72%!important;height:95%!important;top:5%!important}
+ .nexus-login-page .login-art-tag{top:10px!important;right:10px!important}
+}
