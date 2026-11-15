@@ -3686,3 +3686,17 @@ body:has(.nexus-login-page){margin:0!important}
 .site-live-preview button{border:0;border-radius:8px;padding:12px 20px;color:#15110a;font-size:10px;font-weight:900}
 .site-live-preview small{margin-top:20px;color:#8295a4;font-size:8px;letter-spacing:.8px}
 @media(max-width:720px){.site-builder-create{grid-template-columns:1fr}.site-builder-create button{min-height:42px}.site-editor{padding:14px}.site-editor-actions{flex-direction:column}.site-editor-actions button{width:100%;min-height:42px}}
+
+/* Mobile dashboard navigation: prevent fixed desktop sidebar from squeezing content */
+@media(max-width:900px){
+ .aurex-dashboard{display:flex!important;flex-direction:column!important;width:100%!important;min-width:0!important;overflow:visible!important}
+ .aurex-sidebar{position:relative!important;inset:auto!important;width:100%!important;height:auto!important;min-height:0!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important;padding:12px!important;border-right:0!important;border-bottom:1px solid #bd8a2d!important}
+ .aurex-side-brand{grid-column:1/-1!important;width:100%!important;margin:0 0 7px!important;padding:0 4px 12px!important}
+ .aurex-side-link,.aurex-logout{width:100%!important;min-width:0!important;min-height:42px!important;padding:10px 9px!important;font-size:11px!important;white-space:normal!important;line-height:1.35!important}
+ .aurex-side-tag{display:none!important}
+ .aurex-main{width:100%!important;min-width:0!important;padding:12px!important}
+}
+@media(max-width:380px){
+ .aurex-sidebar{grid-template-columns:1fr!important}
+ .aurex-side-link,.aurex-logout{font-size:12px!important;padding:11px 12px!important}
+}
