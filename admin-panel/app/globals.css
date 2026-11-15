@@ -3615,3 +3615,54 @@ body:has(.nexus-login-page){margin:0!important}
  0%,100%{transform:translateY(0) scale(1)}
  50%{transform:translateY(-7px) scale(1.008)}
 }
+
+
+/* FINAL NAVIGATION + RESPONSIVE FIXES (scoped to the admin workspaces) */
+/* Each sidebar item displays only its own page. */
+.dashboard-content[data-active="app-projects"] .metric-grid{display:none!important}
+.dashboard-content[data-active="app-projects"] .content-grid>section:not(#app-projects){display:none!important}
+.dashboard-content[data-active="app-projects"] .content-grid>#app-projects{display:block!important;grid-column:1/-1!important}
+.dashboard-content[data-active="app-projects"] .content-grid{display:grid!important;grid-template-columns:minmax(0,1fr)!important;align-content:start!important;min-height:0!important}
+.dashboard-content[data-active="app-projects"] .welcome-panel{margin-bottom:14px!important}
+.dashboard-content[data-active="premium"] .content-grid>#app-projects{display:none!important}
+.dashboard-content[data-active="premium"] .content-grid>section:not(#premium){display:none!important}
+.dashboard-content[data-active="users"] .content-grid>#app-projects,
+.dashboard-content[data-active="app-control"] .content-grid>#app-projects,
+.dashboard-content[data-active="activity"] .content-grid>#app-projects,
+.dashboard-content[data-active="integrations"] .content-grid>#app-projects,
+.dashboard-content[data-active="websites"] .content-grid>#app-projects{display:none!important}
+/* Disabled actions remain visibly disabled rather than looking broken or unreadable. */
+.dashboard-content button:disabled{
+ opacity:.58!important;cursor:not-allowed!important;filter:saturate(.55)!important;
+}
+.dashboard-content .inline-form button:disabled{
+ color:#d0c7b2!important;background:#39342a!important;border-color:#716248!important;
+ box-shadow:none!important;
+}
+.dashboard-content input:focus-visible,
+.dashboard-content button:focus-visible,
+.side-nav a:focus-visible{
+ outline:2px solid #79dff5!important;outline-offset:3px!important;
+}
+.dashboard-content[data-workspace="app"] .welcome-panel,
+.dashboard-content[data-workspace="website"] .welcome-panel{
+ min-width:0!important;gap:16px!important;flex-wrap:wrap!important;
+}
+.dashboard-content .welcome-panel>div{min-width:0!important}
+.dashboard-content .welcome-panel p{max-width:760px!important;overflow-wrap:anywhere!important}
+.dashboard-content .panel-card{min-width:0!important;overflow:hidden}
+.dashboard-content .data-row{min-width:0!important}
+.dashboard-content .data-row code{min-width:0!important;overflow-wrap:anywhere!important}
+@media(max-width:1100px){
+ .dashboard-content[data-active="app-projects"] .content-grid{min-height:0!important}
+ .dashboard-content[data-active="app-projects"] .content-grid>#app-projects{grid-column:1!important}
+}
+@media(max-width:720px){
+ .dashboard-content .welcome-panel{align-items:flex-start!important}
+ .dashboard-content .welcome-panel>div{width:100%!important}
+ .dashboard-content .welcome-panel .workspace-context{width:max-content!important;max-width:100%!important}
+ .dashboard-content .metric-card .primary-btn{max-width:100%!important;white-space:normal!important}
+ .dashboard-content .inline-form button{white-space:normal!important;overflow-wrap:anywhere!important}
+ .dashboard-content .data-row{grid-template-columns:minmax(0,1fr) auto!important}
+ .dashboard-content .data-row>*{min-width:0!important}
+}
