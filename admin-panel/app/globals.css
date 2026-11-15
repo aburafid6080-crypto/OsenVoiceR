@@ -4091,3 +4091,56 @@ button:focus-visible,a:focus-visible{outline:2px solid #f0ca79!important;outline
  .nexus-login-page .login-panel{padding:23px 18px!important}
  .nexus-login-page .login-field{height:54px!important}
 }
+
+/* Fix double gold rectangle on login inputs: focus ring belongs to the field wrapper */
+.nexus-login-page .login-field{
+ position:relative!important;
+ display:flex!important;
+ align-items:center!important;
+ width:100%!important;
+ min-width:0!important;
+ box-sizing:border-box!important;
+ overflow:visible!important;
+ border:1px solid #b88b35!important;
+ border-radius:13px!important;
+ background:#090b10!important;
+ box-shadow:inset 0 1px 0 #fff1,0 0 0 1px #d9a84916!important;
+}
+.nexus-login-page .login-field:focus-within{
+ border-color:#ffe08a!important;
+ outline:0!important;
+ box-shadow:0 0 0 2px #e9bd5b30,0 0 18px #e9bd5b38,inset 0 1px 0 #fff2!important;
+}
+.nexus-login-page .login-field input,
+.nexus-login-page .login-field input:focus,
+.nexus-login-page .login-field input:focus-visible{
+ display:block!important;
+ flex:1 1 0!important;
+ width:1px!important;
+ min-width:0!important;
+ max-width:100%!important;
+ height:100%!important;
+ margin:0!important;
+ padding:0 10px!important;
+ border:0!important;
+ border-radius:0 12px 12px 0!important;
+ outline:none!important;
+ outline-offset:0!important;
+ box-shadow:none!important;
+ background:transparent!important;
+ color:#fff3d4!important;
+}
+.nexus-login-page .login-field>span{
+ flex:0 0 44px!important;
+ width:44px!important;
+ display:flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ align-self:stretch!important;
+ border-right:1px solid #8a682f66!important;
+ color:#f4ca65!important;
+}
+.nexus-login-page .login-field input:focus-visible{
+ outline:none!important;
+ box-shadow:none!important;
+}
