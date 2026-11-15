@@ -3666,3 +3666,23 @@ body:has(.nexus-login-page){margin:0!important}
  .dashboard-content .data-row{grid-template-columns:minmax(0,1fr) auto!important}
  .dashboard-content .data-row>*{min-width:0!important}
 }
+
+/* Website Studio builder controls */
+.site-builder-create{display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,.55fr) auto;gap:10px;margin:18px 0}
+.site-builder-create input,.site-builder-create select,.site-editor-input{width:100%;min-width:0;min-height:43px;padding:11px 13px;border:1px solid #355268;border-radius:9px;background:#070e16;color:#edf5fb;font:inherit;font-size:11px;outline:none}
+.site-builder-create input:focus,.site-builder-create select:focus,.site-editor-input:focus{border-color:#6bd7ed;box-shadow:0 0 0 3px #55caff18}
+.site-builder-create button,.site-editor-actions button:last-child{border:1px solid #caa45c;border-radius:9px;padding:11px 15px;background:linear-gradient(110deg,#8d6428,#bd9142);color:#120e08;font-size:9px;font-weight:900;letter-spacing:.7px}
+.site-editor{margin-top:22px;padding:20px;border:1px solid #8b6a36;border-radius:14px;background:linear-gradient(145deg,#1d1a14,#0b1118)}
+.site-editor label{display:block;margin:14px 0 7px;color:#eac36f;font-size:9px;font-weight:800;letter-spacing:1px}
+.site-editor-input{display:block}
+.site-editor textarea.site-editor-input{resize:vertical;line-height:1.6}
+.site-color-row{display:flex;align-items:center;gap:12px;color:#a9bdcb;font-size:10px}
+.site-color-row input{width:48px;height:36px;border:0;background:transparent}
+.site-editor-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.site-live-preview{margin-top:18px;min-height:220px;padding:clamp(24px,5vw,55px);border:1px solid;border-radius:12px;background:radial-gradient(ellipse at 80% 0%,#ffffff12,transparent 45%),linear-gradient(145deg,#171d25,#080c12);display:flex;flex-direction:column;align-items:flex-start;justify-content:center}
+.site-live-preview>span{font-size:9px;font-weight:900;letter-spacing:2px}
+.site-live-preview h2{max-width:620px;margin:15px 0 10px;color:#f4f7fa;font-size:clamp(24px,4vw,42px);letter-spacing:-1.2px}
+.site-live-preview p{max-width:560px;color:#a9bac7;font-size:12px;line-height:1.8}
+.site-live-preview button{border:0;border-radius:8px;padding:12px 20px;color:#15110a;font-size:10px;font-weight:900}
+.site-live-preview small{margin-top:20px;color:#8295a4;font-size:8px;letter-spacing:.8px}
+@media(max-width:720px){.site-builder-create{grid-template-columns:1fr}.site-builder-create button{min-height:42px}.site-editor{padding:14px}.site-editor-actions{flex-direction:column}.site-editor-actions button{width:100%;min-height:42px}}
