@@ -67,7 +67,8 @@ export default function Home(){
  },[]);
  const premiumCount=users.filter(u=>u.premium).length;
  const currentNav=workspace==="website"?websiteNav:appNav;
- function goHome(){window.history.pushState({osenAdmin:true,workspace:"home"},"",window.location.pathname);setWorkspace("home");setActiveSection("overview");setMobileMenuOpen(false)}\n function openWorkspace(target:"website"|"app"){window.history.pushState({osenAdmin:true,workspace:target},"",target==="website"?"#website-center":"#app-center");setWorkspace(target);setActiveSection(target==="website"?"websites":"overview");setMobileMenuOpen(false);loadDashboard(token,target).catch(e=>{setNotice(e instanceof Error?e.message:"Could not load workspace");setNoticeError(true)})}
+ function goHome(){window.history.pushState({osenAdmin:true,workspace:"home"},"",window.location.pathname);setWorkspace("home");setActiveSection("overview");setMobileMenuOpen(false)}
+ function openWorkspace(target:"website"|"app"){window.history.pushState({osenAdmin:true,workspace:target},"",target==="website"?"#website-center":"#app-center");setWorkspace(target);setActiveSection(target==="website"?"websites":"overview");setMobileMenuOpen(false);loadDashboard(token,target).catch(e=>{setNotice(e instanceof Error?e.message:"Could not load workspace");setNoticeError(true)})}
  return <main className="nexus-shell">
   {token&&<header className="nexus-topbar"><a className="nexus-brand" href="#overview" onClick={e=>{e.preventDefault();goHome()}}><span className="brand-mark">R</span><span><b>OSEN <i>AUREX</i></b><small>ADMIN PANEL · PRIVATE OWNER</small></span></a><div className="topbar-right"><span className="secure-state"><i/> SECURE ADMIN</span>{token&&<div className="owner-chip"><span className="owner-avatar">AR</span><span><b>{OWNER}</b><small>OWNER</small></span><button className="logout-btn" onClick={logout}>LOG OUT</button></div>}</div></header>}
   {token&&workspace==="home"?<section className="aurex-dashboard">
