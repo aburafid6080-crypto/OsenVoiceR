@@ -35,11 +35,13 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
-      - name: Build OSEN TURBOPLAY Debug APK
-        run: gradle :booster:assembleDebug
-      - name: Upload APK
+      - name: Build Voice Changer and TurboPlay Debug APKs
+        run: gradle :app:assembleDebug :booster:assembleDebug
+      - name: Upload both APKs
         uses: actions/upload-artifact@v4
         with:
-          name: OSEN-TURBOPLAY-debug-apk
-          path: booster/build/outputs/apk/debug/*.apk
+          name: OSEN-BOOSTVOX-RX-APKs
+          path: |
+            app/build/outputs/apk/debug/*.apk
+            booster/build/outputs/apk/debug/*.apk
           if-no-files-found: error
