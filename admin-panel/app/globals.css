@@ -6698,3 +6698,31 @@ body{background:radial-gradient(ellipse at 82% 4%,#35106a44,transparent 38%),rad
   background:rgba(9,6,17,.60)!important;
  }
 }
+
+
+/* LOGIN INTERACTION HOTFIX: background layer must not block the login form */
+.nexus-login-page.ocean-reference-login > .boost-login-layout.ocean-reference-layout{
+ pointer-events:none!important;
+}
+.nexus-login-page.ocean-reference-login .boost-login-panel.ocean-reference-card,
+.nexus-login-page.ocean-reference-login .boost-login-panel.ocean-reference-card *{
+ pointer-events:auto!important;
+}
+.nexus-login-page.ocean-reference-login .anime-login-form,
+.nexus-login-page.ocean-reference-login .anime-login-form form,
+.nexus-login-page.ocean-reference-login .anime-field,
+.nexus-login-page.ocean-reference-login .anime-field input,
+.nexus-login-page.ocean-reference-login .anime-login-submit{
+ position:relative!important;z-index:7!important;pointer-events:auto!important;
+}
+.nexus-login-page.ocean-reference-login .anime-field input{
+ display:block!important;width:100%!important;min-width:0!important;
+ opacity:1!important;visibility:visible!important;
+ -webkit-user-select:text!important;user-select:text!important;
+}
+.nexus-login-page.ocean-reference-login .anime-login-submit:disabled{
+ cursor:wait!important;opacity:.72!important;
+}
+.nexus-login-page.ocean-reference-login .anime-login-submit:not(:disabled){
+ cursor:pointer!important;
+}
