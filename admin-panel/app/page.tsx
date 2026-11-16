@@ -114,28 +114,22 @@ export default function Home(){
    <div className="login-ambient login-ambient-one"/><div className="login-ambient login-ambient-two"/>
    <div className="boost-login-layout">
     <section className="boost-login-visual">
-     <div className="boost-visual-glow"/>
-     <div className="boost-visual-kicker"><span/> OCEAN ADMIN · OWNER ACCESS</div>
-     <div className="boost-visual-copy"><span className="boost-overline">POWER BEYOND LIMITS</span><h1>Enter the<br/><em>Next Level.</em></h1><p>Your apps. Your platform. Your control center.</p></div>
-     <div className="boost-character"><img src="/aurex-anime-character.svg" alt="OSEN anime hero character" loading="eager"/></div>
-     <div className="boost-feature-row"><div><b>01</b><span>VOICE<br/>STUDIO</span></div><div><b>02</b><span>GAME<br/>BOOSTER</span></div><div><b>03</b><span>OWNER<br/>CONTROL</span></div></div>
-     <div className="boost-visual-brand">OSEN <em>OCEAN ADMIN PANEL</em></div>
+     <div className="boost-character"><img src="/aurex-anime-character.svg" alt="Anime character artwork" loading="eager"/></div>
+     <div className="boost-visual-brand"><span>♛</span><b>OCEAN ADMIN PANEL</b></div>
     </section>
     <section className="boost-login-panel">
-     <div className="boost-panel-top"><span className="boost-panel-mark">O</span><span>PRIVATE ADMIN PORTAL<small>AUTHORIZED OWNER ONLY</small></span><i>SECURE</i></div>
-     <div className="boost-form-heading"><span className="anime-crown">♛</span><h2>Welcome <em>Back</em></h2><p>Sign in to access your control center.</p></div>
+     <div className="boost-form-heading"><span className="anime-crown">♛</span><h2>OCEAN <em>ADMIN PANEL</em></h2><p>LOGIN TO CONTINUE</p></div>
      <div className="anime-login-form">
       <form onSubmit={login}>
        <label htmlFor="admin-email">EMAIL ADDRESS</label>
-       <div className="anime-field"><span>✉</span><input id="admin-email" type="email" autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Enter your email address" required /></div>
+       <div className="anime-field"><span>✉</span><input id="admin-email" type="email" autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email Address" required /></div>
        <label htmlFor="admin-password">PASSWORD</label>
-       <div className="anime-field"><span>⌑</span><input id="admin-password" type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter your password" required /></div>
-       <button className="anime-login-submit" disabled={busy}>{busy?<><span className="login-spinner"/> SIGNING IN…</>:"SIGN IN TO DASHBOARD　→"}</button>
+       <div className="anime-field"><span>⌑</span><input id="admin-password" type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password" required /></div>
+       <button className="anime-login-submit" disabled={busy}>{busy?<><span className="login-spinner"/> SIGNING IN…</>:"➜　LOGIN"}</button>
       </form>
-      <div className="anime-login-note">♢ ENCRYPTED SESSION · OCEAN ADMIN PANEL</div>
+      <div className="anime-login-note">♢ SECURE ACCESS · PRIVATE OWNER</div>
       {notice&&<div className={noticeError?"alert error":"alert"} role="status">{notice}</div>}
      </div>
-     <div className="boost-panel-footer"><span>© 2026 OCEAN ADMIN PANEL</span><span>PRIVATE · SECURE · OWNER</span></div>
     </section>
    </div>
    <footer className="login-page-footer"><span>Ⓡ OCEAN ADMIN PANEL</span><span>OWNER ACCESS ONLY · © 2026</span></footer>
