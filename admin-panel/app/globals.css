@@ -6665,3 +6665,36 @@ body{background:radial-gradient(ellipse at 82% 4%,#35106a44,transparent 38%),rad
  }
  .nexus-login-page.ocean-reference-login .login-page-footer{display:none!important}
 }
+
+
+/* FACE VISIBILITY TUNING — keep the character's head in the visible upper area */
+.nexus-login-page.ocean-reference-login .boost-character img{
+ object-fit:cover!important;
+ object-position:50% 22%!important;
+}
+.nexus-login-page.ocean-reference-login .boost-login-visual.ocean-character-side:after{
+ background:
+ linear-gradient(90deg,rgba(4,2,12,.24),rgba(4,2,12,.42) 50%,rgba(4,2,12,.24)),
+ linear-gradient(0deg,rgba(4,2,12,.50),rgba(4,2,12,.08) 58%,rgba(4,2,12,.18))!important;
+}
+@media(min-width:701px){
+ .nexus-login-page.ocean-reference-login .boost-character img{
+  object-position:50% 24%!important;
+ }
+ .nexus-login-page.ocean-reference-login .boost-login-panel.ocean-reference-card{
+  background:rgba(10,7,19,.58)!important;
+ }
+}
+@media(max-width:700px){
+ .nexus-login-page.ocean-reference-login .boost-character img{
+  object-position:50% 16%!important;
+ }
+ .nexus-login-page.ocean-reference-login .boost-login-visual.ocean-character-side:after{
+  background:
+   linear-gradient(90deg,rgba(4,2,12,.20),rgba(4,2,12,.34) 50%,rgba(4,2,12,.20)),
+   linear-gradient(0deg,rgba(4,2,12,.48),rgba(4,2,12,.04) 62%,rgba(4,2,12,.12))!important;
+ }
+ .nexus-login-page.ocean-reference-login .boost-login-panel.ocean-reference-card{
+  background:rgba(9,6,17,.60)!important;
+ }
+}
