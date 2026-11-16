@@ -5959,3 +5959,108 @@ body{background:radial-gradient(ellipse at 82% 4%,#35106a44,transparent 38%),rad
  .boost-panel-footer{font-size:7px!important}
 }
 @media(prefers-reduced-motion:reduce){.aurex-side-link,.boost-login-panel .anime-login-submit{transition:none!important}}
+
+
+/* OCEAN visual pass — consistent premium login + dashboard, responsive at every width */
+.nexus-shell{width:100%;overflow-x:clip}
+.nexus-topbar{min-height:82px!important;padding:14px clamp(16px,3.5vw,48px)!important;background:#0c0911!important}
+.nexus-brand b{font-size:15px!important;letter-spacing:1.4px!important}
+.nexus-brand b i{color:#e6c77e!important}
+.aurex-dashboard{grid-template-columns:260px minmax(0,1fr)!important;min-height:calc(100svh - 82px)!important}
+.aurex-sidebar{width:260px!important;padding:28px 18px!important;background:linear-gradient(180deg,#191321 0%,#0c0911 100%)!important}
+.aurex-main{max-width:1500px!important;padding:clamp(20px,2.7vw,42px)!important;gap:22px!important}
+.aurex-welcome{min-height:94px!important;padding:20px 26px!important;border-radius:18px!important;background:linear-gradient(110deg,#21182b,#100d16 72%)!important;box-shadow:0 12px 36px #0004!important}
+.aurex-stats{gap:16px!important}
+.aurex-stats article{min-height:142px!important;padding:20px!important;border-radius:16px!important;box-shadow:0 10px 26px #0003!important}
+.aurex-stats article>span{display:grid;place-items:center;width:34px;height:34px;border:1px solid #d8b15e55;border-radius:10px;background:#d8b15e16;color:#e8c77d;font-size:17px}
+.aurex-stats article>b{font-size:30px!important}
+.aurex-anime-banner{min-height:270px!important;max-height:310px!important;border-radius:20px!important;box-shadow:0 14px 38px #0005!important}
+.aurex-anime-banner img{z-index:1!important;right:0!important;width:66%!important;object-fit:contain!important;object-position:right center!important;opacity:1!important;filter:drop-shadow(0 12px 28px #0009)!important}
+.aurex-anime-banner:after{z-index:1!important;background:linear-gradient(90deg,#0c0a12 0%,#0c0a12ed 30%,#0c0a1288 57%,transparent 100%)!important}
+.aurex-banner-copy{z-index:2!important;max-width:55%!important}
+.aurex-anime-banner>strong{z-index:3!important}
+.aurex-dash-grid{grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr)!important;gap:18px!important}
+.aurex-panel{padding:22px!important;border-radius:16px!important;box-shadow:0 10px 28px #0003!important}
+.aurex-status{grid-column:1/-1}
+.aurex-action-grid button{transition:transform .18s ease,border-color .18s ease,background .18s ease!important}
+.aurex-action-grid button:hover{transform:translateY(-2px)!important;border-color:#d8b15e!important;background:#21182b!important}
+.boost-login-layout{width:min(1160px,100%)!important;min-height:660px!important;max-height:none!important;grid-template-columns:minmax(0,1.1fr) minmax(390px,.9fr)!important;overflow:hidden!important;border:1px solid #b58c4c!important;border-radius:26px!important;box-shadow:0 30px 90px #0009,0 0 50px #8a5bb322!important}
+.boost-login-visual{min-height:660px!important;background:radial-gradient(ellipse at 75% 42%,#68418a55,transparent 48%),linear-gradient(145deg,#21162c,#0d0a12 78%)!important}
+.boost-character{inset:82px 0 64px 4%!important;justify-content:flex-end!important;overflow:hidden!important}
+.boost-character img{width:100%!important;height:100%!important;object-fit:contain!important;object-position:right bottom!important}
+.boost-visual-copy{max-width:62%!important;margin-top:58px!important}
+.boost-visual-copy h1{font-size:clamp(42px,4.7vw,64px)!important}
+.boost-login-panel{display:flex!important;flex-direction:column!important;justify-content:center!important;background:linear-gradient(155deg,#17111f,#0c0a10)!important}
+.boost-form-heading{margin:54px 0 28px!important}
+@media(max-width:1100px){
+ .aurex-dashboard{grid-template-columns:225px minmax(0,1fr)!important}
+ .aurex-sidebar{width:225px!important}
+ .aurex-dash-grid{grid-template-columns:1fr!important}
+ .aurex-status{grid-column:auto}
+ .boost-login-layout{grid-template-columns:minmax(0,1fr) minmax(350px,.95fr)!important}
+}
+@media(max-width:760px){
+ .nexus-topbar{min-height:68px!important;padding:12px 14px!important;align-items:center!important}
+ .nexus-brand b{font-size:12px!important}
+ .nexus-brand small{font-size:7px!important;letter-spacing:1px!important}
+ .topbar-right{width:auto!important;gap:8px!important}
+ .secure-state{display:none!important}
+ .owner-chip{gap:6px!important}
+ .owner-chip .owner-avatar{width:31px!important;height:31px!important}
+ .owner-chip b{font-size:10px!important}
+ .owner-chip small{font-size:8px!important}
+ .logout-btn{padding:8px 10px!important;font-size:9px!important}
+ .aurex-dashboard{display:flex!important;flex-direction:column!important}
+ .aurex-sidebar{width:100%!important;height:auto!important;min-height:0!important;position:relative!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;padding:12px!important;gap:7px!important}
+ .aurex-side-brand{grid-column:1/-1!important;margin-bottom:5px!important}
+ .aurex-side-link{min-height:44px!important;padding:0 10px!important;font-size:10px!important}
+ .aurex-logout{min-height:44px!important}
+ .aurex-main{padding:14px!important;gap:14px!important}
+ .aurex-welcome{min-height:76px!important;padding:14px!important;gap:8px!important}
+ .aurex-welcome b{font-size:13px!important}
+ .aurex-welcome small{font-size:9px!important}
+ .aurex-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+ .aurex-stats article{min-height:118px!important;padding:13px!important}
+ .aurex-stats article>b{font-size:25px!important}
+ .aurex-stats article>strong{font-size:10px!important}
+ .aurex-anime-banner{min-height:220px!important;max-height:240px!important;padding:17px!important}
+ .aurex-anime-banner img{width:75%!important;object-fit:contain!important;object-position:right bottom!important;opacity:.88!important}
+ .aurex-anime-banner:after{background:linear-gradient(90deg,#0c0a12f2 0%,#0c0a12c9 42%,#0c0a1244 100%)!important}
+ .aurex-banner-copy{max-width:72%!important}
+ .aurex-banner-copy h2{font-size:clamp(23px,6vw,32px)!important}
+ .aurex-banner-copy p{max-width:210px!important;font-size:10px!important;line-height:1.5!important}
+ .aurex-anime-banner>strong{right:12px!important;bottom:10px!important;font-size:8px!important}
+ .aurex-dash-grid{grid-template-columns:1fr!important;gap:12px!important}
+ .aurex-panel{padding:15px!important}
+ .aurex-activity-row{grid-template-columns:7px minmax(0,1fr)!important}
+ .aurex-activity-row small{grid-column:2!important}
+ .aurex-footer{font-size:8px!important}
+ .nexus-login-page{justify-content:flex-start!important;padding:12px 10px!important}
+ .boost-login-layout{width:min(540px,100%)!important;min-height:0!important;max-height:none!important;display:flex!important;flex-direction:column!important;border-radius:20px!important}
+ .boost-login-visual{height:340px!important;min-height:340px!important;padding:22px!important}
+ .boost-visual-copy{margin-top:28px!important;max-width:67%!important}
+ .boost-visual-copy h1{font-size:clamp(34px,8vw,46px)!important}
+ .boost-visual-copy p{font-size:10px!important}
+ .boost-character{inset:68px -2% 45px 18%!important}
+ .boost-character img{object-fit:contain!important;object-position:right bottom!important}
+ .boost-feature-row{left:14px!important;bottom:12px!important;gap:5px!important}
+ .boost-feature-row>div{padding:6px 7px!important}
+ .boost-feature-row span{font-size:6px!important}
+ .boost-login-panel{padding:25px 22px!important}
+ .boost-form-heading{margin:26px 0 18px!important}
+ .login-page-footer{font-size:7px!important}
+}
+@media(max-width:390px){
+ .aurex-sidebar{grid-template-columns:1fr 1fr!important}
+ .aurex-side-link{font-size:9px!important}
+ .aurex-welcome>div:first-child{gap:8px!important}
+ .aurex-online{font-size:8px!important}
+ .aurex-anime-banner{min-height:200px!important}
+ .aurex-banner-copy{max-width:82%!important}
+ .aurex-banner-copy h2{font-size:23px!important}
+ .aurex-banner-copy p{max-width:175px!important}
+ .boost-login-visual{height:305px!important;min-height:305px!important}
+ .boost-visual-copy{max-width:72%!important}
+ .boost-login-panel{padding:22px 17px!important}
+}
+@media(prefers-reduced-motion:reduce){.aurex-action-grid button{transition:none!important}}
