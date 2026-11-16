@@ -139,7 +139,7 @@ export default function Home(){
     </section>
    </div>
    <footer className="login-page-footer"><span>Ⓡ OSEN BOOSTVOX RX</span><span>OWNER ACCESS ONLY · © 2026</span></footer>
-  :workspace==="home"?null:workspace==="chooser"?<section className="workspace-picker">
+  </section>:workspace==="home"?null:workspace==="chooser"?<section className="workspace-picker">
    <div className="picker-heading"><span className="section-kicker">ADMIN PANEL · PRIVATE OWNER</span><h1>Choose your <em>workspace</em></h1><p>Website projects and Android app controls stay in separate work areas.</p></div>
    <div className="picker-grid">
     <button className="workspace-tile website-tile" onClick={()=>{openWorkspace("website")}}><span className="tile-icon">◎</span><span className="tile-kicker">01 / WEB PLATFORM</span><strong>WEBSITE CENTER</strong><small>Build and manage websites, projects, domains and hosting.</small><span className="tile-cta">OPEN WEBSITE CENTER ↗</span></button>
