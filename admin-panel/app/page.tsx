@@ -68,17 +68,17 @@ export default function Home(){
  function navigateSection(section:string){const nextWorkspace=workspace==="website"?"website":"app";writeAdminUrl(nextWorkspace,section);setActiveSection(section);setMobileMenuOpen(false)}
  function openWorkspace(target:"website"|"app",sectionOverride?:string){const section=sectionOverride||(target==="website"?"websites":"overview");writeAdminUrl(target,section);setWorkspace(target);setActiveSection(section);setMobileMenuOpen(false);loadDashboard(token,target).catch(e=>{setNotice(e instanceof Error?e.message:"Could not load workspace");setNoticeError(true)})}
  return <main className="nexus-shell">
-  {token&&<header className="nexus-topbar"><a className="nexus-brand" href="#overview" onClick={e=>{e.preventDefault();goHome()}}><span className="brand-mark">R</span><span><b>OSEN <i>BOOSTVOX RX</i></b><small>ADMIN PANEL · PRIVATE OWNER</small></span></a><div className="topbar-right"><span className="secure-state"><i/> SECURE ADMIN</span>{token&&<div className="owner-chip"><span className="owner-avatar">AR</span><span><b>{OWNER}</b><small>OWNER</small></span><button className="logout-btn" onClick={logout}>LOG OUT</button></div>}</div></header>}
+  {token&&<header className="nexus-topbar"><a className="nexus-brand" href="#overview" onClick={e=>{e.preventDefault();goHome()}}><span className="brand-mark">O</span><span><b>OSEN <i>OCEAN ADMIN PANEL</i></b><small>ADMIN PANEL · PRIVATE OWNER</small></span></a><div className="topbar-right"><span className="secure-state"><i/> SECURE ADMIN</span>{token&&<div className="owner-chip"><span className="owner-avatar">AR</span><span><b>{OWNER}</b><small>OWNER</small></span><button className="logout-btn" onClick={logout}>LOG OUT</button></div>}</div></header>}
   {token&&workspace==="home"?<section className="aurex-dashboard">
    <aside className="aurex-sidebar">
-    <div className="aurex-side-brand"><span>R</span><b>OSEN BOOSTVOX RX<small>ADMIN PANEL</small></b></div>
+    <div className="aurex-side-brand"><span>O</span><b>OCEAN ADMIN PANEL<small>ADMIN PANEL</small></b></div>
     <button className="aurex-side-link active" onClick={goHome}>⌂　Dashboard</button>
     <button className="aurex-side-link" onClick={()=>openWorkspace("website")}>◎　Website Center</button>
     <button className="aurex-side-link" onClick={()=>openWorkspace("app")}>▣　Android App Center</button>
     <button className="aurex-side-link" onClick={()=>openWorkspace("app","app-control")}>⚙　Settings</button>
     <button className="aurex-side-link" onClick={()=>openWorkspace("app","integrations")}>⬡　Security & Integrations</button>
     <button className="aurex-logout" onClick={logout}>⇥　LOG OUT</button>
-    <div className="aurex-side-tag">OSEN BOOSTVOX RX<small>Powering Your Digital World</small></div>
+    <div className="aurex-side-tag">OCEAN ADMIN PANEL<small>Powering Your Digital World</small></div>
    </aside>
    <div className="aurex-main">
     <header className="aurex-welcome"><div><span className="aurex-crown">♛</span><div><b>Welcome Back, <em>{OWNER}</em></b><small>Manage your workspace with power and ease.</small></div></div><span className="aurex-online">● Online</span><span className="aurex-profile">AR　 ADMIN</span></header>
@@ -88,7 +88,7 @@ export default function Home(){
      <article><span>▣</span><b>{appProjects.length}</b><strong>App Projects</strong><small>Saved projects</small></article>
      <article><span>♛</span><b>{premiumCount}</b><strong>Premium Users</strong><small>{enabled?"Premium enabled":"Premium disabled"}</small></article>
     </div>
-    <section className="aurex-anime-banner"><img src="/a3d7c249-a11e-4aa1-9273-5f8fe2139d3b.png" alt="OSEN anime hero with a purple-eyed companion cat"/><div className="aurex-banner-copy"><span>OSEN BOOSTVOX RX · CONTROL CENTER</span><h2>Power Beyond <em>Limits.</em></h2><p>Your apps. Your platform. One powerful owner dashboard.</p></div><strong>BOOSTVOX <em>RX</em></strong></section>
+    <section className="aurex-anime-banner"><img src="/aurex-anime-character.svg" alt="OSEN anime hero with a purple-eyed companion cat"/><div className="aurex-banner-copy"><span>OCEAN ADMIN PANEL · CONTROL CENTER</span><h2>Power Beyond <em>Limits.</em></h2><p>Your apps. Your platform. One powerful owner dashboard.</p></div><strong>OCEAN <em>RX</em></strong></section>
     <div className="aurex-dash-grid">
      <section className="aurex-panel aurex-activity"><header><b>▥　Latest Activity</b><button onClick={()=>openWorkspace("app","activity")}>VIEW ALL　→</button></header>
       {logs.length?logs.slice(0,5).map(log=><div className="aurex-activity-row" key={log.id}><i/> <span>{log.action.replaceAll("_"," ")}</span><small>{new Date(log.created_at).toLocaleString()}</small></div>):<p className="aurex-empty">No admin activity recorded yet.</p>}
@@ -107,7 +107,7 @@ export default function Home(){
      </section>
     </div>
     {notice&&<div className={noticeError?"alert error":"alert"} role="status">{notice}</div>}
-    <footer className="aurex-footer">© 2026 <b>OSEN BOOSTVOX RX.</b> All Rights Reserved. <em>Dream Big · Play Better</em><span>♛ Powered by Passion</span></footer>
+    <footer className="aurex-footer">© 2026 <b>OCEAN ADMIN PANEL.</b> All Rights Reserved. <em>Dream Big · Play Better</em><span>♛ Powered by Passion</span></footer>
    </div>
   </section>:null}
   {!token?<section className="nexus-login-page">
@@ -115,14 +115,14 @@ export default function Home(){
    <div className="boost-login-layout">
     <section className="boost-login-visual">
      <div className="boost-visual-glow"/>
-     <div className="boost-visual-kicker"><span/> OSEN ORIGINAL · OWNER ACCESS</div>
+     <div className="boost-visual-kicker"><span/> OCEAN ADMIN · OWNER ACCESS</div>
      <div className="boost-visual-copy"><span className="boost-overline">POWER BEYOND LIMITS</span><h1>Enter the<br/><em>Next Level.</em></h1><p>Your apps. Your platform. Your control center.</p></div>
-     <div className="boost-character"><img src="/a3d7c249-a11e-4aa1-9273-5f8fe2139d3b.png" alt="OSEN anime hero character" loading="eager"/></div>
+     <div className="boost-character"><img src="/aurex-anime-character.svg" alt="OSEN anime hero character" loading="eager"/></div>
      <div className="boost-feature-row"><div><b>01</b><span>VOICE<br/>STUDIO</span></div><div><b>02</b><span>GAME<br/>BOOSTER</span></div><div><b>03</b><span>OWNER<br/>CONTROL</span></div></div>
-     <div className="boost-visual-brand">OSEN <em>BOOSTVOX RX</em></div>
+     <div className="boost-visual-brand">OSEN <em>OCEAN ADMIN PANEL</em></div>
     </section>
     <section className="boost-login-panel">
-     <div className="boost-panel-top"><span className="boost-panel-mark">R</span><span>PRIVATE ADMIN PORTAL<small>AUTHORIZED OWNER ONLY</small></span><i>SECURE</i></div>
+     <div className="boost-panel-top"><span className="boost-panel-mark">O</span><span>PRIVATE ADMIN PORTAL<small>AUTHORIZED OWNER ONLY</small></span><i>SECURE</i></div>
      <div className="boost-form-heading"><span className="anime-crown">♛</span><h2>Welcome <em>Back</em></h2><p>Sign in to access your control center.</p></div>
      <div className="anime-login-form">
       <form onSubmit={login}>
@@ -132,24 +132,24 @@ export default function Home(){
        <div className="anime-field"><span>⌑</span><input id="admin-password" type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter your password" required /></div>
        <button className="anime-login-submit" disabled={busy}>{busy?<><span className="login-spinner"/> SIGNING IN…</>:"SIGN IN TO DASHBOARD　→"}</button>
       </form>
-      <div className="anime-login-note">♢ ENCRYPTED SESSION · OSEN BOOSTVOX RX</div>
+      <div className="anime-login-note">♢ ENCRYPTED SESSION · OCEAN ADMIN PANEL</div>
       {notice&&<div className={noticeError?"alert error":"alert"} role="status">{notice}</div>}
      </div>
-     <div className="boost-panel-footer"><span>© 2026 OSEN BOOSTVOX RX</span><span>PRIVATE · SECURE · OWNER</span></div>
+     <div className="boost-panel-footer"><span>© 2026 OCEAN ADMIN PANEL</span><span>PRIVATE · SECURE · OWNER</span></div>
     </section>
    </div>
-   <footer className="login-page-footer"><span>Ⓡ OSEN BOOSTVOX RX</span><span>OWNER ACCESS ONLY · © 2026</span></footer>
+   <footer className="login-page-footer"><span>Ⓡ OCEAN ADMIN PANEL</span><span>OWNER ACCESS ONLY · © 2026</span></footer>
   </section>:workspace==="home"?null:workspace==="chooser"?<section className="workspace-picker">
    <div className="picker-heading"><span className="section-kicker">ADMIN PANEL · PRIVATE OWNER</span><h1>Choose your <em>workspace</em></h1><p>Website projects and Android app controls stay in separate work areas.</p></div>
    <div className="picker-grid">
     <button className="workspace-tile website-tile" onClick={()=>{openWorkspace("website")}}><span className="tile-icon">◎</span><span className="tile-kicker">01 / WEB PLATFORM</span><strong>WEBSITE CENTER</strong><small>Build and manage websites, projects, domains and hosting.</small><span className="tile-cta">OPEN WEBSITE CENTER ↗</span></button>
     <button className="workspace-tile app-tile" onClick={()=>{openWorkspace("app")}}><span className="tile-icon">▣</span><span className="tile-kicker">02 / ANDROID PLATFORM</span><strong>ANDROID APP CENTER</strong><small>Manage app access, Premium, Voice and Game Booster controls.</small><span className="tile-cta">OPEN APP CENTER ↗</span></button>
    </div>
-   <div className="picker-foot"><span>Ⓡ OSEN BOOSTVOX RX</span><span>ONE OWNER · TWO WORKSPACES</span><button onClick={logout}>LOG OUT</button></div>
+   <div className="picker-foot"><span>Ⓡ OCEAN ADMIN PANEL</span><span>ONE OWNER · TWO WORKSPACES</span><button onClick={logout}>LOG OUT</button></div>
   </section>:<div className="nexus-workspace">
    <aside className="side-nav"><button className="workspace-switch" onClick={goHome}>← ALL WORKSPACES</button><button className="workspace-home" onClick={goHome}>⌂　HOME</button><div className="nav-caption">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div>{currentNav.map(([id,label,ico])=><a key={id} href={"#"+id} aria-current={activeSection===id?"page":undefined} className={activeSection===id?"nav-active":""} onClick={e=>{e.preventDefault();navigateSection(id)}}><span>{ico}</span>{label}</a>)}<div className="sidebar-bottom"><i/> SYSTEM READY<small>Owner-only workspace</small></div></aside>
    <div className="dashboard-content" data-active={activeSection} data-workspace={workspace}>
-    <section id="overview" className="welcome-panel"><div className="workspace-context">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div><div><div className="section-kicker">CONTROL CENTER　/　{(currentNav.find(([id])=>id===activeSection)?.[1]||"OVERVIEW").toUpperCase()}</div><h1>{activeSection==="overview"?"Welcome back,":activeSection==="premium"?"Premium":"Manage"} <em>{activeSection==="overview"?OWNER:activeSection==="premium"?"Access":" "+(currentNav.find(([id])=>id===activeSection)?.[1]||"Workspace")}.</em></h1><p>{activeSection==="premium"?"Manage global Premium availability and securely update the app verification password.":activeSection==="overview"?"Your private workspace to manage OSEN apps, access and website projects.":`Manage ${currentNav.find(([id])=>id===activeSection)?.[1]||"workspace"} settings from your private OSEN BOOSTVOX RX console.`}</p></div><div className="welcome-status"><i/> PRIVATE WORKSPACE</div></section>
+    <section id="overview" className="welcome-panel"><div className="workspace-context">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div><div><div className="section-kicker">CONTROL CENTER　/　{(currentNav.find(([id])=>id===activeSection)?.[1]||"OVERVIEW").toUpperCase()}</div><h1>{activeSection==="overview"?"Welcome back,":activeSection==="premium"?"Premium":"Manage"} <em>{activeSection==="overview"?OWNER:activeSection==="premium"?"Access":" "+(currentNav.find(([id])=>id===activeSection)?.[1]||"Workspace")}.</em></h1><p>{activeSection==="premium"?"Manage global Premium availability and securely update the app verification password.":activeSection==="overview"?"Your private workspace to manage OSEN apps, access and website projects.":`Manage ${currentNav.find(([id])=>id===activeSection)?.[1]||"workspace"} settings from your private OCEAN ADMIN PANEL console.`}</p></div><div className="welcome-status"><i/> PRIVATE WORKSPACE</div></section>
     <div className="metric-grid">
      <article className="metric-card metric-gold"><span>PREMIUM SYSTEM</span><strong className={enabled?"status-on":"status-off"}>{enabled?"ENABLED":"DISABLED"}</strong><small>Global Premium access</small><button className="primary-btn" disabled={busy} onClick={()=>run("set_premium_enabled",{enabled:!enabled},enabled?"Premium access disabled.":"Premium access enabled.")}>{enabled?"TURN OFF PREMIUM":"TURN ON PREMIUM"}</button></article>
      <article className="metric-card"><span>PREMIUM ACCESS RECORDS</span><strong>{users.length}</strong><small>{premiumCount} currently approved · {users.length-premiumCount} not approved</small><a className="text-link" href="#users" onClick={e=>{e.preventDefault();navigateSection("users")}}>Manage users　↗</a></article>
@@ -166,7 +166,7 @@ export default function Home(){
      <section id="integrations" className="panel-card span-two"><div className="panel-heading"><div><span className="section-kicker">PLATFORM INTEGRATIONS</span><h2>Owner <em>tools</em></h2></div><span className="panel-icon">⌘</span></div><div className="integration-list"><div><b>Android device registry</b><span>Pending · app must register a generated device UUID</span></div><div><b>Voice & Booster remote controls</b><span>Pending · Android app must fetch and apply remote settings</span></div><div><b>Vercel hosting & custom domains</b><span>Pending · provider API credentials and project linking required</span></div><div><b>Audit trail</b><span className="ready-label">ACTIVE · admin actions are logged</span></div></div></section>
     </div>
     {notice&&<div className={noticeError?"alert error":"alert"} role="status">{notice}</div>}
-    <footer className="nexus-footer"><span>OSEN BOOSTVOX RX　·　OWNER CONSOLE</span><span>BLACK / SKY BLUE / GOLD　·　{OWNER}</span></footer>
+    <footer className="nexus-footer"><span>OCEAN ADMIN PANEL　·　OWNER CONSOLE</span><span>BLACK / SKY BLUE / GOLD　·　{OWNER}</span></footer>
    </div>
   </div>}
  </main>;
