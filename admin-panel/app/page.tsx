@@ -68,9 +68,9 @@ export default function Home(){
  function navigateSection(section:string){const nextWorkspace=workspace==="website"?"website":"app";writeAdminUrl(nextWorkspace,section);setActiveSection(section);setMobileMenuOpen(false)}
  function openWorkspace(target:"website"|"app",sectionOverride?:string){const section=sectionOverride||(target==="website"?"websites":"overview");writeAdminUrl(target,section);setWorkspace(target);setActiveSection(section);setMobileMenuOpen(false);loadDashboard(token,target).catch(e=>{setNotice(e instanceof Error?e.message:"Could not load workspace");setNoticeError(true)})}
  return <main className="nexus-shell">
-  {token&&<header className="nexus-topbar"><a className="nexus-brand" href="#overview" onClick={e=>{e.preventDefault();goHome()}}><span className="brand-mark">♛</span><span><b><i>OCEAN</i></b><small>ADMIN PANEL · PRIVATE OWNER</small></span></a><div className="topbar-right"><span className="secure-state"><i/> SECURE ADMIN</span>{token&&<div className="owner-chip"><span className="owner-avatar">AR</span><span><b>{OWNER}</b><small>OWNER</small></span><button className="logout-btn" onClick={logout}>LOG OUT</button></div>}</div></header>}
+  {token&&<header className="nexus-topbar"><a className="nexus-brand" href="#overview" onClick={e=>{e.preventDefault();goHome()}}><span className="brand-mark">♛</span><span><b><i>OCEAN</i></b><small>ADMIN PANEL · PRIVATE OWNER</small></span></a><div className="topbar-right"><button className="aurex-mobile-menu" aria-label="Toggle navigation" aria-expanded={mobileMenuOpen} onClick={()=>setMobileMenuOpen(v=>!v)}>☰</button><span className="secure-state"><i/> SECURE ADMIN</span>{token&&<div className="owner-chip"><span className="owner-avatar">AR</span><span><b>{OWNER}</b><small>OWNER</small></span><button className="logout-btn" onClick={logout}>LOG OUT</button></div>}</div></header>}
   {token&&workspace==="home"?<section className="aurex-dashboard">
-   <aside className="aurex-sidebar">
+   <aside className={`aurex-sidebar ${mobileMenuOpen?"is-open":""}`}>
     <div className="aurex-side-brand"><span>♛</span><b>OCEAN ADMIN PANEL<small>ADMIN PANEL</small></b></div>
     <button className="aurex-side-link active" onClick={goHome}>⌂　Dashboard</button>
     <button className="aurex-side-link" onClick={()=>openWorkspace("website")}>◎　Website Center</button>
