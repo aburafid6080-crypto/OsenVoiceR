@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
-<title id="title">OSEN BOOSTVOX RX anime mascots</title><desc id="desc">Original silver-haired anime hero with violet eyes and a small companion cat, surrounded by violet and blue energy.</desc>
+<title id="title">OCEAN ADMIN PANEL anime mascot artwork</title><desc id="desc">Original silver-haired anime hero with violet eyes and a small companion cat, surrounded by violet and blue energy.</desc>
 <defs>
  <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#080817"/><stop offset=".55" stop-color="#1b1040"/><stop offset="1" stop-color="#071b32"/></linearGradient>
  <radialGradient id="glow"><stop stop-color="#9d55ff" stop-opacity=".72"/><stop offset="1" stop-color="#5423a8" stop-opacity="0"/></radialGradient>
@@ -47,7 +47,7 @@
 <!-- floating emblem and sparkles -->
 <g filter="url(#shine)" fill="url(#gold)"><path d="M875 80L895 35L915 80L960 86L925 117L935 160L895 138L855 160L865 117L830 86Z"/><circle cx="1070" cy="220" r="7"/><circle cx="760" cy="120" r="5"/><circle cx="1130" cy="440" r="6"/></g>
 <g fill="#c5aaff"><path d="M770 250l8 18 18 8-18 8-8 18-8-18-18-8 18-8z"/><path d="M1110 80l6 14 14 6-14 6-6 14-6-14-14-6 14-6z"/></g>
-<text x="62" y="510" fill="#f4eaff" font-family="Arial,sans-serif" font-size="22" font-weight="700" letter-spacing="7">OSEN BOOSTVOX RX</text>
-<text x="62" y="552" fill="#c2a7ff" font-family="Arial,sans-serif" font-size="15" letter-spacing="4">POWER BEYOND LIMITS</text>
+<text x="62" y="510" fill="#f4eaff" font-family="Arial,sans-serif" font-size="22" font-weight="700" letter-spacing="7">OCEAN ADMIN PANEL</text>
+<text x="62" y="552" fill="#c2a7ff" font-family="Arial,sans-serif" font-size="15" letter-spacing="4">ADMIN CONTROL CENTER</text>
 <path d="M62 575H400" stroke="url(#gold)" stroke-width="3"/>
 </svg>
