@@ -114,7 +114,7 @@ export default function Home(){
    <div className="boost-login-layout ocean-reference-layout">
     <section className="boost-login-visual ocean-character-side">
      <div className="ocean-character-halo"/>
-     <div className="boost-character"><img src="/ocean-login-character.svg" alt="OCEAN silver-haired anime character" loading="eager"/></div>
+     <div className="boost-character"><img src="/a3d7c249-a11e-4aa1-9273-5f8fe2139d3b.png" alt="OCEAN anime hero with white cat" loading="eager"/></div>
     </section>
     <section className="boost-login-panel ocean-reference-card">
      <div className="ocean-crown">♛</div>
