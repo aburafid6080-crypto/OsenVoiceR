@@ -88,7 +88,7 @@ export default function Home(){
      <article><span>▣</span><b>{appProjects.length}</b><strong>App Projects</strong><small>Saved projects</small></article>
      <article><span>♛</span><b>{premiumCount}</b><strong>Premium Users</strong><small>{enabled?"Premium enabled":"Premium disabled"}</small></article>
     </div>
-    <section className="aurex-anime-banner"><img src="/aurex-anime-character.svg" alt="Original OSEN anime mascot with a companion cat"/><div className="aurex-banner-copy"><span>OSEN BOOSTVOX RX · CONTROL CENTER</span><h2>Power Beyond <em>Limits.</em></h2><p>Your apps. Your platform. One powerful owner dashboard.</p></div><strong>BOOSTVOX <em>RX</em></strong></section>
+    <section className="aurex-anime-banner"><img src="/a3d7c249-a11e-4aa1-9273-5f8fe2139d3b.png" alt="OSEN anime hero with a purple-eyed companion cat"/><div className="aurex-banner-copy"><span>OSEN BOOSTVOX RX · CONTROL CENTER</span><h2>Power Beyond <em>Limits.</em></h2><p>Your apps. Your platform. One powerful owner dashboard.</p></div><strong>BOOSTVOX <em>RX</em></strong></section>
     <div className="aurex-dash-grid">
      <section className="aurex-panel aurex-activity"><header><b>▥　Latest Activity</b><button onClick={()=>openWorkspace("app","activity")}>VIEW ALL　→</button></header>
       {logs.length?logs.slice(0,5).map(log=><div className="aurex-activity-row" key={log.id}><i/> <span>{log.action.replaceAll("_"," ")}</span><small>{new Date(log.created_at).toLocaleString()}</small></div>):<p className="aurex-empty">No admin activity recorded yet.</p>}
@@ -117,7 +117,7 @@ export default function Home(){
      <div className="anime-crown">♛</div>
      <h1>Welcome <em>Back</em></h1>
      <p>Login to continue your journey</p>
-     <div className="anime-hero"><img src="/aurex-anime-character.svg" alt="Anime character and cat" loading="eager" /></div>
+     <div className="anime-hero"><img src="/a3d7c249-a11e-4aa1-9273-5f8fe2139d3b.png" alt="OSEN anime hero with a purple-eyed companion cat" loading="eager" /></div>
     </div>
     <div className="anime-login-form">
      <div className="anime-brand"><span className="aurex-mark">R</span><div><b>OSEN <em>BOOSTVOX RX</em></b><small>OWNER ADMINISTRATION PORTAL</small></div></div>
