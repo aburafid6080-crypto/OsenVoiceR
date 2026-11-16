@@ -5400,3 +5400,102 @@ input:focus,textarea:focus{border-color:#b779ff!important;box-shadow:0 0 0 3px r
 @media(prefers-reduced-motion:reduce){
  .aurex-side-link,.side-nav a,.workspace-home,.workspace-switch,.aurex-action-grid button{transition:none!important}
 }
+
+
+/* OSEN AUREX OWNER LOGIN — match the supplied reference layout */
+.nexus-login-page{
+  background:
+    radial-gradient(ellipse at 18% 48%,#38281238,transparent 42%),
+    radial-gradient(ellipse at 85% 20%,#5d431c18,transparent 35%),
+    #07080b;
+}
+.nexus-login-page:before{
+  opacity:.24;
+  background-size:48px 48px;
+  mask-image:linear-gradient(90deg,#000,transparent 92%);
+}
+.nexus-login-page .login-stage{
+  width:min(1320px,100%);
+  grid-template-columns:minmax(0,1.06fr) minmax(390px,.94fr);
+  gap:clamp(28px,3.2vw,56px);
+  padding:38px clamp(24px,4vw,60px) 28px;
+}
+.nexus-login-page .login-visual{
+  min-height:582px;
+  height:min(68vh,582px);
+  border-radius:24px;
+  border-color:#bd913d80;
+  background:
+    radial-gradient(ellipse at 50% 58%,#a779292e,transparent 52%),
+    linear-gradient(145deg,#21190e,#090a0d 72%);
+}
+.nexus-login-page .login-visual:before{inset:10px;border-radius:17px;border-color:#d9b45a55}
+.nexus-login-page .login-character{
+  width:min(96%,540px);
+  height:96%;
+  bottom:0;
+  z-index:2;
+}
+.nexus-login-page .login-character img{
+  display:block;
+  width:100%;
+  height:100%;
+  max-width:540px;
+  object-fit:contain;
+  object-position:center bottom;
+  visibility:visible;
+  opacity:1;
+  filter:drop-shadow(0 0 20px #e8bd5860);
+}
+.nexus-login-page .login-orbit-a{
+  width:86%;
+  border-style:solid;
+  transform:rotateX(68deg) rotate(-22deg);
+  box-shadow:0 0 24px #e8bd5850,inset 0 0 20px #e8bd5820;
+}
+.nexus-login-page .login-orbit-b{
+  width:74%;
+  border-style:solid;
+  transform:rotateX(68deg) rotate(28deg);
+  opacity:.75;
+}
+.nexus-login-page .login-left-brand,
+.nexus-login-page .login-art-tag,
+.nexus-login-page .login-benefits{display:none!important}
+.nexus-login-page .login-visual-caption{left:20px;bottom:18px;z-index:4}
+.nexus-login-page .login-panel-wrap{max-width:510px}
+.nexus-login-page .login-panel{
+  min-height:550px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:clamp(30px,3vw,42px);
+  border-radius:0;
+  border:1px solid #bd913d9c;
+  clip-path:polygon(4% 0,96% 0,100% 5%,100% 95%,96% 100%,4% 100%,0 95%,0 5%);
+  background:linear-gradient(145deg,#17130def,#090a0df5 64%,#12100c);
+  box-shadow:0 28px 90px #000b,inset 0 1px #fff2;
+}
+.nexus-login-page .login-panel:before{inset:0 14% auto}
+.nexus-login-page .login-panel-brand{margin-bottom:28px}
+.nexus-login-page .login-panel h1{font-size:clamp(38px,3.5vw,50px)}
+.nexus-login-page .login-panel form{margin-top:26px}
+.nexus-login-page .login-field{height:50px;border-radius:12px}
+.nexus-login-page .login-submit{height:52px;border-radius:12px}
+.nexus-login-page .login-security{margin-top:18px}
+.nexus-login-page .login-page-footer{width:min(1460px,100%);padding-top:12px}
+@media(max-width:980px){
+  .nexus-login-page .login-stage{gap:24px;padding:30px 22px 22px}
+  .nexus-login-page .login-visual{min-height:500px;height:62vh}
+  .nexus-login-page .login-panel{min-height:500px;padding:28px}
+}
+@media(max-width:720px){
+  .nexus-login-page .login-stage{display:flex;flex-direction:column;gap:14px;padding:18px 14px 12px}
+  .nexus-login-page .login-visual{width:100%;height:270px;min-height:270px}
+  .nexus-login-page .login-character{height:100%;width:78%}
+  .nexus-login-page .login-panel-wrap{width:100%;max-width:520px;margin-top:0}
+  .nexus-login-page .login-panel{min-height:0;padding:24px 20px;clip-path:polygon(3% 0,97% 0,100% 4%,100% 96%,97% 100%,3% 100%,0 96%,0 4%)}
+  .nexus-login-page .login-panel-brand{margin-bottom:23px}
+  .nexus-login-page .login-panel h1{font-size:34px}
+  .nexus-login-page .login-page-footer{padding:10px 15px 16px}
+}
