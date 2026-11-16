@@ -5499,3 +5499,35 @@ input:focus,textarea:focus{border-color:#b779ff!important;box-shadow:0 0 0 3px r
   .nexus-login-page .login-panel h1{font-size:34px}
   .nexus-login-page .login-page-footer{padding:10px 15px 16px}
 }
+
+
+/* Anime welcome-back login — visual-only styling; existing Supabase login handler stays unchanged. */
+.nexus-login-page{min-height:100svh!important;height:auto!important;overflow-x:hidden!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;padding:28px 18px 12px!important;background:radial-gradient(ellipse at 50% 0%,#252d78 0%,#11142e 42%,#080a18 100%)!important}
+.nexus-login-page:before{opacity:.12!important;background-size:42px 42px!important}
+.nexus-login-page .anime-login-card{width:min(520px,100%)!important;overflow:hidden!important;border-radius:34px!important;background:linear-gradient(155deg,#fff 0%,#f5f2ff 55%,#e9edff 100%)!important;border:1px solid rgba(255,255,255,.9)!important;box-shadow:0 30px 90px rgba(0,0,0,.48),0 0 45px rgba(119,91,255,.25),inset 0 2px 0 #fff!important}
+.anime-login-top{text-align:center;padding:22px 24px 0!important;color:#20328d!important}
+.anime-crown{font-size:46px!important;line-height:1.1!important;color:#e6a928!important;text-shadow:0 5px 12px #e7b84d66!important}
+.anime-login-top h1{margin:5px 0 0!important;font-size:clamp(34px,7vw,46px)!important;font-weight:900!important;letter-spacing:-1.6px!important;color:#1738b3!important}
+.anime-login-top h1 em{font-style:normal!important;color:#7446d9!important}
+.anime-login-top p{margin:2px 0 0!important;color:#48538f!important;font-size:13px!important;font-weight:650!important}
+.anime-hero{width:100%!important;height:230px!important;margin:8px auto 0!important;overflow:hidden!important}
+.anime-hero img{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 42%!important}
+.anime-login-form{padding:20px 30px 25px!important;color:#1e2d78!important}
+.anime-brand{display:flex!important;align-items:center!important;gap:11px!important;margin-bottom:17px!important}
+.anime-brand .aurex-mark{width:40px!important;height:40px!important;background:linear-gradient(145deg,#fff1a8,#d89b25)!important;color:#54330b!important;border:2px solid #f4d879!important}
+.anime-brand b{display:block!important;font-size:15px!important;letter-spacing:1px!important;color:#172c91!important}
+.anime-brand em{font-style:normal!important;color:#7545d9!important}
+.anime-brand small{display:block!important;margin-top:3px!important;font-size:7px!important;letter-spacing:1.6px!important;color:#777ba5!important}
+.anime-login-form form{display:grid!important;gap:9px!important}
+.anime-login-form label{margin:6px 0 0!important;font-size:9px!important;font-weight:850!important;letter-spacing:1.1px!important;color:#44518e!important}
+.anime-field{display:flex!important;align-items:center!important;min-height:53px!important;border-radius:17px!important;background:linear-gradient(180deg,#fff,#f0edfa)!important;border:1px solid #d9d7ec!important;box-shadow:inset 0 2px 5px #4e4b7a12,0 4px 10px #38306d12!important;overflow:hidden!important}
+.anime-field>span{display:grid!important;place-items:center!important;flex:0 0 48px!important;height:48px!important;margin:2px!important;border-radius:50%!important;background:linear-gradient(145deg,#5588ff,#3934d4)!important;color:#fff!important;font-size:20px!important;box-shadow:0 4px 9px #283db34d!important}
+.anime-field input{flex:1!important;min-width:0!important;height:50px!important;padding:0 14px!important;border:0!important;outline:0!important;background:transparent!important;color:#253477!important;font-size:13px!important}
+.anime-field input::placeholder{color:#8588aa!important}
+.anime-field:focus-within{border-color:#7d69ec!important;box-shadow:0 0 0 3px #7d69ec24!important}
+.anime-login-submit{height:56px!important;margin-top:10px!important;border:1px solid #4d6ff5!important;border-radius:18px!important;background:linear-gradient(105deg,#2457dc,#6044e9 58%,#873edb)!important;color:#fff!important;font-size:18px!important;font-weight:900!important;letter-spacing:.3px!important;box-shadow:0 8px 18px #374bd94d,inset 0 1px #ffffff70!important;cursor:pointer!important;transition:transform .18s ease,filter .18s ease!important}
+.anime-login-submit:hover{transform:translateY(-2px)!important;filter:brightness(1.08)!important}
+.anime-login-submit:disabled{opacity:.7!important;cursor:wait!important}
+.anime-login-note{text-align:center!important;margin-top:17px!important;padding-top:14px!important;border-top:1px solid #dedcf0!important;color:#7a7da1!important;font-size:7px!important;letter-spacing:1.2px!important;font-weight:800!important}
+.nexus-login-page .login-page-footer{width:min(520px,100%)!important;margin-top:14px!important;color:#d9d5ff!important;border-color:#ffffff30!important}
+@media(max-width:560px){.nexus-login-page{padding:12px 12px 8px!important;justify-content:flex-start!important}.nexus-login-page .anime-login-card{border-radius:25px!important}.anime-login-top{padding:17px 15px 0!important}.anime-crown{font-size:38px!important}.anime-login-top h1{font-size:34px!important}.anime-hero{height:190px!important;margin-top:7px!important}.anime-login-form{padding:16px 18px 20px!important}.anime-field{min-height:49px!important}.anime-field>span{flex-basis:43px!important;height:43px!important}.anime-field input{height:46px!important;font-size:12px!important}.anime-login-submit{height:51px!important;font-size:16px!important}.nexus-login-page .login-page-footer{justify-content:center!important;font-size:6px!important}}
