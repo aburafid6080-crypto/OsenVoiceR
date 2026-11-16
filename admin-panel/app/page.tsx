@@ -121,8 +121,8 @@ export default function Home(){
      <div className="boost-form-heading"><h2><span>OCEAN</span><em>ADMIN PANEL</em></h2><p><i/> LOGIN TO CONTINUE <i/></p></div>
      <div className="anime-login-form">
       <form onSubmit={login}>
-       <div className="anime-field"><span>✉</span><input id="admin-email" aria-label="Email Address" type="email" autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email Address" required /></div>
-       <div className="anime-field"><span>♙</span><input id="admin-password" aria-label="Password" type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password" required /></div>
+       <div className="anime-field"><span className="ocean-field-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.8"/><path d="m4 7 8 6 8-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg></span><input id="admin-email" aria-label="Email Address" type="email" autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email Address" required /></div>
+       <div className="anime-field"><span className="ocean-field-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="11" rx="2" stroke="currentColor" strokeWidth="1.8"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><circle cx="12" cy="15.5" r="1.2" fill="currentColor"/></svg></span><input id="admin-password" aria-label="Password" type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password" required /></div>
        <button className="anime-login-submit" disabled={busy}>{busy?<><span className="login-spinner"/> SIGNING IN…</>:<><span>➜</span> Login</>}</button>
       </form>
       <div className="ocean-or"><i/> OR <i/></div>
