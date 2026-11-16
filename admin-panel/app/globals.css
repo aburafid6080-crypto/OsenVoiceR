@@ -6064,3 +6064,44 @@ body{background:radial-gradient(ellipse at 82% 4%,#35106a44,transparent 38%),rad
  .boost-login-panel{padding:22px 17px!important}
 }
 @media(prefers-reduced-motion:reduce){.aurex-action-grid button{transition:none!important}}
+
+
+/* OCEAN ADMIN PANEL — reference-matched black / gold / violet login */
+.nexus-login-page{position:relative;isolation:isolate;min-height:100vh;overflow:hidden;padding:28px clamp(16px,4vw,64px) 18px;background:radial-gradient(ellipse at 17% 55%,#5914a766 0,transparent 38%),radial-gradient(ellipse at 80% 12%,#5b2a9d44 0,transparent 35%),linear-gradient(115deg,#030306,#08050e 54%,#030306)}
+.nexus-login-page:before,.nexus-login-page:after{content:"";position:absolute;z-index:-1;pointer-events:none}
+.nexus-login-page:before{inset:0;background:repeating-linear-gradient(125deg,transparent 0 110px,#9b6a1710 111px 113px,transparent 114px 220px),radial-gradient(ellipse at 50% 100%,#d39b2c30,transparent 42%)}
+.nexus-login-page:after{left:0;right:0;bottom:8%;height:2px;background:linear-gradient(90deg,transparent,#f0b83b,#a54dff,#f0b83b,transparent);box-shadow:0 0 22px #d99b35}
+.boost-login-layout{width:min(100%,1450px);min-height:min(790px,calc(100vh - 80px));margin:auto;display:grid;grid-template-columns:minmax(0,1.12fr) minmax(410px,.88fr);align-items:center;gap:clamp(22px,4vw,70px)}
+.boost-login-visual{position:relative;min-height:680px;height:100%;display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
+.boost-login-visual:before{content:"";position:absolute;inset:5% 0 0;background:radial-gradient(ellipse at 50% 65%,#8a25ff66,transparent 48%),radial-gradient(ellipse at 45% 95%,#f0a82c55,transparent 30%);filter:blur(12px)}
+.boost-character{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.boost-character img{width:min(100%,760px);height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 0 30px #8e2cff66);transform:scale(1.12);transform-origin:center bottom}
+.boost-visual-brand{position:absolute;left:4%;bottom:4%;display:flex;align-items:center;gap:12px;padding:12px 20px;border:1px solid #d6a33c99;border-radius:12px;background:#08060dd9;box-shadow:0 0 26px #a64dff33;color:#f6d27b;letter-spacing:2px;font-size:clamp(14px,1.6vw,22px)}
+.boost-visual-brand span{font-size:30px;color:#f6c34c;text-shadow:0 0 15px #e5a82c}
+.boost-visual-brand b{font-weight:900}
+.boost-login-panel{position:relative;width:100%;max-width:590px;justify-self:center;padding:clamp(28px,4vw,56px);border:2px solid #d9a52d;border-radius:28px;background:linear-gradient(145deg,#09070cf5,#050408f7);box-shadow:0 0 0 5px #d7a42a16,0 0 35px #8b32ed45,inset 0 0 35px #d7a42a0b}
+.boost-login-panel:before{content:"";position:absolute;inset:10px;border:1px solid #8e5e1e88;border-radius:19px;pointer-events:none}
+.boost-form-heading{position:relative;text-align:center;margin:0 0 34px}
+.boost-form-heading .anime-crown{display:block;font-size:52px;color:#f5c34c;line-height:1.2;text-shadow:0 0 22px #e5a72c88}
+.boost-form-heading h2{margin:12px 0 8px;color:#f5c34c;font-size:clamp(25px,3vw,39px);font-weight:950;letter-spacing:1.2px;text-shadow:0 0 18px #b77b1e55}
+.boost-form-heading h2 em{display:block;color:#f5f1e9;font-style:normal}
+.boost-form-heading p{margin:12px 0 0;color:#f2c64e;font-size:13px;font-weight:800;letter-spacing:2px}
+.anime-login-form{position:relative}
+.anime-login-form form{display:grid;gap:12px}
+.anime-login-form label{margin-top:8px;color:#e9c25e;font-size:10px;font-weight:800;letter-spacing:1.5px}
+.anime-field{height:66px;display:flex;align-items:center;gap:16px;padding:0 20px;border:1.5px solid #e4b52f;border-radius:18px;background:#030305;box-shadow:inset 0 0 18px #e3a9260a}
+.anime-field>span{font-size:25px;color:#f3c64b}
+.anime-field input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:#fff;font-size:16px}
+.anime-field input::placeholder{color:#a9a6ad}
+.anime-login-submit{height:68px;margin-top:12px;border:1px solid #ffe28a;border-radius:18px;background:linear-gradient(180deg,#ffe27a,#d99208 55%,#f5b92f);color:#171006;font-size:20px;font-weight:950;letter-spacing:1px;box-shadow:0 8px 28px #d9951d44,inset 0 2px #fff7;transition:transform .2s,filter .2s}
+.anime-login-submit:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.08)}
+.anime-login-note{margin-top:24px;text-align:center;color:#e6bd4e;font-size:10px;letter-spacing:1.3px}
+.login-page-footer{width:min(100%,1450px);margin:10px auto 0;display:flex;justify-content:space-between;gap:12px;color:#9c8b69;font-size:9px;letter-spacing:1.2px}
+.aurex-dashboard{background:radial-gradient(ellipse at 10% 10%,#5b1b8c2b,transparent 34%),radial-gradient(ellipse at 90% 0,#b5812020,transparent 32%),#07060b}
+.aurex-sidebar,.aurex-panel,.aurex-stats article{border-color:#61491f!important;background:linear-gradient(145deg,#17121b,#09070d)!important;box-shadow:0 14px 38px #0008,0 0 18px #8a39b014}
+.aurex-side-link.active,.aurex-side-link:hover{border-color:#d8ad43!important;background:linear-gradient(100deg,#392512,#211322)!important;color:#ffe09a!important}
+.aurex-welcome b,.aurex-stats article b,.aurex-panel header b{color:#f5d27a!important}
+.aurex-anime-banner{border-color:#b98a31!important;background:radial-gradient(ellipse at 15% 50%,#7627a966,transparent 45%),linear-gradient(110deg,#100b18,#08060d)!important;box-shadow:0 0 30px #7b2ec52c}
+.aurex-anime-banner strong,.aurex-banner-copy h2 em{color:#f2c34f!important}
+@media(max-width:900px){.boost-login-layout{grid-template-columns:minmax(0,1fr);gap:0;min-height:auto}.boost-login-visual{min-height:390px;max-height:48vh}.boost-character img{width:min(100%,520px)}.boost-login-panel{max-width:560px;margin:0 auto 24px}.boost-visual-brand{left:50%;transform:translateX(-50%);white-space:nowrap;bottom:12px}.login-page-footer{padding:0 4px}}
+@media(max-width:560px){.nexus-login-page{padding:12px 13px 18px}.boost-login-layout{gap:0}.boost-login-visual{min-height:270px;max-height:34vh}.boost-character img{transform:scale(1.1)}.boost-visual-brand{font-size:12px;padding:8px 13px;bottom:7px}.boost-visual-brand span{font-size:22px}.boost-login-panel{padding:27px 19px;border-radius:20px}.boost-form-heading{margin-bottom:23px}.boost-form-heading .anime-crown{font-size:38px}.boost-form-heading h2{font-size:24px}.anime-field{height:55px;border-radius:13px;padding:0 14px}.anime-field input{font-size:14px}.anime-login-submit{height:57px;font-size:17px}.login-page-footer{font-size:7px;flex-wrap:wrap}}
