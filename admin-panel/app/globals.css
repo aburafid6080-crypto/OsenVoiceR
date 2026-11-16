@@ -5531,3 +5531,56 @@ input:focus,textarea:focus{border-color:#b779ff!important;box-shadow:0 0 0 3px r
 .anime-login-note{text-align:center!important;margin-top:17px!important;padding-top:14px!important;border-top:1px solid #dedcf0!important;color:#7a7da1!important;font-size:7px!important;letter-spacing:1.2px!important;font-weight:800!important}
 .nexus-login-page .login-page-footer{width:min(520px,100%)!important;margin-top:14px!important;color:#d9d5ff!important;border-color:#ffffff30!important}
 @media(max-width:560px){.nexus-login-page{padding:12px 12px 8px!important;justify-content:flex-start!important}.nexus-login-page .anime-login-card{border-radius:25px!important}.anime-login-top{padding:17px 15px 0!important}.anime-crown{font-size:38px!important}.anime-login-top h1{font-size:34px!important}.anime-hero{height:190px!important;margin-top:7px!important}.anime-login-form{padding:16px 18px 20px!important}.anime-field{min-height:49px!important}.anime-field>span{flex-basis:43px!important;height:43px!important}.anime-field input{height:46px!important;font-size:12px!important}.anime-login-submit{height:51px!important;font-size:16px!important}.nexus-login-page .login-page-footer{justify-content:center!important;font-size:6px!important}}
+
+
+/* OSEN BOOSTVOX RX · anime reference finish */
+:root{--blue:#8d79ff;--blue2:#4b9cff;--gold:#e9bf58;--muted:#a7a4c2}
+body{background:radial-gradient(ellipse at 82% 4%,#35106a44,transparent 38%),radial-gradient(ellipse at 4% 45%,#0a367544,transparent 34%),#05050a}
+.nexus-login-page{background:radial-gradient(ellipse at 50% 0%,#4d20a944,transparent 48%),radial-gradient(ellipse at 90% 78%,#153c8940,transparent 38%),linear-gradient(90deg,#ffffff08 1px,transparent 1px),linear-gradient(#ffffff08 1px,transparent 1px),#070611!important;background-size:auto,auto,42px 42px,42px 42px,auto!important}
+.nexus-login-page .anime-login-card{width:min(690px,100%)!important;border-radius:38px!important;background:linear-gradient(155deg,#fff 0%,#f4f0ff 57%,#e8edff 100%)!important;box-shadow:0 32px 100px #0009,0 0 65px #8354ff35,inset 0 2px 0 #fff!important}
+.anime-login-top{padding:25px 30px 0!important}
+.anime-login-top h1{font-size:clamp(38px,5vw,55px)!important}
+.anime-hero{height:clamp(220px,28vw,330px)!important;margin:10px auto 0!important;border-radius:20px 20px 0 0!important;position:relative!important}
+.anime-hero:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#fff0,transparent 65%,#fff2);pointer-events:none}
+.anime-hero img{object-fit:cover!important;object-position:center 34%!important}
+.anime-login-form{padding:22px 42px 30px!important}
+.anime-field{min-height:58px!important;border-radius:22px!important}
+.anime-field>span{flex-basis:52px!important;height:52px!important}
+.anime-login-submit{height:62px!important;border-radius:22px!important;background:linear-gradient(105deg,#2558e8,#6541ed 58%,#922fe0)!important;box-shadow:0 10px 24px #4c3ee955,inset 0 1px #ffffff80!important}
+.nexus-login-page .login-page-footer{width:min(690px,100%)!important}
+.aurex-dashboard{background:radial-gradient(ellipse at 78% 5%,#35106a4d,transparent 35%),radial-gradient(ellipse at 30% 100%,#0b387444,transparent 45%),#05050a!important}
+.aurex-sidebar{border-right-color:#7653d866!important;background:linear-gradient(180deg,#0d0a1c,#05050b 80%)!important}
+.aurex-side-brand>span{border-color:#9a7aff!important;color:#f0e8ff!important;background:linear-gradient(145deg,#5420a4,#080614)!important;box-shadow:0 0 20px #8d59ff99,inset 0 0 12px #bda2ff55!important}
+.aurex-side-brand b,.aurex-side-tag,.aurex-side-link:hover,.aurex-side-link.active{color:#e8dfff!important}
+.aurex-side-link:hover,.aurex-side-link.active{border-color:#8c69ff!important;background:linear-gradient(90deg,#5025a64d,#17102b)!important;box-shadow:0 0 18px #8053ff3d!important}
+.aurex-main{gap:16px}
+.aurex-welcome{border-color:#7553c9!important;background:linear-gradient(110deg,#1b1230,#080812 68%)!important;box-shadow:0 0 24px #7147e733!important}
+.aurex-crown,.aurex-welcome em{color:#d8bdff!important}
+.aurex-stats article{border-color:#51408b!important;background:linear-gradient(145deg,#1b1532,#080912 72%)!important;box-shadow:0 0 17px #7147e722,inset 0 0 18px #a78bff0b!important}
+.aurex-stats article:nth-child(2){border-color:#9a782e!important;background:linear-gradient(145deg,#2a2110,#09090b 72%)!important}
+.aurex-stats article:nth-child(3){border-color:#2876b9!important;background:linear-gradient(145deg,#0d2442,#080912 72%)!important}
+.aurex-stats article:nth-child(4){border-color:#258b60!important;background:linear-gradient(145deg,#0b3025,#080912 72%)!important}
+.aurex-stats article>span{color:#b89aff!important}
+.aurex-stats article:nth-child(2)>span{color:#ffd65d!important}.aurex-stats article:nth-child(3)>span{color:#51c8ff!important}.aurex-stats article:nth-child(4)>span{color:#54f0a6!important}
+.aurex-panel{border-color:#55418b!important;background:linear-gradient(145deg,#171229,#07070d 72%)!important;box-shadow:0 0 18px #7147e722!important}
+.aurex-panel>header button{color:#c4aaff!important}
+.aurex-action-grid button{border-color:#7959d8!important;background:linear-gradient(145deg,#25174a,#090811)!important}
+.aurex-action-grid button:nth-child(2){border-color:#2398c8!important;background:linear-gradient(145deg,#0c2942,#070a11)!important}
+.aurex-action-grid button:nth-child(3){border-color:#b38b35!important;background:linear-gradient(145deg,#33270d,#090811)!important}
+.aurex-action-grid button:nth-child(4){border-color:#338e6b!important;background:linear-gradient(145deg,#0d3024,#070a11)!important}
+.aurex-action-grid span{color:#c4aaff!important}
+.aurex-status-grid>div{border-color:#57458d!important;background:#100d1d!important}
+.aurex-status-grid b{color:#c7aaff!important}
+.aurex-footer{border-top-color:#654ca855!important}.aurex-footer b,.aurex-footer em,.aurex-footer span{color:#c9adff!important}
+.aurex-anime-banner{position:relative;isolation:isolate;min-height:220px;display:flex;align-items:center;overflow:hidden;border:1px solid #7855c9;border-radius:18px;background:linear-gradient(100deg,#0b0a16 0%,#17102d 52%,#080d1c 100%);box-shadow:0 16px 38px #0007,inset 0 1px #ffffff14}
+.aurex-anime-banner:before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 75% 50%,#7138d966,transparent 43%),linear-gradient(90deg,#080811 10%,#080811d9 44%,transparent 100%)}
+.aurex-anime-banner img{position:absolute;z-index:-1;right:0;top:-32%;height:165%;width:62%;object-fit:cover;object-position:center 35%;opacity:.88;mask-image:linear-gradient(90deg,transparent 0%,#000 28%)}
+.aurex-banner-copy{padding:28px 34px;max-width:62%}
+.aurex-banner-copy>span{color:#c9adff;font-size:9px;font-weight:900;letter-spacing:1.7px}
+.aurex-banner-copy h2{margin:12px 0 8px;font-size:clamp(27px,3.2vw,43px);letter-spacing:-1.5px;color:#fff}
+.aurex-banner-copy h2 em{font-style:normal;color:#d9bcff}
+.aurex-banner-copy p{margin:0;color:#b7b0d0;font-size:11px;line-height:1.7}
+.aurex-anime-banner>strong{position:absolute;right:25px;bottom:15px;color:#fff;font-size:clamp(15px,2vw,25px);font-style:italic;text-shadow:0 3px 20px #000}
+.aurex-anime-banner>strong em{font-style:normal;color:#d5b7ff}
+@media(max-width:760px){.aurex-anime-banner{min-height:175px;border-radius:14px}.aurex-anime-banner img{height:130%;width:75%;top:-10%;right:-14%;opacity:.72}.aurex-banner-copy{padding:20px 17px;max-width:78%}.aurex-banner-copy>span{font-size:7px;letter-spacing:1px}.aurex-banner-copy h2{font-size:25px;margin:9px 0 6px}.aurex-banner-copy p{font-size:9px;max-width:210px}.aurex-anime-banner>strong{right:12px;bottom:9px;font-size:13px}}
+@media(max-width:560px){.nexus-login-page .anime-login-card{width:100%!important;border-radius:28px!important}.anime-login-top{padding:17px 15px 0!important}.anime-hero{height:205px!important}.anime-login-form{padding:17px 19px 22px!important}}
