@@ -110,30 +110,29 @@ export default function Home(){
     <footer className="aurex-footer">© 2026 <b>OCEAN ADMIN PANEL.</b> All Rights Reserved. <em>Dream Big · Play Better</em><span>♛ Powered by Passion</span></footer>
    </div>
   </section>:null}
-  {!token?<section className="nexus-login-page">
-   <div className="login-ambient login-ambient-one"/><div className="login-ambient login-ambient-two"/>
-   <div className="boost-login-layout">
-    <section className="boost-login-visual">
-     <div className="boost-character"><img src="/aurex-anime-character.svg" alt="Anime character artwork" loading="eager"/></div>
-     <div className="boost-visual-brand"><span>♛</span><b>OCEAN ADMIN PANEL</b></div>
+  {!token?<section className="nexus-login-page ocean-reference-login">
+   <div className="boost-login-layout ocean-reference-layout">
+    <section className="boost-login-visual ocean-character-side">
+     <div className="ocean-character-halo"/>
+     <div className="boost-character"><img src="/aurex-anime-character.svg" alt="OCEAN masked anime character" loading="eager"/></div>
     </section>
-    <section className="boost-login-panel">
-     <div className="boost-form-heading"><span className="anime-crown">♛</span><h2>OCEAN <em>ADMIN PANEL</em></h2><p>LOGIN TO CONTINUE</p></div>
+    <section className="boost-login-panel ocean-reference-card">
+     <div className="ocean-crown">♛</div>
+     <div className="boost-form-heading"><h2><span>OCEAN</span><em>ADMIN PANEL</em></h2><p><i/> LOGIN TO CONTINUE <i/></p></div>
      <div className="anime-login-form">
       <form onSubmit={login}>
-       <label htmlFor="admin-email">EMAIL ADDRESS</label>
-       <div className="anime-field"><span>✉</span><input id="admin-email" type="email" autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email Address" required /></div>
-       <label htmlFor="admin-password">PASSWORD</label>
-       <div className="anime-field"><span>⌑</span><input id="admin-password" type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password" required /></div>
-       <button className="anime-login-submit" disabled={busy}>{busy?<><span className="login-spinner"/> SIGNING IN…</>:"➜　LOGIN"}</button>
+       <div className="anime-field"><span>✉</span><input id="admin-email" aria-label="Email Address" type="email" autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email Address" required /></div>
+       <div className="anime-field"><span>♙</span><input id="admin-password" aria-label="Password" type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password" required /></div>
+       <button className="anime-login-submit" disabled={busy}>{busy?<><span className="login-spinner"/> SIGNING IN…</>:<><span>➜</span> Login</>}</button>
       </form>
-      <div className="anime-login-note">♢ SECURE ACCESS · PRIVATE OWNER</div>
+      <div className="ocean-or"><i/> OR <i/></div>
+      <div className="anime-login-note"><span>♢</span> Secure Access</div>
       {notice&&<div className={noticeError?"alert error":"alert"} role="status">{notice}</div>}
      </div>
     </section>
    </div>
-   <footer className="login-page-footer"><span>Ⓡ OCEAN ADMIN PANEL</span><span>OWNER ACCESS ONLY · © 2026</span></footer>
-  </section>:workspace==="home"?null:workspace==="chooser"?<section className="workspace-picker">
+   <footer className="login-page-footer"><span>♛ OCEAN ADMIN PANEL</span><span>OWNER ACCESS ONLY · © 2026</span></footer>
+  </section>  </section>:workspace==="home"?null:workspace==="chooser"?<section className="workspace-picker">
    <div className="picker-heading"><span className="section-kicker">ADMIN PANEL · PRIVATE OWNER</span><h1>Choose your <em>workspace</em></h1><p>Website projects and Android app controls stay in separate work areas.</p></div>
    <div className="picker-grid">
     <button className="workspace-tile website-tile" onClick={()=>{openWorkspace("website")}}><span className="tile-icon">◎</span><span className="tile-kicker">01 / WEB PLATFORM</span><strong>WEBSITE CENTER</strong><small>Build and manage websites, projects, domains and hosting.</small><span className="tile-cta">OPEN WEBSITE CENTER ↗</span></button>
