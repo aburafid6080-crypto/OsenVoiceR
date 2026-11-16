@@ -6271,3 +6271,27 @@ body{background:radial-gradient(ellipse at 82% 4%,#35106a44,transparent 38%),rad
  .ocean-character-side{aspect-ratio:3/2!important}
  .ocean-character-side .boost-character img{object-fit:contain!important;object-position:center center!important;background:linear-gradient(145deg,#080511,#10091b)!important}
 }
+
+
+/* FINAL OVERRIDE — visibly frosted-glass Login button and full hero background */
+.ocean-reference-card .anime-login-submit{
+ position:relative!important;isolation:isolate!important;display:flex!important;
+ align-items:center!important;justify-content:center!important;gap:14px!important;
+ width:100%!important;min-height:76px!important;height:auto!important;padding:16px 24px!important;
+ overflow:hidden!important;border:1.5px solid rgba(255,239,190,.98)!important;border-radius:22px!important;
+ background:linear-gradient(125deg,rgba(255,255,255,.42),rgba(255,255,255,.10) 30%,rgba(255,190,42,.22) 65%,rgba(255,255,255,.18))!important;
+ color:#fff8df!important;-webkit-backdrop-filter:blur(26px) saturate(200%)!important;backdrop-filter:blur(26px) saturate(200%)!important;
+ box-shadow:inset 0 2px 3px rgba(255,255,255,.85),inset 0 -12px 25px rgba(255,190,35,.16),0 12px 34px rgba(255,184,32,.34),0 0 0 1px rgba(255,220,130,.3)!important;
+ text-shadow:0 1px 14px rgba(255,225,150,.7)!important;transition:transform .25s ease,box-shadow .25s ease!important;
+}
+.ocean-reference-card .anime-login-submit:before{content:""!important;position:absolute!important;z-index:-1!important;inset:1px!important;border-radius:20px!important;background:linear-gradient(110deg,rgba(255,255,255,.28),rgba(255,255,255,.035) 48%,rgba(255,195,55,.18))!important}
+.ocean-reference-card .anime-login-submit span{color:#fff1bd!important;background:rgba(8,7,16,.65)!important;border:1px solid rgba(255,237,180,.85)!important;box-shadow:0 0 18px rgba(255,203,78,.45),inset 0 1px 3px rgba(255,255,255,.4)!important}
+.ocean-reference-card .anime-login-submit:after{z-index:2!important;width:38%!important;background:linear-gradient(90deg,transparent,rgba(255,255,255,.9),transparent)!important;animation:oceanButtonShine 3s ease-in-out infinite!important}
+.ocean-reference-card .anime-login-submit:hover:not(:disabled){transform:translateY(-3px)!important;background:linear-gradient(125deg,rgba(255,255,255,.54),rgba(255,255,255,.16) 30%,rgba(255,190,42,.34) 65%,rgba(255,255,255,.28))!important;box-shadow:inset 0 2px 3px #fff,0 16px 42px rgba(255,184,32,.46),0 0 30px rgba(255,218,120,.35)!important}
+.ocean-character-side{position:relative!important;isolation:isolate!important;overflow:hidden!important;background:#090511 url("/a3d7c249-a11e-4aa1-9273-5f8fe2139d3b.png") center center/cover no-repeat!important}
+.ocean-character-side:after{content:""!important;position:absolute!important;z-index:0!important;inset:0!important;pointer-events:none!important;background:linear-gradient(180deg,rgba(5,3,12,.02),rgba(5,3,12,.08) 70%,rgba(5,3,12,.26))!important}
+.ocean-character-side .boost-character{position:absolute!important;z-index:1!important;inset:0!important;width:100%!important;max-width:none!important;height:100%!important;opacity:0!important;pointer-events:none!important}
+.ocean-character-side .ocean-character-halo{z-index:2!important}
+@media(max-width:900px){.ocean-character-side{width:100%!important;max-width:none!important;aspect-ratio:3/2!important;min-height:0!important;height:auto!important;background-position:center 44%!important;background-size:cover!important}}
+@media(min-width:901px){.ocean-character-side{width:100%!important;min-height:650px!important;height:min(78svh,820px)!important;background-position:center center!important;background-size:cover!important}}
+@media(prefers-reduced-motion:reduce){.ocean-reference-card .anime-login-submit:after{animation:none!important}.ocean-reference-card .anime-login-submit{transition:none!important}}
