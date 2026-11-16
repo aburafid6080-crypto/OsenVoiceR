@@ -111,32 +111,24 @@ export default function Home(){
   </section>:null}
   {!token?<section className="nexus-login-page">
    <div className="login-ambient login-ambient-one"/><div className="login-ambient login-ambient-two"/>
-   <div className="login-stage">
-    <div className="login-visual">
-     <div className="login-visual-grid"/>
-     <div className="login-left-brand"><span className="login-crown">♛</span><strong>OSEN<br/><em>AUREX</em></strong><small>PLAY SMART · PLAY BETTER</small></div>
-     <div className="login-orbit login-orbit-a"/><div className="login-orbit login-orbit-b"/>
-     <div className="login-character" aria-hidden="true"><img src="/aurex-character-hat.webp" alt="" loading="eager" fetchPriority="high" decoding="async" /></div>
-     <div className="login-visual-caption"><span className="aurex-mark">R</span><b>OSEN <i>AUREX</i></b><small>THE ULTIMATE CONTROL CENTER</small></div>
-     <div className="login-art-tag">PRIVATE OWNER ACCESS <span>✦</span></div>
+   <div className="anime-login-card">
+    <div className="anime-login-top">
+     <div className="anime-crown">♛</div>
+     <h1>Welcome <em>Back</em></h1>
+     <p>Login to continue your journey</p>
+     <div className="anime-hero"><img src="/aurex-anime-character.svg" alt="Anime character and cat" loading="eager" /></div>
     </div>
-    <div className="login-panel-wrap">
-     <div className="login-panel">
-      <div className="login-panel-brand"><span className="aurex-mark">R</span><div><b>OSEN <em>AUREX</em></b><small>ADMINISTRATION PORTAL</small></div></div>
-      <div className="login-panel-kicker"><i/> WELCOME BACK · OWNER</div>
-      <h1>Owner <em>Login.</em></h1>
-      <p>Sign in to access your private workspace and manage your projects.</p>
-      <form onSubmit={login}>
-       <label htmlFor="admin-email">OWNER EMAIL</label>
-       <div className="login-field"><span>✉</span><input id="admin-email" type="email" autoComplete="off" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Enter your email address" required/></div>
-       <label htmlFor="admin-password">PASSWORD</label>
-       <div className="login-field"><span>♙</span><input id="admin-password" type="password" autoComplete="new-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter your password" required/></div>
-       <button className="login-submit" disabled={busy}>{busy?<><span className="login-spinner"/> VERIFYING ACCESS…</>:"SECURE LOGIN　↗"}</button>
-      </form>
-      <div className="login-security"><span>♢</span> ENCRYPTED OWNER AUTHENTICATION <i/> SECURE ACCESS</div>
-      {notice&&<div className={noticeError?"alert error":"alert"} role="status">{notice}</div>}
-     </div>
-     <div className="login-benefits"><span><b>✦</b> ADVANCED CONTROL</span><span><b>♢</b> ULTIMATE SECURITY</span><span><b>◇</b> PREMIUM EXPERIENCE</span></div>
+    <div className="anime-login-form">
+     <div className="anime-brand"><span className="aurex-mark">R</span><div><b>OSEN <em>AUREX</em></b><small>OWNER ADMINISTRATION PORTAL</small></div></div>
+     <form onSubmit={login}>
+      <label htmlFor="admin-email">EMAIL OR USERNAME</label>
+      <div className="anime-field"><span>♙</span><input id="admin-email" type="email" autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Enter your email address" required /></div>
+      <label htmlFor="admin-password">PASSWORD</label>
+      <div className="anime-field"><span>♙</span><input id="admin-password" type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter your password" required /></div>
+      <button className="anime-login-submit" disabled={busy}>{busy?<><span className="login-spinner"/> SIGNING IN…</>:"Login　→"}</button>
+     </form>
+     <div className="anime-login-note">♢ SECURE OWNER AUTHENTICATION　·　OSEN AUREX</div>
+     {notice&&<div className={noticeError?"alert error":"alert"} role="status">{notice}</div>}
     </div>
    </div>
   <footer className="login-page-footer"><span>Ⓡ OSEN AUREX</span><span>OWNER ACCESS ONLY · © 2026</span></footer>
