@@ -6756,3 +6756,26 @@ body{background:radial-gradient(ellipse at 82% 4%,#35106a44,transparent 38%),rad
   width:22px!important;height:22px!important;
  }
 }
+
+
+/* Dashboard hero: use the real uploaded OCEAN character art, not the placeholder SVG */
+.aurex-anime-banner img{
+ right:0!important;top:-22%!important;width:66%!important;height:150%!important;
+ object-fit:cover!important;object-position:48% 24%!important;
+ opacity:1!important;mask-image:linear-gradient(90deg,transparent 0%,#000 16%,#000 100%)!important;
+}
+@media(max-width:760px){
+ .aurex-anime-banner img{
+  right:-4%!important;top:-8%!important;width:78%!important;height:118%!important;
+  object-position:46% 22%!important;opacity:.96!important;
+  mask-image:linear-gradient(90deg,transparent 0%,#000 12%,#000 100%)!important;
+ }
+}
+@media(max-width:560px){
+ .aurex-anime-banner{min-height:190px!important}
+ .aurex-anime-banner img{
+  right:-2%!important;width:82%!important;height:120%!important;
+  object-position:45% 20%!important;
+ }
+ .aurex-banner-copy{max-width:76%!important}
+}
