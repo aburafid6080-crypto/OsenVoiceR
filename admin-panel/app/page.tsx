@@ -112,28 +112,34 @@ export default function Home(){
   </section>:null}
   {!token?<section className="nexus-login-page">
    <div className="login-ambient login-ambient-one"/><div className="login-ambient login-ambient-two"/>
-   <div className="anime-login-card">
-    <div className="anime-login-top">
-     <div className="anime-crown">♛</div>
-     <h1>Welcome <em>Back</em></h1>
-     <p>Login to continue your journey</p>
-     <div className="anime-hero"><img src="/a3d7c249-a11e-4aa1-9273-5f8fe2139d3b.png" alt="OSEN anime hero with a purple-eyed companion cat" loading="eager" /></div>
-    </div>
-    <div className="anime-login-form">
-     <div className="anime-brand"><span className="aurex-mark">R</span><div><b>OSEN <em>BOOSTVOX RX</em></b><small>OWNER ADMINISTRATION PORTAL</small></div></div>
-     <form onSubmit={login}>
-      <label htmlFor="admin-email">EMAIL OR USERNAME</label>
-      <div className="anime-field"><span>♙</span><input id="admin-email" type="email" autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Enter your email address" required /></div>
-      <label htmlFor="admin-password">PASSWORD</label>
-      <div className="anime-field"><span>♙</span><input id="admin-password" type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter your password" required /></div>
-      <button className="anime-login-submit" disabled={busy}>{busy?<><span className="login-spinner"/> SIGNING IN…</>:"Login　→"}</button>
-     </form>
-     <div className="anime-login-note">♢ SECURE OWNER AUTHENTICATION　·　OSEN BOOSTVOX RX</div>
-     {notice&&<div className={noticeError?"alert error":"alert"} role="status">{notice}</div>}
-    </div>
+   <div className="boost-login-layout">
+    <section className="boost-login-visual">
+     <div className="boost-visual-glow"/>
+     <div className="boost-visual-kicker"><span/> OSEN ORIGINAL · OWNER ACCESS</div>
+     <div className="boost-visual-copy"><span className="boost-overline">POWER BEYOND LIMITS</span><h1>Enter the<br/><em>Next Level.</em></h1><p>Your apps. Your platform. Your control center.</p></div>
+     <div className="boost-character"><img src="/a3d7c249-a11e-4aa1-9273-5f8fe2139d3b.png" alt="OSEN anime hero character" loading="eager"/></div>
+     <div className="boost-feature-row"><div><b>01</b><span>VOICE<br/>STUDIO</span></div><div><b>02</b><span>GAME<br/>BOOSTER</span></div><div><b>03</b><span>OWNER<br/>CONTROL</span></div></div>
+     <div className="boost-visual-brand">OSEN <em>BOOSTVOX RX</em></div>
+    </section>
+    <section className="boost-login-panel">
+     <div className="boost-panel-top"><span className="boost-panel-mark">R</span><span>PRIVATE ADMIN PORTAL<small>AUTHORIZED OWNER ONLY</small></span><i>SECURE</i></div>
+     <div className="boost-form-heading"><span className="anime-crown">♛</span><h2>Welcome <em>Back</em></h2><p>Sign in to access your control center.</p></div>
+     <div className="anime-login-form">
+      <form onSubmit={login}>
+       <label htmlFor="admin-email">EMAIL ADDRESS</label>
+       <div className="anime-field"><span>✉</span><input id="admin-email" type="email" autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Enter your email address" required /></div>
+       <label htmlFor="admin-password">PASSWORD</label>
+       <div className="anime-field"><span>⌑</span><input id="admin-password" type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter your password" required /></div>
+       <button className="anime-login-submit" disabled={busy}>{busy?<><span className="login-spinner"/> SIGNING IN…</>:"SIGN IN TO DASHBOARD　→"}</button>
+      </form>
+      <div className="anime-login-note">♢ ENCRYPTED SESSION · OSEN BOOSTVOX RX</div>
+      {notice&&<div className={noticeError?"alert error":"alert"} role="status">{notice}</div>}
+     </div>
+     <div className="boost-panel-footer"><span>© 2026 OSEN BOOSTVOX RX</span><span>PRIVATE · SECURE · OWNER</span></div>
+    </section>
    </div>
-  <footer className="login-page-footer"><span>Ⓡ OSEN BOOSTVOX RX</span><span>OWNER ACCESS ONLY · © 2026</span></footer>
-  </section>:workspace==="home"?null:workspace==="chooser"?<section className="workspace-picker">
+   <footer className="login-page-footer"><span>Ⓡ OSEN BOOSTVOX RX</span><span>OWNER ACCESS ONLY · © 2026</span></footer>
+  :workspace==="home"?null:workspace==="chooser"?<section className="workspace-picker">
    <div className="picker-heading"><span className="section-kicker">ADMIN PANEL · PRIVATE OWNER</span><h1>Choose your <em>workspace</em></h1><p>Website projects and Android app controls stay in separate work areas.</p></div>
    <div className="picker-grid">
     <button className="workspace-tile website-tile" onClick={()=>{openWorkspace("website")}}><span className="tile-icon">◎</span><span className="tile-kicker">01 / WEB PLATFORM</span><strong>WEBSITE CENTER</strong><small>Build and manage websites, projects, domains and hosting.</small><span className="tile-cta">OPEN WEBSITE CENTER ↗</span></button>
