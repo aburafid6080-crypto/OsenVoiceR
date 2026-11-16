@@ -6911,3 +6911,182 @@ body{background:radial-gradient(ellipse at 82% 4%,#35106a44,transparent 38%),rad
 @media(prefers-reduced-motion:reduce){
  .aurex-sidebar{transition:none!important}
 }
+
+
+
+/* OCEAN ADMIN PANEL — rebuilt responsive dashboard layout */
+:root{color-scheme:dark}
+html,body{max-width:100%;overflow-x:hidden}
+body{background:#07030d}
+.nexus-shell{width:100%;max-width:none;margin:0 auto;padding:0 22px 24px!important;background:
+ linear-gradient(180deg,rgba(5,2,11,.88),rgba(7,3,13,.96)),
+ url("/a3d7c249-a11e-4aa1-9273-5f8fe2139d3b.png") center 10%/cover fixed!important}
+.nexus-topbar{height:82px!important;margin:0 -22px!important;padding:0 28px!important;
+ background:rgba(5,3,10,.94)!important;border-bottom:1px solid #d5a934!important;
+ -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+.nexus-brand{display:flex!important;align-items:center!important;gap:12px!important}
+.nexus-brand .brand-mark{display:grid!important;place-items:center!important;width:54px!important;height:54px!important;
+ border:1px solid #f2c54e!important;border-radius:15px!important;background:linear-gradient(145deg,#ffe69a,#9c681b)!important;
+ color:#170d04!important;font-size:35px!important;box-shadow:0 0 22px #ffc64b55!important}
+.nexus-brand b,.nexus-brand i{font-size:21px!important;letter-spacing:1.3px!important;color:#ffd34d!important}
+.nexus-brand small{display:block!important;font-size:9px!important;letter-spacing:1.5px!important;color:#b9a8ca!important}
+.topbar-right{display:flex!important;align-items:center!important;gap:18px!important}
+.owner-chip{border:1px solid #5b3c78!important;border-radius:15px!important;background:#100a1b!important;padding:7px 10px!important}
+.owner-avatar{border-color:#d5a83d!important;background:#261537!important;color:#ffdb75!important}
+.logout-btn{border-color:#9e762d!important;color:#ffdc7a!important}
+.aurex-mobile-menu{display:none!important}
+.aurex-dashboard{display:grid!important;grid-template-columns:238px minmax(0,1fr)!important;gap:0!important;
+ min-height:calc(100dvh - 82px)!important;background:transparent!important}
+.aurex-sidebar{position:sticky!important;top:82px!important;align-self:start!important;width:auto!important;
+ height:calc(100dvh - 100px)!important;min-height:660px!important;transform:none!important;
+ padding:22px 14px!important;border:1px solid #5b3479!important;border-top:0!important;border-radius:0 0 20px 20px!important;
+ background:linear-gradient(180deg,rgba(17,9,29,.97),rgba(5,4,12,.98))!important;
+ box-shadow:8px 18px 35px #0007!important;overflow-y:auto!important}
+.aurex-side-brand{display:flex!important;align-items:center!important;gap:11px!important;padding:5px 3px 20px!important;
+ margin:0 0 18px!important;border-bottom:1px solid #d5a93455!important}
+.aurex-side-brand>span{display:grid!important;place-items:center!important;width:52px!important;height:52px!important;
+ flex:0 0 52px!important;border:1px solid #f2ce6a!important;border-radius:14px!important;
+ background:linear-gradient(145deg,#ffe69a,#96611a)!important;color:#170d04!important;font-size:34px!important}
+.aurex-side-brand b{font-size:11px!important;letter-spacing:1px!important;color:#fff!important}
+.aurex-side-brand small{display:block!important;margin-top:5px!important;font-size:9px!important;color:#bba8ce!important}
+.aurex-side-link{display:flex!important;align-items:center!important;width:100%!important;min-height:49px!important;
+ margin:7px 0!important;padding:0 13px!important;border:1px solid transparent!important;border-radius:12px!important;
+ color:#eee7f5!important;background:transparent!important;font-size:13px!important;text-align:left!important}
+.aurex-side-link.active,.aurex-side-link:hover{border-color:#e3b83f!important;
+ background:linear-gradient(100deg,rgba(180,116,20,.42),rgba(55,25,75,.72))!important;
+ color:#ffe18a!important;box-shadow:0 0 18px #a64cff26!important}
+.aurex-logout{width:100%!important;margin-top:30px!important;min-height:46px!important;border:1px solid #9a414b!important;
+ border-radius:12px!important;background:#281015!important;color:#ffc0c0!important}
+.aurex-side-tag{margin-top:20px!important;padding:15px 8px!important;border:1px solid #b78d35!important;
+ border-radius:14px!important;background:linear-gradient(145deg,#251332,#09050f)!important;color:#ffda79!important}
+.aurex-main{min-width:0!important;padding:24px 25px 16px!important;gap:18px!important;
+ background:linear-gradient(120deg,rgba(7,3,13,.76),rgba(7,3,13,.55))!important}
+.aurex-welcome{display:flex!important;align-items:center!important;justify-content:space-between!important;
+ min-height:112px!important;padding:18px 22px!important;border:1px solid #b88637!important;border-radius:18px!important;
+ background:linear-gradient(110deg,rgba(39,20,53,.95),rgba(12,7,20,.92))!important;
+ box-shadow:0 10px 28px #0005!important}
+.aurex-welcome-copy{display:flex!important;align-items:center!important;gap:17px!important}
+.aurex-welcome-line{width:5px!important;height:75px!important;border-radius:8px!important;background:linear-gradient(#ed63ff,#8b3fe7)!important;box-shadow:0 0 16px #c34cff!important}
+.aurex-welcome-copy b{font-size:22px!important;color:#fff!important}
+.aurex-welcome-copy em{display:block!important;margin-top:2px!important;font-size:34px!important;line-height:1.05!important;font-style:normal!important;font-weight:900!important;color:#ffcf32!important}
+.aurex-welcome-copy small{display:block!important;margin-top:7px!important;font-size:12px!important;color:#d0c2dc!important}
+.aurex-online{padding:9px 15px!important;border:1px solid #00c990!important;border-radius:30px!important;background:#03271f!important;color:#8af2c4!important}
+.aurex-profile{padding:9px 14px!important;border:1px solid #9a762e!important;border-radius:30px!important;color:#ffdc7b!important}
+.aurex-stats{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:14px!important}
+.aurex-stats article{display:flex!important;align-items:center!important;justify-content:center!important;min-width:0!important;
+ min-height:124px!important;padding:14px!important;border:1px solid #d0a13b!important;border-radius:17px!important;
+ background:linear-gradient(145deg,rgba(40,21,56,.97),rgba(8,5,14,.98))!important;text-align:center!important;
+ box-shadow:0 10px 24px #0005,0 0 16px #a64cff1b!important}
+.aurex-stats article:nth-child(2){border-color:#b88c39!important}
+.aurex-stats article:nth-child(3){border-color:#3a83bb!important;background:linear-gradient(145deg,#10233d,#080b14)!important}
+.aurex-stats article:nth-child(4){border-color:#198a68!important;background:linear-gradient(145deg,#10362c,#080e12)!important}
+.aurex-stats article>span{font-size:29px!important;color:#d77aff!important}
+.aurex-stats article>b{font-size:26px!important;color:#ffdb76!important}
+.aurex-stats article>strong{font-size:12px!important;color:#fff!important}
+.aurex-stats article>small{display:block!important;font-size:9px!important;color:#a99bb7!important}
+.aurex-anime-banner{position:relative!important;display:block!important;width:100%!important;height:270px!important;min-height:270px!important;
+ margin:0!important;overflow:hidden!important;border:1px solid #e0b743!important;border-radius:19px!important;
+ background:#10051c!important;box-shadow:0 0 24px #9b40ff38!important}
+.aurex-anime-banner img{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;
+ max-width:none!important;object-fit:cover!important;object-position:50% 27%!important;opacity:1!important;mask-image:none!important}
+.aurex-anime-banner:before{content:""!important;position:absolute!important;inset:0!important;z-index:1!important;
+ background:linear-gradient(90deg,rgba(5,2,12,.05),transparent 45%,rgba(5,2,12,.05))!important;pointer-events:none!important}
+.aurex-banner-copy,.aurex-anime-banner>strong{display:none!important}
+.aurex-dash-grid{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+ grid-template-rows:auto auto!important;gap:15px!important}
+.aurex-panel{min-width:0!important;padding:17px!important;border:1px solid #b78b36!important;border-radius:17px!important;
+ background:linear-gradient(145deg,rgba(28,14,39,.97),rgba(7,5,13,.98))!important;box-shadow:0 10px 25px #0005!important}
+.aurex-panel>header{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important}
+.aurex-panel>header b{font-size:15px!important;color:#fff!important}
+.aurex-panel>header button{color:#ffcf39!important}
+.aurex-activity{grid-column:1!important;grid-row:1!important}
+.aurex-quick{grid-column:2!important;grid-row:1!important}
+.aurex-activity-row{display:flex!important;align-items:center!important;gap:11px!important;padding:12px 4px!important;
+ border-bottom:1px solid #ffffff12!important;color:#f4edf8!important;font-size:12px!important}
+.aurex-activity-row i{width:9px!important;height:9px!important;flex:0 0 9px!important;border-radius:50%!important;background:#c34cff!important;box-shadow:0 0 10px #c34cff!important}
+.aurex-activity-row small{margin-left:auto!important;color:#a99ab7!important;font-size:9px!important}
+.aurex-action-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:11px!important}
+.aurex-action-grid button{display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:10px!important;
+ min-width:0!important;min-height:68px!important;padding:11px!important;border:1px solid #d1a33c!important;
+ border-radius:13px!important;background:linear-gradient(145deg,#321b3d,#0a0710)!important;
+ color:#fff!important;text-align:left!important;font-size:11px!important;line-height:1.4!important}
+.aurex-action-grid button span{margin:0!important;color:#ffd34d!important;font-size:27px!important}
+.aurex-status{grid-column:1/-1!important;grid-row:2!important}
+.aurex-status-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:9px!important}
+.aurex-status-grid>div{min-width:0!important;padding:12px!important;border:1px solid #d5b04b33!important;border-radius:11px!important;background:#08050f!important;text-align:center!important}
+.aurex-status-grid>div b{color:#ffda78!important}
+.aurex-status-grid>div small{display:block!important;color:#b9a9c8!important}
+.aurex-status>p{color:#9d91aa!important}
+.aurex-footer{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;
+ border-top:1px solid #d2a63d55!important;padding:16px 3px 4px!important;color:#a99bb8!important;font-size:10px!important}
+.aurex-footer b{color:#ffda72!important}.aurex-footer em{color:#d8a5ff!important;font-size:17px!important}
+@media(max-width:1100px){
+ .nexus-shell{padding:0 15px 20px!important;background-attachment:scroll!important}
+ .nexus-topbar{height:70px!important;margin:0 -15px!important;padding:0 15px!important}
+ .nexus-brand .brand-mark{width:43px!important;height:43px!important;flex:0 0 43px!important;font-size:27px!important}
+ .nexus-brand b,.nexus-brand i{font-size:16px!important}
+ .nexus-brand small{font-size:7px!important}
+ .secure-state,.owner-chip{display:none!important}
+ .aurex-mobile-menu{display:grid!important;place-items:center!important;width:43px!important;height:43px!important;
+  border:1px solid #d8ac42!important;border-radius:12px!important;background:linear-gradient(145deg,#28153a,#0b0711)!important;
+  color:#ffda63!important;font-size:23px!important}
+ .aurex-dashboard{display:block!important;min-height:calc(100dvh - 70px)!important}
+ .aurex-sidebar{position:fixed!important;z-index:200!important;top:80px!important;left:10px!important;right:auto!important;
+  bottom:12px!important;width:min(300px,84vw)!important;height:auto!important;min-height:0!important;
+  padding:17px 13px!important;border:1px solid #d3a43b!important;border-radius:19px!important;
+  background:linear-gradient(160deg,rgba(23,11,34,.99),rgba(5,4,12,.99))!important;
+  box-shadow:18px 20px 55px #000d,0 0 24px #a84cff33!important;
+  transform:translateX(-120%)!important;transition:transform .24s ease!important;overflow-y:auto!important}
+ .aurex-sidebar.is-open{transform:translateX(0)!important}
+ .aurex-main{width:100%!important;min-width:0!important;padding:15px 0 14px!important;gap:13px!important;
+  background:transparent!important}
+ .aurex-welcome{min-height:105px!important;padding:16px!important;border-radius:17px!important}
+ .aurex-welcome-copy{gap:12px!important}
+ .aurex-welcome-line{height:68px!important}
+ .aurex-welcome-copy b{font-size:17px!important}
+ .aurex-welcome-copy em{font-size:28px!important}
+ .aurex-welcome-copy small{font-size:10px!important;max-width:230px!important}
+ .aurex-online,.aurex-profile{display:none!important}
+ .aurex-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+ .aurex-stats article{min-height:119px!important;padding:13px!important;align-items:flex-start!important;text-align:left!important}
+ .aurex-stats article>span{font-size:24px!important}
+ .aurex-stats article>b{font-size:23px!important;margin:4px 0!important}
+ .aurex-stats article>strong{font-size:11px!important}
+ .aurex-stats article>small{font-size:8px!important}
+ .aurex-anime-banner{height:190px!important;min-height:190px!important;border-radius:16px!important}
+ .aurex-anime-banner img{object-position:50% 31%!important}
+ .aurex-dash-grid{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto!important;gap:12px!important}
+ .aurex-activity,.aurex-quick,.aurex-status{grid-column:1!important;grid-row:auto!important}
+ .aurex-panel{padding:14px!important;border-radius:15px!important}
+ .aurex-panel>header b{font-size:13px!important}
+ .aurex-activity-row{padding:10px 2px!important;font-size:10px!important}
+ .aurex-activity-row small{font-size:8px!important}
+ .aurex-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+ .aurex-action-grid button{min-height:60px!important;padding:9px!important;font-size:9px!important;gap:8px!important}
+ .aurex-action-grid button span{font-size:23px!important}
+ .aurex-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .aurex-footer{flex-wrap:wrap!important;justify-content:center!important;text-align:center!important;font-size:8px!important}
+ .aurex-footer em{width:100%!important;font-size:14px!important}
+}
+@media(max-width:430px){
+ .nexus-shell{padding-left:11px!important;padding-right:11px!important}
+ .nexus-topbar{margin-left:-11px!important;margin-right:-11px!important;padding-left:11px!important;padding-right:11px!important}
+ .nexus-brand{gap:8px!important}
+ .nexus-brand .brand-mark{width:39px!important;height:39px!important;flex-basis:39px!important;font-size:24px!important}
+ .nexus-brand b,.nexus-brand i{font-size:14px!important}
+ .nexus-brand small{font-size:6px!important;letter-spacing:.8px!important}
+ .aurex-main{gap:11px!important}
+ .aurex-welcome{min-height:96px!important;padding:13px!important}
+ .aurex-welcome-copy em{font-size:25px!important}
+ .aurex-welcome-copy small{max-width:190px!important;font-size:9px!important}
+ .aurex-stats article{min-height:110px!important;padding:11px!important}
+ .aurex-anime-banner{height:174px!important;min-height:174px!important}
+ .aurex-anime-banner img{object-position:50% 29%!important}
+ .aurex-action-grid button{font-size:8px!important}
+}
+@media(prefers-reduced-motion:no-preference){
+ .aurex-anime-banner img{animation:oceanHeroDrift 18s ease-in-out infinite alternate}
+ .aurex-panel,.aurex-stats article{transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+ .aurex-panel:hover,.aurex-stats article:hover{transform:translateY(-2px);box-shadow:0 14px 28px #0008,0 0 18px #a64cff2a!important}
+}
+@keyframes oceanHeroDrift{from{transform:scale(1.015)}to{transform:scale(1.065)}}
