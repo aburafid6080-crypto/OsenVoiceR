@@ -5642,3 +5642,126 @@ body{background:radial-gradient(ellipse at 82% 4%,#35106a44,transparent 38%),rad
  .aurex-banner-copy{max-width:78%!important;padding:17px 14px!important}
  .aurex-banner-copy h2{font-size:22px!important}
 }
+
+
+/* LOGIN PAGE ONLY — OSEN BOOSTVOX RX character-first black & gold theme.
+   Dashboard/workspace styles and login/authentication logic are intentionally untouched. */
+.nexus-login-page{
+  position:relative!important;
+  isolation:isolate!important;
+  min-height:100svh!important;
+  padding:34px 18px 18px!important;
+  overflow:hidden!important;
+  background:
+    radial-gradient(ellipse at 50% 8%,#633a8a66 0%,transparent 44%),
+    radial-gradient(ellipse at 8% 78%,#9b702a2b 0%,transparent 36%),
+    radial-gradient(ellipse at 94% 68%,#49236e40 0%,transparent 34%),
+    linear-gradient(135deg,#050509 0%,#100b18 48%,#07070c 100%)!important;
+}
+.nexus-login-page:before{
+  opacity:.18!important;
+  background-image:linear-gradient(#d8b15e1c 1px,transparent 1px),linear-gradient(90deg,#d8b15e1c 1px,transparent 1px)!important;
+  background-size:46px 46px!important;
+  mask-image:radial-gradient(ellipse at center,#000 0%,transparent 78%)!important;
+}
+.nexus-login-page:after{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(circle at 18% 22%,#e9c879 0 1px,transparent 2px),
+             radial-gradient(circle at 82% 36%,#b58aff 0 1px,transparent 2px),
+             radial-gradient(circle at 62% 84%,#e9c879 0 1px,transparent 2px);
+  background-size:170px 160px,210px 190px,240px 210px;opacity:.34;
+}
+.nexus-login-page .anime-login-card{
+  width:min(590px,100%)!important;
+  border:1px solid #d8b15e99!important;
+  border-radius:26px!important;
+  background:linear-gradient(155deg,#1b1424 0%,#0b0a10 60%,#17101d 100%)!important;
+  box-shadow:0 30px 95px #000c,0 0 55px #a77aff30,inset 0 1px #ffffff16!important;
+}
+.nexus-login-page .anime-login-top{
+  padding:24px 28px 0!important;
+  color:#f6edff!important;
+}
+.nexus-login-page .anime-crown{
+  color:#e9c879!important;
+  text-shadow:0 0 22px #e9c87966!important;
+}
+.nexus-login-page .anime-login-top h1{color:#fff!important}
+.nexus-login-page .anime-login-top h1 em{
+  color:#d2a7ff!important;
+  text-shadow:0 0 24px #a77aff66!important;
+}
+.nexus-login-page .anime-login-top p{color:#c0b3cf!important}
+.nexus-login-page .anime-hero{
+  height:clamp(260px,34vw,360px)!important;
+  margin:14px auto 0!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  overflow:hidden!important;border-radius:18px 18px 0 0!important;
+  background:radial-gradient(ellipse at 50% 68%,#9a61d64d 0%,#39224f33 48%,transparent 76%)!important;
+  border-bottom:1px solid #d8b15e55!important;
+}
+.nexus-login-page .anime-hero img{
+  display:block!important;width:100%!important;height:100%!important;
+  object-fit:contain!important;object-position:center bottom!important;
+  filter:drop-shadow(0 14px 28px #a77aff66)!important;
+}
+.nexus-login-page .anime-hero:after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(0deg,#0b0a10 0%,transparent 23%,transparent 82%,#17101d33 100%)!important;
+}
+.nexus-login-page .anime-login-form{
+  padding:22px 34px 30px!important;color:#f5edff!important;
+}
+.nexus-login-page .anime-brand .aurex-mark{
+  background:linear-gradient(145deg,#f4dc9a,#b88932)!important;
+  color:#211506!important;border:1px solid #ffe7a0!important;
+  box-shadow:0 0 18px #d8b15e44!important;
+}
+.nexus-login-page .anime-brand b{color:#fff!important}
+.nexus-login-page .anime-brand em{color:#e9c879!important}
+.nexus-login-page .anime-brand small{color:#b8a8c8!important}
+.nexus-login-page .anime-login-form label{
+  color:#e4c98e!important;letter-spacing:1.25px!important;
+}
+.nexus-login-page .anime-field{
+  min-height:55px!important;border-radius:13px!important;
+  background:linear-gradient(145deg,#211a2b,#100e17)!important;
+  border:1px solid #745a8c!important;
+  box-shadow:inset 0 1px #ffffff0b,0 7px 18px #0005!important;
+}
+.nexus-login-page .anime-field>span{
+  background:linear-gradient(145deg,#a77aff,#633b9b)!important;
+  color:#fff!important;box-shadow:0 0 15px #a77aff44!important;
+}
+.nexus-login-page .anime-field input{color:#fff!important}
+.nexus-login-page .anime-field input::placeholder{color:#a99bb7!important}
+.nexus-login-page .anime-field:focus-within{
+  border-color:#e9c879!important;box-shadow:0 0 0 3px #e9c87920,0 0 20px #a77aff20!important;
+}
+.nexus-login-page .anime-login-submit{
+  height:56px!important;border:1px solid #f0d58d!important;border-radius:13px!important;
+  background:linear-gradient(105deg,#8e6423 0%,#d5ad58 48%,#875b20 100%)!important;
+  color:#160f08!important;font-size:16px!important;font-weight:900!important;
+  box-shadow:0 10px 25px #0008,0 0 22px #d8b15e26,inset 0 1px #fff8!important;
+}
+.nexus-login-page .anime-login-submit:hover{filter:brightness(1.12)!important;transform:translateY(-2px)!important}
+.nexus-login-page .anime-login-note{
+  color:#b9a9c7!important;border-top-color:#d8b15e44!important;
+}
+.nexus-login-page .login-page-footer{
+  color:#d8c9e7!important;border-color:#d8b15e44!important;
+}
+.nexus-login-page .login-page-footer span:first-child{color:#e9c879!important}
+@media(max-width:620px){
+  .nexus-login-page{padding:14px 12px 10px!important;justify-content:flex-start!important}
+  .nexus-login-page .anime-login-card{width:min(100%,520px)!important;border-radius:22px!important}
+  .nexus-login-page .anime-login-top{padding:18px 16px 0!important}
+  .nexus-login-page .anime-login-top h1{font-size:36px!important}
+  .nexus-login-page .anime-hero{height:clamp(225px,62vw,290px)!important;margin-top:10px!important}
+  .nexus-login-page .anime-login-form{padding:18px 19px 23px!important}
+  .nexus-login-page .anime-field{min-height:51px!important}
+  .nexus-login-page .anime-login-submit{height:52px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .nexus-login-page .anime-login-submit{transition:none!important}
+}
