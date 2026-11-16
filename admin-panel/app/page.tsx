@@ -68,10 +68,10 @@ export default function Home(){
  function navigateSection(section:string){const nextWorkspace=workspace==="website"?"website":"app";writeAdminUrl(nextWorkspace,section);setActiveSection(section);setMobileMenuOpen(false)}
  function openWorkspace(target:"website"|"app",sectionOverride?:string){const section=sectionOverride||(target==="website"?"websites":"overview");writeAdminUrl(target,section);setWorkspace(target);setActiveSection(section);setMobileMenuOpen(false);loadDashboard(token,target).catch(e=>{setNotice(e instanceof Error?e.message:"Could not load workspace");setNoticeError(true)})}
  return <main className="nexus-shell">
-  {token&&<header className="nexus-topbar"><a className="nexus-brand" href="#overview" onClick={e=>{e.preventDefault();goHome()}}><span className="brand-mark">O</span><span><b><i>OCEAN ADMIN PANEL</i></b><small>ADMIN PANEL · PRIVATE OWNER</small></span></a><div className="topbar-right"><span className="secure-state"><i/> SECURE ADMIN</span>{token&&<div className="owner-chip"><span className="owner-avatar">AR</span><span><b>{OWNER}</b><small>OWNER</small></span><button className="logout-btn" onClick={logout}>LOG OUT</button></div>}</div></header>}
+  {token&&<header className="nexus-topbar"><a className="nexus-brand" href="#overview" onClick={e=>{e.preventDefault();goHome()}}><span className="brand-mark">♛</span><span><b><i>OCEAN</i></b><small>ADMIN PANEL · PRIVATE OWNER</small></span></a><div className="topbar-right"><span className="secure-state"><i/> SECURE ADMIN</span>{token&&<div className="owner-chip"><span className="owner-avatar">AR</span><span><b>{OWNER}</b><small>OWNER</small></span><button className="logout-btn" onClick={logout}>LOG OUT</button></div>}</div></header>}
   {token&&workspace==="home"?<section className="aurex-dashboard">
    <aside className="aurex-sidebar">
-    <div className="aurex-side-brand"><span>O</span><b>OCEAN ADMIN PANEL<small>ADMIN PANEL</small></b></div>
+    <div className="aurex-side-brand"><span>♛</span><b>OCEAN ADMIN PANEL<small>ADMIN PANEL</small></b></div>
     <button className="aurex-side-link active" onClick={goHome}>⌂　Dashboard</button>
     <button className="aurex-side-link" onClick={()=>openWorkspace("website")}>◎　Website Center</button>
     <button className="aurex-side-link" onClick={()=>openWorkspace("app")}>▣　Android App Center</button>
@@ -81,14 +81,14 @@ export default function Home(){
     <div className="aurex-side-tag">OCEAN ADMIN PANEL<small>Powering Your Digital World</small></div>
    </aside>
    <div className="aurex-main">
-    <header className="aurex-welcome"><div><span className="aurex-crown">♛</span><div><b>Welcome Back, <em>{OWNER}</em></b><small>Manage your workspace with power and ease.</small></div></div><span className="aurex-online">● Online</span><span className="aurex-profile">AR　 ADMIN</span></header>
+    <header className="aurex-welcome"><div className="aurex-welcome-copy"><span className="aurex-welcome-line"/><div><b>Welcome Back,</b><em>{OWNER}</em><small>Manage your projects and control everything from here.</small></div></div><span className="aurex-online">● Online</span><span className="aurex-profile">♛　 ADMIN</span></header>
     <div className="aurex-stats">
-     <article><span>♟</span><b>{users.length}</b><strong>Total Users</strong><small>Live records</small></article>
-     <article><span>◎</span><b>{sites.length}</b><strong>Website Projects</strong><small>Saved projects</small></article>
-     <article><span>▣</span><b>{appProjects.length}</b><strong>App Projects</strong><small>Saved projects</small></article>
-     <article><span>♛</span><b>{premiumCount}</b><strong>Premium Users</strong><small>{enabled?"Premium enabled":"Premium disabled"}</small></article>
+     <article><span>♟</span><b>{users.length||"—"}</b><strong>Total Users</strong><small>Live records</small></article>
+     <article><span>◎</span><b>{sites.length||"—"}</b><strong>Website Projects</strong><small>Saved projects</small></article>
+     <article><span>▣</span><b>{appProjects.length||"—"}</b><strong>App Projects</strong><small>Saved projects</small></article>
+     <article><span>♛</span><b>{premiumCount||"—"}</b><strong>Premium Users</strong><small>{enabled?"Premium enabled":"Premium disabled"}</small></article>
     </div>
-    <section className="aurex-anime-banner"><img src="/a3d7c249-a11e-4aa1-9273-5f8fe2139d3b.png" alt="OSEN anime hero with a purple-eyed companion cat"/><div className="aurex-banner-copy"><span>OCEAN ADMIN PANEL · CONTROL CENTER</span><h2>Power Beyond <em>Limits.</em></h2><p>Your apps. Your platform. One powerful owner dashboard.</p></div><strong>OCEAN <em>RX</em></strong></section>
+    <section className="aurex-anime-banner"><img src="/a3d7c249-a11e-4aa1-9273-5f8fe2139d3b.png" alt="OSEN anime hero with a purple-eyed companion cat"/><div className="aurex-banner-copy"></div></section>
     <div className="aurex-dash-grid">
      <section className="aurex-panel aurex-activity"><header><b>▥　Latest Activity</b><button onClick={()=>openWorkspace("app","activity")}>VIEW ALL　→</button></header>
       {logs.length?logs.slice(0,5).map(log=><div className="aurex-activity-row" key={log.id}><i/> <span>{log.action.replaceAll("_"," ")}</span><small>{new Date(log.created_at).toLocaleString()}</small></div>):<p className="aurex-empty">No admin activity recorded yet.</p>}
