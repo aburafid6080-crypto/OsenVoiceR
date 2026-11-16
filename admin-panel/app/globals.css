@@ -6295,3 +6295,83 @@ body{background:radial-gradient(ellipse at 82% 4%,#35106a44,transparent 38%),rad
 @media(max-width:900px){.ocean-character-side{width:100%!important;max-width:none!important;aspect-ratio:3/2!important;min-height:0!important;height:auto!important;background-position:center 44%!important;background-size:cover!important}}
 @media(min-width:901px){.ocean-character-side{width:100%!important;min-height:650px!important;height:min(78svh,820px)!important;background-position:center center!important;background-size:cover!important}}
 @media(prefers-reduced-motion:reduce){.ocean-reference-card .anime-login-submit:after{animation:none!important}.ocean-reference-card .anime-login-submit{transition:none!important}}
+
+
+/* OCEAN layout correction: keep the complete source artwork visible */
+.ocean-reference-login{min-height:100svh!important;overflow-x:hidden!important}
+.ocean-reference-layout{display:grid!important;grid-template-columns:minmax(0,1.08fr) minmax(420px,.92fr)!important;align-items:center!important;gap:clamp(28px,4vw,72px)!important;width:min(100%,1540px)!important;margin:0 auto!important}
+.ocean-character-side{
+ position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;
+ overflow:hidden!important;background:radial-gradient(ellipse at 50% 55%,rgba(107,35,180,.28),transparent 68%),#080511!important;
+}
+.ocean-character-side:after{display:none!important}
+.ocean-character-side .boost-character{
+ position:absolute!important;inset:0!important;z-index:1!important;display:flex!important;
+ align-items:center!important;justify-content:center!important;width:100%!important;height:100%!important;
+ opacity:1!important;pointer-events:none!important;
+}
+.ocean-character-side .boost-character img{
+ display:block!important;visibility:visible!important;opacity:1!important;
+ width:100%!important;height:100%!important;max-width:none!important;
+ object-fit:contain!important;object-position:center center!important;
+ transform:none!important;filter:drop-shadow(0 0 22px rgba(133,55,255,.25))!important;
+}
+.ocean-reference-card{width:100%!important;max-width:670px!important;justify-self:center!important}
+
+/* Real translucent glass: transparent purple-gold pane, bright rim and reflected light */
+.ocean-reference-card .anime-login-submit{
+ min-height:72px!important;height:auto!important;border-radius:20px!important;
+ border:1px solid rgba(255,229,158,.96)!important;
+ background:linear-gradient(115deg,rgba(132,91,190,.30),rgba(36,25,55,.36) 42%,rgba(221,158,45,.28))!important;
+ color:#fff4cf!important;
+ -webkit-backdrop-filter:blur(22px) saturate(180%)!important;
+ backdrop-filter:blur(22px) saturate(180%)!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.72),inset 0 -1px 0 rgba(255,214,133,.22),0 0 0 1px rgba(255,207,93,.2),0 8px 26px rgba(138,81,205,.22)!important;
+ text-shadow:0 1px 12px rgba(255,224,155,.55)!important;
+}
+.ocean-reference-card .anime-login-submit:before{
+ content:""!important;position:absolute!important;inset:2px!important;z-index:0!important;
+ border-radius:17px!important;pointer-events:none!important;
+ background:linear-gradient(105deg,rgba(255,255,255,.22),transparent 34%,rgba(255,197,88,.12))!important;
+}
+.ocean-reference-card .anime-login-submit>*{position:relative!important;z-index:1!important}
+.ocean-reference-card .anime-login-submit span{
+ background:rgba(17,12,28,.48)!important;color:#ffe5a0!important;
+ border:1px solid rgba(255,234,185,.8)!important;
+ box-shadow:inset 0 1px 3px #ffffff45,0 0 14px #ffc85c55!important;
+}
+.ocean-reference-card .anime-login-submit:after{z-index:2!important;pointer-events:none!important}
+.ocean-reference-card .anime-login-submit:hover:not(:disabled){
+ background:linear-gradient(115deg,rgba(166,113,229,.4),rgba(53,35,75,.43) 42%,rgba(239,183,77,.38))!important;
+ box-shadow:inset 0 1px 0 #ffffffbb,0 10px 32px rgba(157,94,224,.3),0 0 20px rgba(255,207,93,.24)!important;
+}
+@media(min-width:901px){
+ .ocean-reference-login{padding:26px clamp(28px,4vw,72px)!important;justify-content:center!important}
+ .ocean-reference-layout{min-height:min(790px,calc(100svh - 110px))!important}
+ .ocean-character-side{height:min(76svh,790px)!important;min-height:590px!important}
+ .ocean-reference-card{padding:clamp(34px,3vw,54px)!important}
+}
+@media(max-width:900px){
+ .ocean-reference-login{height:auto!important;min-height:100svh!important;padding:12px 14px 18px!important;justify-content:flex-start!important}
+ .ocean-reference-layout{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:12px!important;width:100%!important;max-width:560px!important;min-height:0!important}
+ .ocean-character-side{
+  display:flex!important;width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;
+  aspect-ratio:3/2!important;border-radius:17px!important;
+  background:radial-gradient(ellipse at 50% 55%,rgba(107,35,180,.24),transparent 68%),#080511!important;
+ }
+ .ocean-character-side .boost-character{position:absolute!important;inset:0!important;opacity:1!important}
+ .ocean-character-side .boost-character img{
+  width:100%!important;height:100%!important;max-width:none!important;
+  object-fit:contain!important;object-position:center center!important;
+  transform:none!important;
+ }
+ .ocean-reference-card{width:100%!important;max-width:none!important;margin:0!important;padding:24px clamp(17px,5vw,28px)!important}
+ .ocean-reference-card .anime-login-submit{min-height:60px!important;height:60px!important}
+ .ocean-reference-login .login-page-footer{margin:12px auto 0!important}
+}
+@media(max-width:380px){
+ .ocean-reference-login{padding:9px 10px 14px!important}
+ .ocean-reference-layout{gap:9px!important}
+ .ocean-reference-card{padding:19px 14px!important}
+ .ocean-reference-card .anime-login-submit{min-height:55px!important;height:55px!important}
+}
