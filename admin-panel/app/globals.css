@@ -6181,3 +6181,21 @@ body{background:radial-gradient(ellipse at 82% 4%,#35106a44,transparent 38%),rad
  .ocean-reference-card{padding-top:28px!important;padding-bottom:28px!important}
  .ocean-crown{font-size:54px!important}
 }
+
+
+/* Supplied OCEAN hero artwork and subtle login motion */
+.ocean-character-side{background:radial-gradient(ellipse at 50% 70%,#7b22c955,transparent 62%),linear-gradient(145deg,#080511,#10091b 58%,#050409)!important}
+.ocean-character-side .boost-character img{width:100%!important;max-width:920px!important;height:100%!important;object-fit:contain!important;object-position:center center!important;transform:scale(1.02)!important;animation:oceanHeroFloat 6s ease-in-out infinite!important;filter:drop-shadow(0 0 24px #842aff70)!important}
+.ocean-character-halo{animation:oceanHaloPulse 5s ease-in-out infinite!important}
+.ocean-reference-card{animation:oceanCardEnter .8s cubic-bezier(.2,.8,.2,1) both!important}
+.ocean-reference-card .anime-login-submit{position:relative!important;overflow:hidden!important;transition:transform .22s ease,box-shadow .22s ease,filter .22s ease!important}
+.ocean-reference-card .anime-login-submit:after{content:""!important;position:absolute!important;top:-60%!important;left:-40%!important;width:24%!important;height:220%!important;transform:rotate(22deg)!important;background:linear-gradient(90deg,transparent,#fff9,transparent)!important;animation:oceanButtonShine 4.8s ease-in-out infinite!important}
+.ocean-reference-card .anime-login-submit:hover:not(:disabled){transform:translateY(-2px) scale(1.01)!important;box-shadow:0 0 32px #ffc42a99,inset 0 3px 5px #fff9!important;filter:brightness(1.06)!important}
+.ocean-reference-card .anime-field:focus-within{box-shadow:0 0 0 3px #a34dff55,0 0 18px #f6c21d25,inset 0 0 20px #e6b91d08!important}
+@keyframes oceanHeroFloat{0%,100%{translate:0 0}50%{translate:0 -9px}}
+@keyframes oceanHaloPulse{0%,100%{opacity:.58;scale:1}50%{opacity:1;scale:1.035}}
+@keyframes oceanCardEnter{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes oceanButtonShine{0%,65%{left:-45%}100%{left:135%}}
+@media(max-width:900px){.ocean-character-side .boost-character img{width:100%!important;max-width:620px!important;object-fit:contain!important;object-position:center 48%!important;transform:scale(1.02)!important}}
+@media(max-width:480px){.ocean-character-side{overflow:hidden!important}.ocean-character-side .boost-character img{width:100%!important;max-width:390px!important;height:100%!important;object-fit:contain!important;object-position:center 48%!important;transform:none!important}.ocean-reference-card{animation:oceanCardEnter .65s ease-out both!important}}
+@media(prefers-reduced-motion:reduce){.ocean-character-side .boost-character img,.ocean-character-halo,.ocean-reference-card,.ocean-reference-card .anime-login-submit:after{animation:none!important}.ocean-reference-card .anime-login-submit{transition:none!important}}
