@@ -114,7 +114,7 @@ export default function Home(){
    <div className="boost-login-layout ocean-reference-layout">
     <section className="boost-login-visual ocean-character-side">
      <div className="ocean-character-halo"/>
-     <div className="boost-character"><img src="/aurex-anime-character.svg" alt="OCEAN masked anime character" loading="eager"/></div>
+     <div className="boost-character"><img src="/ocean-login-character.svg" alt="OCEAN silver-haired anime character" loading="eager"/></div>
     </section>
     <section className="boost-login-panel ocean-reference-card">
      <div className="ocean-crown">♛</div>
@@ -132,7 +132,7 @@ export default function Home(){
     </section>
    </div>
    <footer className="login-page-footer"><span>♛ OCEAN ADMIN PANEL</span><span>OWNER ACCESS ONLY · © 2026</span></footer>
-  </section>  </section>:workspace==="home"?null:workspace==="chooser"?<section className="workspace-picker">
+  </section>:workspace==="home"?null:workspace==="chooser"?<section className="workspace-picker">
    <div className="picker-heading"><span className="section-kicker">ADMIN PANEL · PRIVATE OWNER</span><h1>Choose your <em>workspace</em></h1><p>Website projects and Android app controls stay in separate work areas.</p></div>
    <div className="picker-grid">
     <button className="workspace-tile website-tile" onClick={()=>{openWorkspace("website")}}><span className="tile-icon">◎</span><span className="tile-kicker">01 / WEB PLATFORM</span><strong>WEBSITE CENTER</strong><small>Build and manage websites, projects, domains and hosting.</small><span className="tile-cta">OPEN WEBSITE CENTER ↗</span></button>
