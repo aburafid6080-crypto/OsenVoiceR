@@ -88,7 +88,7 @@ export default function Home(){
      <article><span>▣</span><b>{appProjects.length}</b><strong>App Projects</strong><small>Saved projects</small></article>
      <article><span>♛</span><b>{premiumCount}</b><strong>Premium Users</strong><small>{enabled?"Premium enabled":"Premium disabled"}</small></article>
     </div>
-    <section className="aurex-anime-banner"><img src="/aurex-anime-character.svg" alt="OSEN anime hero with a purple-eyed companion cat"/><div className="aurex-banner-copy"><span>OCEAN ADMIN PANEL · CONTROL CENTER</span><h2>Power Beyond <em>Limits.</em></h2><p>Your apps. Your platform. One powerful owner dashboard.</p></div><strong>OCEAN <em>RX</em></strong></section>
+    <section className="aurex-anime-banner"><img src="/a3d7c249-a11e-4aa1-9273-5f8fe2139d3b.png" alt="OSEN anime hero with a purple-eyed companion cat"/><div className="aurex-banner-copy"><span>OCEAN ADMIN PANEL · CONTROL CENTER</span><h2>Power Beyond <em>Limits.</em></h2><p>Your apps. Your platform. One powerful owner dashboard.</p></div><strong>OCEAN <em>RX</em></strong></section>
     <div className="aurex-dash-grid">
      <section className="aurex-panel aurex-activity"><header><b>▥　Latest Activity</b><button onClick={()=>openWorkspace("app","activity")}>VIEW ALL　→</button></header>
       {logs.length?logs.slice(0,5).map(log=><div className="aurex-activity-row" key={log.id}><i/> <span>{log.action.replaceAll("_"," ")}</span><small>{new Date(log.created_at).toLocaleString()}</small></div>):<p className="aurex-empty">No admin activity recorded yet.</p>}
