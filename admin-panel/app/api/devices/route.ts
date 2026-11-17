@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 export const runtime = "nodejs";
 
 const rawUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-const url = (() => { try { const p = new URL(rawUrl.trim()); return p.protocol + "//" + p.host; } catch { return rawUrl.trim().replace(/\\/+$/, ""); } })();
+const url = (() => { try { const p = new URL(rawUrl.trim()); return p.protocol + "//" + p.host; } catch { return rawUrl.trim().replace(/\/+$/, ""); } })();
 const anon = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 const service = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 const owner = (process.env.ADMIN_EMAIL || "").toLowerCase();
@@ -21,7 +21,7 @@ async function db(path: string, init: RequestInit = {}) {
 
 async function authorize(req: NextRequest) {
   if (!url || !anon || !service || !owner) throw new Error("Admin service is not configured.");
-  const token = req.headers.get("authorization")?.replace(/^Bearer\\s+/i, "");
+  const token = req.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
   if (!token) throw new Error("Sign in required.");
   const response = await fetch(url + "/auth/v1/user", { headers: { apikey: anon, Authorization: "Bearer " + token }, cache: "no-store" });
   if (!response.ok) throw new Error("Invalid login session.");
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
     if (!uuid.test(id)) return NextResponse.json({ ok: false, error: "Invalid device ID." }, { status: 400 });
     if (body.package_name !== "com.osenturboplay.app") return NextResponse.json({ ok: false, error: "Unrecognized app." }, { status: 400 });
-    const clean = (v: unknown, max: number) => typeof v === "string" ? v.replace(/[\\r\\n\\0]/g, " ").trim().slice(0, max) : "";
+    const clean = (v: unknown, max: number) => typeof v === "string" ? v.replace(/[\r\n\0]/g, " ").trim().slice(0, max) : "";
     const device = {
       device_id: id,
       package_name: "com.osenturboplay.app",
