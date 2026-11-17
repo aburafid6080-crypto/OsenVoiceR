@@ -137,7 +137,7 @@ private fun TurboPlayScreen() {
                                     stats.value = readDeviceStats(context)
                                     status.value = "Device information refreshed"
                                 },
-                                onCleaner = { openAppSettings(context) },
+                                onCleaner = { openStorageSettings(context) },
                                 onPhoneSettings = { openDeviceSettings(context) },
                                 onDeviceInfo = { selectedTab.value = "Stats" },
                                 onDnd = { status.value = toggleDndMode(context) }
@@ -369,7 +369,7 @@ private fun HomePage(context: Context, stats: DeviceStats, status: androidx.comp
             ToolTile("🚀", "GAME LAUNCHER", "Open games", Purple, Modifier.weight(1f)) { status.value = launchFreeFire(context) }
             ToolTile("⟳", "REFRESH", "Update info", Cyan, Modifier.weight(1f), onRefresh)
             ToolTile("⚡", "BOOSTER", "Performance info", Green, Modifier.weight(1f)) { val latest = readDeviceStats(context); status.value = "Game check: ${latest.ramAvailable} RAM free • ${latest.storageFree} storage free. Android controls game performance." }
-            ToolTile("▤", "CLEANER", "App storage", Gold, Modifier.weight(1f)) { openAppSettings(context) }
+            ToolTile("▤", "STORAGE", "Manage space", Gold, Modifier.weight(1f)) { openStorageSettings(context) }
         }
         NoteCard()
     }
@@ -444,7 +444,7 @@ private fun ToolsPage(
     PageTitle("GAMING TOOLS", "Quick shortcuts for your device")
     ActionButton("🌙  DO NOT DISTURB MODE", Gold, onDnd)
     ActionButton("📱  PHONE SETTINGS", Cyan, onPhoneSettings)
-    ActionButton("▤  APP INFO", Gold, onCleaner)
+    ActionButton("▤  STORAGE SETTINGS", Gold, onCleaner)
     ActionButton("📊  DEVICE INFO", Purple, onDeviceInfo)
     ActionButton("↻  REFRESH RAM & STORAGE", Green, onRefresh)
     Text("Android requires one-time Do Not Disturb access. DND silences interruptions according to your phone settings; it does not permanently block callers.", color = Muted, fontSize = 11.sp, lineHeight = 16.sp)
@@ -657,23 +657,22 @@ private fun readDeviceStats(context: Context): DeviceStats {
 private fun launchSpecificGame(context: Context, packageName: String, gameName: String): String {
     val intent = context.packageManager.getLaunchIntentForPackage(packageName)
         ?: return "$gameName is not installed."
-    if (!Settings.canDrawOverlays(context)) {
-        safeOpen(
-            context,
-            Intent(
-                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                android.net.Uri.parse("package:${context.packageName}")
-            )
-        )
-        return "Allow OSEN TURBOPLAY to display over other apps, then tap PLAY again."
-    }
     return try {
-        context.startForegroundService(Intent(context, GameOverlayService::class.java))
+        // Launching a game must not require overlay permission. The optional panel
+        // starts only when the user has already granted the Android permission.
+        if (Settings.canDrawOverlays(context)) {
+            try {
+                context.startForegroundService(Intent(context, GameOverlayService::class.java))
+            } catch (_: Exception) {
+                // Keep the core game-launch action available if the optional panel fails.
+            }
+        }
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
-        "$gameName launched. OSEN floating panel is ready."
+        if (Settings.canDrawOverlays(context)) "$gameName launched. Optional OSEN panel may be available."
+        else "$gameName launched. Grant overlay access only if you want the optional floating panel."
     } catch (_: Exception) {
-        "Could not start $gameName with the game panel on this device."
+        "Could not launch $gameName. Check that it is installed and enabled."
     }
 }
 
@@ -711,29 +710,41 @@ private fun launchFreeFire(context: Context): String {
         .firstNotNullOfOrNull { context.packageManager.getLaunchIntentForPackage(it) }
         ?: return "Free Fire not found. Install Free Fire or Free Fire MAX first."
 
-    if (!Settings.canDrawOverlays(context)) {
-        safeOpen(
-            context,
-            Intent(
-                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                android.net.Uri.parse("package:${context.packageName}")
-            )
-        )
-        return "Allow OSEN TURBOPLAY to display over other apps, then tap PLAY again."
-    }
-
     return try {
-        context.startForegroundService(Intent(context, GameOverlayService::class.java))
+        // Game launch works independently. The floating panel is an optional extra.
+        if (Settings.canDrawOverlays(context)) {
+            try {
+                context.startForegroundService(Intent(context, GameOverlayService::class.java))
+            } catch (_: Exception) {
+                // Do not block game launch if Android rejects the optional service.
+            }
+        }
         gameIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(gameIntent)
-        "Game launched. OSEN floating panel is ready."
+        if (Settings.canDrawOverlays(context)) "Free Fire launched. Optional OSEN floating panel may be available."
+        else "Free Fire launched. Allow overlay access only to use the optional floating panel."
     } catch (_: Exception) {
-        "Could not start the game panel on this device."
+        "Could not launch Free Fire. Check that it is installed and enabled."
     }
 }
 
 private fun openAppSettings(context: Context) {
     safeOpen(context, Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply { data = android.net.Uri.parse("package:${context.packageName}") })
+}
+
+private fun openStorageSettings(context: Context) {
+    // Android owns cross-app storage cleanup; this opens its storage manager.
+    // Apps cannot silently clear another app's private cache on modern Android.
+    val storageIntent = Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS)
+    try {
+        if (storageIntent.resolveActivity(context.packageManager) != null) {
+            safeOpen(context, storageIntent)
+        } else {
+            safeOpen(context, Intent(Settings.ACTION_SETTINGS))
+        }
+    } catch (_: Exception) {
+        safeOpen(context, Intent(Settings.ACTION_SETTINGS))
+    }
 }
 
 private fun openDeviceSettings(context: Context) {
