@@ -22,14 +22,15 @@ async function audit(user:any,action:string,details:Record<string,unknown>={}){
 export async function GET(req:NextRequest){
  try{
   await authorize(req);
-  const [settings,users,configs,appProjects,logs]=await Promise.all([
+  const [settings,users,configs,appProjects,logs,devices]=await Promise.all([
    db("app_settings?select=premium_enabled,premium_password_changed_at&id=eq.main"),
    db("premium_users?select=user_id,premium,updated_at&order=updated_at.desc"),
    db("app_config?select=maintenance_mode,force_update,announcement&id=eq.main").catch(()=>[]),
    db("app_projects?select=id,name,package_name,platform,status,created_at&order=created_at.desc").catch(()=>[]),
-   db("admin_audit_logs?select=id,actor_email,action,details,created_at&order=created_at.desc&limit=25").catch(()=>[])
+   db("admin_audit_logs?select=id,actor_email,action,details,created_at&order=created_at.desc&limit=25").catch(()=>[]),
+   db("registered_devices?select=device_id,device_model,android_version,app_version,first_seen,last_seen&order=last_seen.desc&limit=500").catch(()=>[])
   ]);
-  return NextResponse.json({settings:settings?.[0]||{premium_enabled:false},users:users||[],config:configs?.[0]||{maintenance_mode:false,force_update:false,announcement:""},appProjects:appProjects||[],logs:logs||[]});
+  return NextResponse.json({settings:settings?.[0]||{premium_enabled:false},users:users||[],config:configs?.[0]||{maintenance_mode:false,force_update:false,announcement:""},appProjects:appProjects||[],logs:logs||[],devices:devices||[]});
  }catch(error){return NextResponse.json({error:error instanceof Error?error.message:"Unauthorized"},{status:401});}
 }
 export async function POST(req:NextRequest){
