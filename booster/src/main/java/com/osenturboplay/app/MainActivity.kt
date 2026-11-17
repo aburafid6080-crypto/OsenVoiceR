@@ -85,6 +85,7 @@ private val Muted = Color(0xFFB8B0CC)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        DeviceRegistration.register(applicationContext)
         setContent { TurboPlayScreen() }
     }
 }
