@@ -1,6 +1,6 @@
 const artwork = "https://raw.githubusercontent.com/aburafid6080-crypto/OsenVoiceR/admin-panel/admin-panel/public/a3d7c249-a11e-4aa1-9273-5f8fe2139d3b.png";
 const features = [
-  { n: "01", title: "Voice FX Studio", text: "Enter Arena voice tools designed for creative play and expressive communication." },
+  { n: "01", title: "Voice FX Studio", text: "Switch between voice effects and give your gaming moments a sound of their own." },
   { n: "02", title: "Battle Launcher", text: "Keep your gaming tools close, launch your game and prepare your phone for the session." },
   { n: "03", title: "Command Centre", text: "Your voice and game utilities, brought together in one clean control space." },
 ];
