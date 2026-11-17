@@ -137,7 +137,7 @@ private fun TurboPlayScreen() {
                                     stats.value = readDeviceStats(context)
                                     status.value = "Device information refreshed"
                                 },
-                                onCleaner = { openStorageSettings(context) },
+                                onCleaner = { status.value = clearOsenTemporaryFiles(context); stats.value = readDeviceStats(context) },
                                 onPhoneSettings = { openDeviceSettings(context) },
                                 onDeviceInfo = { selectedTab.value = "Stats" },
                                 onDnd = { status.value = toggleDndMode(context) }
@@ -369,7 +369,7 @@ private fun HomePage(context: Context, stats: DeviceStats, status: androidx.comp
             ToolTile("🚀", "GAME LAUNCHER", "Open games", Purple, Modifier.weight(1f)) { status.value = launchFreeFire(context) }
             ToolTile("⟳", "REFRESH", "Update info", Cyan, Modifier.weight(1f), onRefresh)
             ToolTile("⚡", "BOOSTER", "Performance info", Green, Modifier.weight(1f)) { val latest = readDeviceStats(context); status.value = "Game check: ${latest.ramAvailable} RAM free • ${latest.storageFree} storage free. Android controls game performance." }
-            ToolTile("▤", "STORAGE", "Manage space", Gold, Modifier.weight(1f)) { openStorageSettings(context) }
+            ToolTile("▤", "CLEAR JUNK", "OSEN cache only", Gold, Modifier.weight(1f)) { status.value = clearOsenTemporaryFiles(context); stats.value = readDeviceStats(context) }
         }
         NoteCard()
     }
@@ -444,7 +444,7 @@ private fun ToolsPage(
     PageTitle("GAMING TOOLS", "Quick shortcuts for your device")
     ActionButton("🌙  DO NOT DISTURB MODE", Gold, onDnd)
     ActionButton("📱  PHONE SETTINGS", Cyan, onPhoneSettings)
-    ActionButton("▤  STORAGE SETTINGS", Gold, onCleaner)
+    ActionButton("🧹  CLEAR OSEN JUNK", Gold, onCleaner)
     ActionButton("📊  DEVICE INFO", Purple, onDeviceInfo)
     ActionButton("↻  REFRESH RAM & STORAGE", Green, onRefresh)
     Text("Android requires one-time Do Not Disturb access. DND silences interruptions according to your phone settings; it does not permanently block callers.", color = Muted, fontSize = 11.sp, lineHeight = 16.sp)
@@ -732,18 +732,29 @@ private fun openAppSettings(context: Context) {
     safeOpen(context, Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply { data = android.net.Uri.parse("package:${context.packageName}") })
 }
 
-private fun openStorageSettings(context: Context) {
-    // Android owns cross-app storage cleanup; this opens its storage manager.
-    // Apps cannot silently clear another app's private cache on modern Android.
-    val storageIntent = Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS)
-    try {
-        if (storageIntent.resolveActivity(context.packageManager) != null) {
-            safeOpen(context, storageIntent)
-        } else {
-            safeOpen(context, Intent(Settings.ACTION_SETTINGS))
+
+private fun clearOsenTemporaryFiles(context: Context): String {
+    // Android does not let ordinary apps silently erase another app's cache.
+    // This action only removes this app's own temporary cache files.
+    val cacheDirs = listOfNotNull(context.cacheDir, context.externalCacheDir)
+    var bytesFreed = 0L
+    var filesRemoved = 0
+    for (dir in cacheDirs.distinctBy { it.absolutePath }) {
+        val children = dir.listFiles() ?: continue
+        for (file in children) {
+            val sizeBefore = file.walkTopDown().filter { it.isFile }.sumOf { it.length() }
+            val removed = try { file.deleteRecursively() } catch (_: Exception) { false }
+            if (removed) {
+                bytesFreed += sizeBefore
+                filesRemoved++
+            }
         }
-    } catch (_: Exception) {
-        safeOpen(context, Intent(Settings.ACTION_SETTINGS))
+    }
+    val mb = bytesFreed / (1024.0 * 1024.0)
+    return if (filesRemoved == 0) {
+        "OSEN temporary cache is already clean. Personal files were not touched."
+    } else {
+        String.format(Locale.getDefault(), "Cleaned %.1f MB of OSEN temporary cache. Other apps and personal files were not touched.", mb)
     }
 }
 
