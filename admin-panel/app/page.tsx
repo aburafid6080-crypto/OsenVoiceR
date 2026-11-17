@@ -69,33 +69,33 @@ export default function Home(){
  function navigateSection(section:string){const nextWorkspace=workspace==="website"?"website":"app";writeAdminUrl(nextWorkspace,section);setActiveSection(section);setMobileMenuOpen(false)}
  function openWorkspace(target:"website"|"app",sectionOverride?:string){const section=sectionOverride||(target==="website"?"websites":"overview");writeAdminUrl(target,section);setWorkspace(target);setActiveSection(section);setMobileMenuOpen(false);loadDashboard(token,target).catch(e=>{setNotice(e instanceof Error?e.message:"Could not load workspace");setNoticeError(true)})}
  return <main className="nexus-shell">
-  {token&&<header className="nexus-topbar"><a className="nexus-brand" href="#overview" onClick={e=>{e.preventDefault();goHome()}}><span className="brand-mark">♛</span><span><b><i>OCEAN</i></b><small>ADMIN PANEL · PRIVATE OWNER</small></span></a><div className="topbar-right"><button className="aurex-mobile-menu" aria-label="Toggle navigation" aria-expanded={mobileMenuOpen} aria-controls="aurex-mobile-navigation" onClick={()=>setMobileMenuOpen(v=>!v)}>☰</button><span className="secure-state"><i/> SECURE ADMIN</span>{token&&<div className="owner-chip"><span className="owner-avatar">AR</span><span><b>{OWNER}</b><small>OWNER</small></span><button className="logout-btn" onClick={logout}>LOG OUT</button></div>}</div></header>}
+  {token&&<header className="nexus-topbar"><a className="nexus-brand" href="#overview" onClick={e=>{e.preventDefault();goHome()}}><span className="brand-mark">♛</span><span><b><i>OCEAN</i></b><small>COMMAND CENTER · OWNER ACCESS</small></span></a><div className="topbar-right"><button className="aurex-mobile-menu" aria-label="Toggle navigation" aria-expanded={mobileMenuOpen} aria-controls="aurex-mobile-navigation" onClick={()=>setMobileMenuOpen(v=>!v)}>☰</button><span className="secure-state"><i/> SECURE COMMAND</span>{token&&<div className="owner-chip"><span className="owner-avatar">AR</span><span><b>{OWNER}</b><small>OWNER</small></span><button className="logout-btn" onClick={logout}>LOG OUT</button></div>}</div></header>}
   {token&&workspace==="home"?<section className="aurex-dashboard">
    {mobileMenuOpen&&<button type="button" className="aurex-menu-backdrop" aria-label="Close navigation menu" onClick={()=>setMobileMenuOpen(false)}/>}
    <aside id="aurex-mobile-navigation" aria-label="Admin navigation" className={`aurex-sidebar ${mobileMenuOpen?"is-open":""}`}>
-    <div className="aurex-side-brand"><span>♛</span><b>OCEAN ADMIN PANEL<small>ADMIN PANEL</small></b></div>
+    <div className="aurex-side-brand"><span>♛</span><b>OSEN COMMAND CENTER<small>COMMAND CENTER</small></b></div>
     <button className="aurex-side-link active" onClick={goHome}>⌂　Dashboard</button>
     <button className="aurex-side-link" onClick={()=>openWorkspace("website")}>◎　Website Center</button>
     <button className="aurex-side-link" onClick={()=>openWorkspace("app")}>▣　Android App Center</button>
     <button className="aurex-side-link" onClick={()=>openWorkspace("app","app-control")}>⚙　Settings</button>
     <button className="aurex-side-link" onClick={()=>openWorkspace("app","integrations")}>⬡　Security & Integrations</button>
     <button className="aurex-logout" onClick={logout}>⇥　LOG OUT</button>
-    <div className="aurex-side-tag">OCEAN ADMIN PANEL<small>Powering Your Digital World</small></div>
+    <div className="aurex-side-tag">OSEN COMMAND CENTER<small>YOUR GAME. YOUR VOICE. YOUR CONTROL.</small></div>
    </aside>
    <div className="aurex-main">
-    <header className="aurex-welcome"><div className="aurex-welcome-copy"><span className="aurex-welcome-line"/><div><b>Welcome Back,</b><em>{OWNER}</em><small>Manage your projects and control everything from here.</small></div></div><span className="aurex-online">● Online</span><span className="aurex-profile">♛　 ADMIN</span></header>
+    <header className="aurex-welcome"><div className="aurex-welcome-copy"><span className="aurex-welcome-line"/><div><b>WELCOME BACK,</b><em>{OWNER}</em><small>Your digital arena starts here. Manage your website, Android app and player tools from one secure command center.</small></div></div><span className="aurex-online">● Online</span><span className="aurex-profile">♛　 ADMIN</span></header>
     <div className="aurex-stats">
-     <article><span>♟</span><b>{devices.length||"—"}</b><strong>Connected Devices</strong><small>OSEN TURBOPLAY installs</small></article>
-     <article><span>◎</span><b>{sites.length||"—"}</b><strong>Website Projects</strong><small>Saved projects</small></article>
-     <article><span>▣</span><b>{appProjects.length||"—"}</b><strong>App Projects</strong><small>Saved projects</small></article>
-     <article><span>♛</span><b>{premiumCount||"—"}</b><strong>Premium Users</strong><small>{enabled?"Premium enabled":"Premium disabled"}</small></article>
+     <article><span>♟</span><b>{devices.length||"—"}</b><strong>ACTIVE DEVICES</strong><small>Connected OSEN devices</small></article>
+     <article><span>◎</span><b>{sites.length||"—"}</b><strong>WEB PROJECTS</strong><small>Your web platforms</small></article>
+     <article><span>▣</span><b>{appProjects.length||"—"}</b><strong>APP PROJECTS</strong><small>Your web platforms</small></article>
+     <article><span>♛</span><b>{premiumCount||"—"}</b><strong>PREMIUM PLAYERS</strong><small>{enabled?"Premium enabled":"Premium disabled"}</small></article>
     </div>
     <section className="aurex-anime-banner"><img src="/a3d7c249-a11e-4aa1-9273-5f8fe2139d3b.png" alt="OSEN anime hero with a purple-eyed companion cat"/><div className="aurex-banner-copy"></div></section>
     <div className="aurex-dash-grid">
-     <section className="aurex-panel aurex-activity"><header><b>▥　Latest Activity</b><button onClick={()=>openWorkspace("app","activity")}>VIEW ALL　→</button></header>
+     <section className="aurex-panel aurex-activity"><header><b>▥　MISSION ACTIVITY</b><button onClick={()=>openWorkspace("app","activity")}>VIEW ACTIVITY　→</button></header>
       {logs.length?logs.slice(0,5).map(log=><div className="aurex-activity-row" key={log.id}><i/> <span>{log.action.replaceAll("_"," ")}</span><small>{new Date(log.created_at).toLocaleString()}</small></div>):<p className="aurex-empty">No admin activity recorded yet.</p>}
      </section>
-     <section className="aurex-panel aurex-quick"><header><b>ϟ　Quick Actions</b></header>
+     <section className="aurex-panel aurex-quick"><header><b>ϟ　QUICK DEPLOY</b></header>
       <div className="aurex-action-grid">
        <button onClick={()=>openWorkspace("website")}><span>◎</span>Manage<br/>Website　›</button>
        <button onClick={()=>openWorkspace("app")}><span>▣</span>Manage<br/>Android App　›</button>
@@ -103,13 +103,13 @@ export default function Home(){
        <button onClick={()=>openWorkspace("app","app-control")}><span>⚙</span>Settings　›</button>
       </div>
      </section>
-     <section className="aurex-panel aurex-status"><header><b>⬡　System Status</b><span>● LIVE DATA</span></header>
-      <div className="aurex-status-grid"><div><b>{enabled?"ON":"OFF"}</b><small>Premium System</small></div><div><b>{maintenance?"ON":"OFF"}</b><small>Maintenance Mode</small></div><div><b>{sites.length}</b><small>Website Projects</small></div><div><b>{appProjects.length}</b><small>App Projects</small></div><div><b>{devices.length}</b><small>Registered Devices</small></div></div>
+     <section className="aurex-panel aurex-status"><header><b>⬡　SYSTEM STATUS</b><span>● LIVE SYSTEM</span></header>
+      <div className="aurex-status-grid"><div><b>{enabled?"ON":"OFF"}</b><small>Premium System</small></div><div><b>{maintenance?"ON":"OFF"}</b><small>Maintenance Mode</small></div><div><b>{sites.length}</b><small>WEB PROJECTS</small></div><div><b>{appProjects.length}</b><small>APP PROJECTS</small></div><div><b>{devices.length}</b><small>Registered Devices</small></div></div>
       <p>Hosting, analytics tracking and Android build services are not connected unless configured in Integrations.</p>
      </section>
     </div>
     {notice&&<div className={noticeError?"alert error":"alert"} role="status">{notice}</div>}
-    <footer className="aurex-footer">© 2026 <b>OCEAN ADMIN PANEL.</b> All Rights Reserved. <em>Dream Big · Play Better</em><span>♛ Powered by Passion</span></footer>
+    <footer className="aurex-footer">© 2026 <b>OSEN COMMAND CENTER.</b> All Rights Reserved. <em>GEAR UP · PLAY SMART</em><span>OSEN · BUILT FOR PLAYERS</span></footer>
    </div>
   </section>:null}
   {!token?<section className="nexus-login-page ocean-reference-login">
@@ -120,7 +120,7 @@ export default function Home(){
     </section>
     <section className="boost-login-panel ocean-reference-card">
      <div className="ocean-crown">♛</div>
-     <div className="boost-form-heading"><h2><span>OCEAN</span><em>ADMIN PANEL</em></h2><p><i/> LOGIN TO CONTINUE <i/></p></div>
+     <div className="boost-form-heading"><h2><span>OCEAN</span><em>ADMIN PANEL</em></h2><p><i/> OWNER ACCESS · ENTER COMMAND <i/></p></div>
      <div className="anime-login-form">
       <form onSubmit={login}>
        <div className="anime-field"><span className="ocean-field-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.8"/><path d="m4 7 8 6 8-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg></span><input id="admin-email" aria-label="Email Address" type="email" autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email Address" required /></div>
@@ -128,23 +128,23 @@ export default function Home(){
        <button className="anime-login-submit" disabled={busy}>{busy?<><span className="login-spinner"/> SIGNING IN…</>:<><span>➜</span> Login</>}</button>
       </form>
       <div className="ocean-or"><i/> OR <i/></div>
-      <div className="anime-login-note"><span>♢</span> Secure Access</div>
+      <div className="anime-login-note"><span>♢</span> ENCRYPTED OWNER ACCESS</div>
       {notice&&<div className={noticeError?"alert error":"alert"} role="status">{notice}</div>}
      </div>
     </section>
    </div>
-   <footer className="login-page-footer"><span>♛ OCEAN ADMIN PANEL</span><span>OWNER ACCESS ONLY · © 2026</span></footer>
+   <footer className="login-page-footer"><span>♛ OSEN COMMAND CENTER</span><span>PRIVATE OWNER ACCESS · © 2026</span></footer>
   </section>:workspace==="home"?null:workspace==="chooser"?<section className="workspace-picker">
-   <div className="picker-heading"><span className="section-kicker">ADMIN PANEL · PRIVATE OWNER</span><h1>Choose your <em>workspace</em></h1><p>Website projects and Android app controls stay in separate work areas.</p></div>
+   <div className="picker-heading"><span className="section-kicker">COMMAND CENTER · OWNER ACCESS</span><h1>CHOOSE YOUR <em>COMMAND</em></h1><p>Choose your arena. Website operations and Android app controls stay safely separated.</p></div>
    <div className="picker-grid">
-    <button className="workspace-tile website-tile" onClick={()=>{openWorkspace("website")}}><span className="tile-icon">◎</span><span className="tile-kicker">01 / WEB PLATFORM</span><strong>WEBSITE CENTER</strong><small>Build and manage websites, projects, domains and hosting.</small><span className="tile-cta">OPEN WEBSITE CENTER ↗</span></button>
-    <button className="workspace-tile app-tile" onClick={()=>{openWorkspace("app")}}><span className="tile-icon">▣</span><span className="tile-kicker">02 / ANDROID PLATFORM</span><strong>ANDROID APP CENTER</strong><small>Manage app access, Premium, Voice and Game Booster controls.</small><span className="tile-cta">OPEN APP CENTER ↗</span></button>
+    <button className="workspace-tile website-tile" onClick={()=>{openWorkspace("website")}}><span className="tile-icon">◎</span><span className="tile-kicker">01 / WEB PLATFORM</span><strong>WEBSITE CENTER</strong><small>Create, edit and monitor your web presence from one place.</small><span className="tile-cta">OPEN WEBSITE CENTER ↗</span></button>
+    <button className="workspace-tile app-tile" onClick={()=>{openWorkspace("app")}}><span className="tile-icon">▣</span><span className="tile-kicker">02 / ANDROID PLATFORM</span><strong>ANDROID APP CENTER</strong><small>Manage app access, Premium settings, voice tools and game utilities.</small><span className="tile-cta">OPEN APP CENTER ↗</span></button>
    </div>
-   <div className="picker-foot"><span>Ⓡ OCEAN ADMIN PANEL</span><span>ONE OWNER · TWO WORKSPACES</span><button onClick={logout}>LOG OUT</button></div>
+   <div className="picker-foot"><span>Ⓡ OSEN COMMAND CENTER</span><span>ONE OWNER · TWO WORKSPACES</span><button onClick={logout}>LOG OUT</button></div>
   </section>:<div className="nexus-workspace">
    <aside className="side-nav"><button className="workspace-switch" onClick={goHome}>← ALL WORKSPACES</button><button className="workspace-home" onClick={goHome}>⌂　HOME</button><div className="nav-caption">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div>{currentNav.map(([id,label,ico])=><a key={id} href={"#"+id} aria-current={activeSection===id?"page":undefined} className={activeSection===id?"nav-active":""} onClick={e=>{e.preventDefault();navigateSection(id)}}><span>{ico}</span>{label}</a>)}<div className="sidebar-bottom"><i/> SYSTEM READY<small>Owner-only workspace</small></div></aside>
    <div className="dashboard-content" data-active={activeSection} data-workspace={workspace}>
-    <section id="overview" className="welcome-panel"><div className="workspace-context">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div><div><div className="section-kicker">CONTROL CENTER　/　{(currentNav.find(([id])=>id===activeSection)?.[1]||"OVERVIEW").toUpperCase()}</div><h1>{activeSection==="overview"?"Welcome back,":activeSection==="premium"?"Premium":"Manage"} <em>{activeSection==="overview"?OWNER:activeSection==="premium"?"Access":" "+(currentNav.find(([id])=>id===activeSection)?.[1]||"Workspace")}.</em></h1><p>{activeSection==="premium"?"Manage global Premium availability and securely update the app verification password.":activeSection==="overview"?"Your private workspace to manage OSEN apps, access and website projects.":`Manage ${currentNav.find(([id])=>id===activeSection)?.[1]||"workspace"} settings from your private OCEAN ADMIN PANEL console.`}</p></div><div className="welcome-status"><i/> PRIVATE WORKSPACE</div></section>
+    <section id="overview" className="welcome-panel"><div className="workspace-context">{workspace==="website"?"WEBSITE CENTER":"ANDROID APP CENTER"}</div><div><div className="section-kicker">COMMAND DECK　/　{(currentNav.find(([id])=>id===activeSection)?.[1]||"OVERVIEW").toUpperCase()}</div><h1>{activeSection==="overview"?"Welcome back,":activeSection==="premium"?"Premium":"Manage"} <em>{activeSection==="overview"?OWNER:activeSection==="premium"?"Access":" "+(currentNav.find(([id])=>id===activeSection)?.[1]||"Workspace")}.</em></h1><p>{activeSection==="premium"?"Manage global Premium availability and securely update the app verification password.":activeSection==="overview"?"Your private OSEN command deck for website operations, Android app access and player services.":`Manage ${currentNav.find(([id])=>id===activeSection)?.[1]||"workspace"} settings from your private OSEN COMMAND CENTER console.`}</p></div><div className="welcome-status"><i/> OWNER COMMAND · SECURE</div></section>
     <div className="metric-grid">
      <article className="metric-card metric-gold"><span>PREMIUM SYSTEM</span><strong className={enabled?"status-on":"status-off"}>{enabled?"ENABLED":"DISABLED"}</strong><small>Global Premium access</small><button className="primary-btn" disabled={busy} onClick={()=>run("set_premium_enabled",{enabled:!enabled},enabled?"Premium access disabled.":"Premium access enabled.")}>{enabled?"TURN OFF PREMIUM":"TURN ON PREMIUM"}</button></article>
      <article className="metric-card"><span>PREMIUM ACCESS RECORDS</span><strong>{users.length}</strong><small>{premiumCount} currently approved · {users.length-premiumCount} not approved</small><a className="text-link" href="#users" onClick={e=>{e.preventDefault();navigateSection("users")}}>Manage users　↗</a></article>
@@ -161,7 +161,7 @@ export default function Home(){
      <section id="integrations" className="panel-card span-two"><div className="panel-heading"><div><span className="section-kicker">PLATFORM INTEGRATIONS</span><h2>Owner <em>tools</em></h2></div><span className="panel-icon">⌘</span></div><div className="table-tools"><span>REGISTERED OSEN TURBOPLAY DEVICES · {devices.length}</span><button className="outline-btn" disabled={busy} onClick={()=>loadDashboard()}>REFRESH LIST</button></div><div className="data-list">{devices.length?devices.map(device=><div className="data-row site-row" key={device.device_id}><div><b>{device.device_model}</b><small>{device.android_version} · App {device.app_version}</small></div><code>{device.device_id}</code><span className="ready-label">REGISTERED</span><small>Seen {new Date(device.last_seen).toLocaleString()}</small></div>):<div className="empty-state">No OSEN TURBOPLAY devices registered yet. Install and open the connected Android build to register it.</div>}</div><div className="integration-list"><div><b>Android device registry</b><span className="ready-label">CONNECTED · {devices.length} registered device(s)</span></div><div><b>Voice & Booster remote controls</b><span>Next stage · remote controls are not enabled yet</span></div><div><b>Vercel hosting & custom domains</b><span>Pending · provider API credentials and project linking required</span></div><div><b>Audit trail</b><span className="ready-label">ACTIVE · admin actions are logged</span></div></div></section>
     </div>
     {notice&&<div className={noticeError?"alert error":"alert"} role="status">{notice}</div>}
-    <footer className="nexus-footer"><span>OCEAN ADMIN PANEL　·　OWNER CONSOLE</span><span>BLACK / SKY BLUE / GOLD　·　{OWNER}</span></footer>
+    <footer className="nexus-footer"><span>OSEN COMMAND CENTER　·　OWNER CONSOLE</span><span>BLACK / GOLD · GAMING COMMAND　·　{OWNER}</span></footer>
    </div>
   </div>}
  </main>;
