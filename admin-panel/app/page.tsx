@@ -71,7 +71,8 @@ export default function Home(){
  return <main className="nexus-shell">
   {token&&<header className="nexus-topbar"><a className="nexus-brand" href="#overview" onClick={e=>{e.preventDefault();goHome()}}><span className="brand-mark">♛</span><span><b><i>OCEAN</i></b><small>ADMIN PANEL · PRIVATE OWNER</small></span></a><div className="topbar-right"><button className="aurex-mobile-menu" aria-label="Toggle navigation" aria-expanded={mobileMenuOpen} onClick={()=>setMobileMenuOpen(v=>!v)}>☰</button><span className="secure-state"><i/> SECURE ADMIN</span>{token&&<div className="owner-chip"><span className="owner-avatar">AR</span><span><b>{OWNER}</b><small>OWNER</small></span><button className="logout-btn" onClick={logout}>LOG OUT</button></div>}</div></header>}
   {token&&workspace==="home"?<section className="aurex-dashboard">
-   <aside className={`aurex-sidebar ${mobileMenuOpen?"is-open":""}`}>
+   {mobileMenuOpen&&<button type="button" className="aurex-menu-backdrop" aria-label="Close navigation menu" onClick={()=>setMobileMenuOpen(false)}/>}
+   <aside id="aurex-mobile-navigation" aria-label="Admin navigation" aria-hidden={!mobileMenuOpen && typeof window !== "undefined" && window.matchMedia("(max-width: 1100px)").matches} className={`aurex-sidebar ${mobileMenuOpen?"is-open":""}`}>
     <div className="aurex-side-brand"><span>♛</span><b>OCEAN ADMIN PANEL<small>ADMIN PANEL</small></b></div>
     <button className="aurex-side-link active" onClick={goHome}>⌂　Dashboard</button>
     <button className="aurex-side-link" onClick={()=>openWorkspace("website")}>◎　Website Center</button>
