@@ -70,3 +70,17 @@ alter table public.app_projects enable row level security;
 -- Website Studio builder fields (safe to run on an existing project).
 alter table public.website_projects add column if not exists template text not null default 'portfolio' check (template in ('portfolio','business','landing','creator'));
 alter table public.website_projects add column if not exists content jsonb not null default '{"headline":"Build something remarkable.","description":"Introduce your work, your ideas and what makes your project unique.","button_text":"Get started","accent":"#d8b15e"}'::jsonb;
+
+-- OSEN TURBOPLAY anonymous device registry. The app sends only a generated UUID,
+-- app/package version, Android version, model label and last-seen timestamp.
+create table if not exists public.registered_devices (
+  device_id uuid primary key,
+  package_name text not null check (package_name = 'com.osenturboplay.app'),
+  device_model text not null default 'Android device',
+  android_version text not null default 'Unknown',
+  app_version text not null default 'Unknown',
+  first_seen timestamptz not null default now(),
+  last_seen timestamptz not null default now()
+);
+alter table public.registered_devices enable row level security;
+-- No anon/authenticated policies. Only server-side service-role access is allowed.
