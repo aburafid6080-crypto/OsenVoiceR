@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+<title id="title">OCEAN ADMIN PANEL anime mascot artwork</title><desc id="desc">Original silver-haired anime hero with violet eyes and a small companion cat, surrounded by violet and blue energy.</desc>
+<defs>
+ <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#080817"/><stop offset=".55" stop-color="#1b1040"/><stop offset="1" stop-color="#071b32"/></linearGradient>
+ <radialGradient id="glow"><stop stop-color="#9d55ff" stop-opacity=".72"/><stop offset="1" stop-color="#5423a8" stop-opacity="0"/></radialGradient>
+ <linearGradient id="hair" x2=".8" y2="1"><stop stop-color="#fff"/><stop offset=".4" stop-color="#c9c7ff"/><stop offset="1" stop-color="#7164b8"/></linearGradient>
+ <linearGradient id="coat" x2="1" y2="1"><stop stop-color="#40217c"/><stop offset=".5" stop-color="#14152f"/><stop offset="1" stop-color="#070c1c"/></linearGradient>
+ <linearGradient id="gold"><stop stop-color="#ffe58b"/><stop offset="1" stop-color="#b97a22"/></linearGradient>
+ <linearGradient id="cat"><stop stop-color="#fff"/><stop offset="1" stop-color="#a8a4c7"/></linearGradient>
+ <filter id="blur"><feGaussianBlur stdDeviation="34"/></filter>
+ <filter id="shine"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="1200" height="620" fill="url(#bg)"/><ellipse cx="830" cy="305" rx="390" ry="300" fill="url(#glow)" filter="url(#blur)"/>
+<path d="M720 620Q805 430 750 240M850 620Q1000 390 1120 170M620 590Q720 360 640 180" fill="none" stroke="#8d4aff" stroke-width="8" opacity=".55" filter="url(#shine)"/>
+<path d="M700 620Q840 420 790 180M950 620Q1030 380 1180 300" fill="none" stroke="#27aaff" stroke-width="5" opacity=".55"/>
+<!-- hero silhouette and jacket -->
+<path d="M330 620Q340 450 430 370Q495 330 585 350Q710 370 770 620Z" fill="url(#coat)" stroke="#8d6bff" stroke-width="5"/>
+<path d="M420 405L520 520L590 390L700 620H360Z" fill="#10142c" stroke="#6950b5" stroke-width="4"/>
+<path d="M515 400L555 465L590 400L620 620H490Z" fill="#251a4e"/>
+<path d="M540 440L570 470L600 440" fill="none" stroke="url(#gold)" stroke-width="8"/>
+<!-- neck and face -->
+<path d="M490 305L485 390Q555 445 630 380L612 300Z" fill="#e6b7b3"/>
+<path d="M430 160Q455 85 570 92Q690 105 680 235L650 333Q610 390 525 370Q440 340 420 250Z" fill="#f4d0c8" stroke="#b58da9" stroke-width="4"/>
+<path d="M420 205Q370 110 480 55Q550 8 645 58Q740 110 680 235L654 180L625 120L595 180L575 105L530 180L500 125L470 220L440 180Z" fill="url(#hair)" stroke="#8d81c9" stroke-width="5"/>
+<path d="M432 190Q390 110 465 75L450 170L500 120L486 200L540 130L525 210L585 115L590 215L640 130L650 220L687 165Q710 265 655 335Q685 245 640 205L620 240L600 185L560 245L545 190L505 245L482 190L455 255Z" fill="url(#hair)" stroke="#9990d0" stroke-width="3"/>
+<!-- eyes -->
+<path d="M465 255Q495 225 530 253Q500 280 465 255M580 253Q615 225 645 250Q615 280 580 253Z" fill="#fff"/>
+<ellipse cx="501" cy="254" rx="12" ry="17" fill="#7145e8"/><ellipse cx="613" cy="253" rx="12" ry="17" fill="#7145e8"/><circle cx="505" cy="250" r="5" fill="#fff"/><circle cx="617" cy="249" r="5" fill="#fff"/>
+<path d="M538 300Q560 311 580 296" fill="none" stroke="#a85f83" stroke-width="4" stroke-linecap="round"/>
+<path d="M455 237L526 226M578 226L650 235" stroke="#574c83" stroke-width="9" stroke-linecap="round"/>
+<!-- hair highlights -->
+<path d="M470 80Q525 40 595 60M455 120L480 92M610 78L650 105" fill="none" stroke="#fff" stroke-width="8" opacity=".7" stroke-linecap="round"/>
+<!-- cat companion -->
+<g transform="translate(820 345)">
+ <ellipse cx="165" cy="210" rx="160" ry="42" fill="#070716" opacity=".6"/>
+ <path d="M65 115L42 10Q100 24 125 72Q180 40 230 70L280 14L275 130Z" fill="url(#cat)" stroke="#8076ae" stroke-width="6"/>
+ <ellipse cx="165" cy="150" rx="130" ry="125" fill="url(#cat)" stroke="#8278b5" stroke-width="6"/>
+ <path d="M70 85Q90 20 130 72L108 120M220 76Q260 25 270 88L245 125" fill="#8b82b7" opacity=".65"/>
+ <ellipse cx="112" cy="145" rx="22" ry="30" fill="#fff"/><ellipse cx="214" cy="145" rx="22" ry="30" fill="#fff"/>
+ <ellipse cx="116" cy="148" rx="12" ry="21" fill="#7d4de8"/><ellipse cx="210" cy="148" rx="12" ry="21" fill="#7d4de8"/>
+ <circle cx="120" cy="140" r="6" fill="#fff"/><circle cx="214" cy="140" r="6" fill="#fff"/>
+ <path d="M151 183L171 183L161 197Z" fill="#e98cae"/><path d="M161 197Q145 218 130 202M161 197Q178 218 194 201" fill="none" stroke="#8f5e86" stroke-width="5" stroke-linecap="round"/>
+ <path d="M50 174L5 164M53 192L8 202M270 174L315 160M270 195L315 205" stroke="#8176a7" stroke-width="4" stroke-linecap="round"/>
+ <path d="M140 242Q162 263 184 242" fill="none" stroke="url(#gold)" stroke-width="7"/>
+ <circle cx="162" cy="251" r="14" fill="url(#gold)"/>
+</g>
+<!-- floating emblem and sparkles -->
+<g filter="url(#shine)" fill="url(#gold)"><path d="M875 80L895 35L915 80L960 86L925 117L935 160L895 138L855 160L865 117L830 86Z"/><circle cx="1070" cy="220" r="7"/><circle cx="760" cy="120" r="5"/><circle cx="1130" cy="440" r="6"/></g>
+<g fill="#c5aaff"><path d="M770 250l8 18 18 8-18 8-8 18-8-18-18-8 18-8z"/><path d="M1110 80l6 14 14 6-14 6-6 14-6-14-14-6 14-6z"/></g>
+<text x="62" y="510" fill="#f4eaff" font-family="Arial,sans-serif" font-size="22" font-weight="700" letter-spacing="7">OCEAN ADMIN PANEL</text>
+<text x="62" y="552" fill="#c2a7ff" font-family="Arial,sans-serif" font-size="15" letter-spacing="4">ADMIN CONTROL CENTER</text>
+<path d="M62 575H400" stroke="url(#gold)" stroke-width="3"/>
+</svg>

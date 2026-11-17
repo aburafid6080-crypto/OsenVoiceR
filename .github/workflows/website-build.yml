@@ -1,0 +1,27 @@
+name: Build OSEN BOOSTVOX RX Public Website
+on:
+  push:
+    branches: [admin-panel]
+    paths:
+      - 'website/**'
+      - '.github/workflows/website-build.yml'
+  pull_request:
+    branches: [admin-panel]
+    paths:
+      - 'website/**'
+      - '.github/workflows/website-build.yml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: website
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: website/package.json
+      - run: npm install
+      - run: npm run build
