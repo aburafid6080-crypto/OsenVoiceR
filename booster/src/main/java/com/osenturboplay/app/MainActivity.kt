@@ -369,7 +369,7 @@ private fun HomePage(context: Context, stats: DeviceStats, status: androidx.comp
             ToolTile("🚀", "GAME LAUNCHER", "Open games", Purple, Modifier.weight(1f)) { status.value = launchFreeFire(context) }
             ToolTile("⟳", "REFRESH", "Update info", Cyan, Modifier.weight(1f), onRefresh)
             ToolTile("⚡", "BOOSTER", "Performance info", Green, Modifier.weight(1f)) { val latest = readDeviceStats(context); status.value = "Game check: ${latest.ramAvailable} RAM free • ${latest.storageFree} storage free. Android controls game performance." }
-            ToolTile("▤", "CLEAR JUNK", "OSEN cache only", Gold, Modifier.weight(1f)) { status.value = clearOsenTemporaryFiles(context); stats.value = readDeviceStats(context) }
+            ToolTile("▤", "CLEAR JUNK", "OSEN cache only", Gold, Modifier.weight(1f)) { status.value = clearOsenTemporaryFiles(context); onRefresh() }
         }
         NoteCard()
     }
