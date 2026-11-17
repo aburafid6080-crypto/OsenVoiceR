@@ -7130,3 +7130,34 @@ button, a, [role="button"]{
   .aurex-dashboard .aurex-main{position:relative;z-index:1}
   .aurex-dashboard .aurex-sidebar button{width:100%;min-height:46px}
 }
+
+
+/* OCEAN MOBILE NAVIGATION — isolated drawer and reliable backdrop */
+.aurex-menu-backdrop{display:none}
+@media(max-width:1100px){
+ .aurex-dashboard{position:relative;isolation:isolate}
+ .aurex-dashboard>.aurex-sidebar{
+  position:fixed!important;display:flex!important;left:10px!important;top:80px!important;
+  right:auto!important;bottom:12px!important;width:min(310px,calc(100vw - 28px))!important;
+  height:auto!important;min-height:0!important;max-height:calc(100dvh - 94px)!important;
+  margin:0!important;z-index:1002!important;overflow-y:auto!important;
+  transform:translate3d(-115%,0,0)!important;visibility:hidden!important;
+  pointer-events:none!important;transition:transform .24s ease,visibility .24s ease!important;
+ }
+ .aurex-dashboard>.aurex-sidebar.is-open{
+  transform:translate3d(0,0,0)!important;visibility:visible!important;pointer-events:auto!important;
+ }
+ .aurex-menu-backdrop{
+  display:block;position:fixed;inset:70px 0 0;z-index:1001;
+  width:100%;height:calc(100dvh - 70px);margin:0;padding:0;
+  border:0;border-radius:0;background:rgba(0,0,0,.62);
+  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+ }
+ .aurex-dashboard>.aurex-main{position:relative;z-index:1}
+ .aurex-dashboard>.aurex-sidebar button{position:relative;z-index:2;min-height:48px}
+ .aurex-topbar .aurex-mobile-menu{position:relative;z-index:1003;touch-action:manipulation}
+}
+@media(min-width:1101px){
+ .aurex-dashboard>.aurex-sidebar{visibility:visible!important;pointer-events:auto!important}
+ .aurex-menu-backdrop{display:none!important}
+}
