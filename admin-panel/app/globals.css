@@ -7090,3 +7090,43 @@ body{background:#07030d}
  .aurex-panel:hover,.aurex-stats article:hover{transform:translateY(-2px);box-shadow:0 14px 28px #0008,0 0 18px #a64cff2a!important}
 }
 @keyframes oceanHeroDrift{from{transform:scale(1.015)}to{transform:scale(1.065)}}
+
+
+/* MOBILE TAP + BUTTON HIT-AREA REPAIR */
+button, a, [role="button"]{
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+  pointer-events:auto;
+}
+.aurex-dashboard,
+.aurex-dashboard .aurex-sidebar,
+.aurex-dashboard .aurex-main,
+.aurex-dashboard .aurex-dash-grid,
+.aurex-dashboard .aurex-panel{
+  pointer-events:auto;
+}
+.aurex-dashboard .aurex-sidebar{z-index:20}
+.aurex-dashboard .aurex-sidebar button,
+.aurex-dashboard .aurex-panel button,
+.aurex-dashboard .aurex-topbar button{
+  position:relative;
+  z-index:21;
+  min-height:42px;
+  cursor:pointer;
+  -webkit-user-select:none;
+  user-select:none;
+}
+.aurex-dashboard button:active{
+  filter:brightness(1.18);
+  transform:scale(.985);
+}
+.aurex-dashboard button:focus-visible{
+  outline:2px solid #ffd45e!important;
+  outline-offset:3px!important;
+}
+@media(max-width:900px){
+  .aurex-dashboard .aurex-sidebar{isolation:isolate}
+  .aurex-dashboard .aurex-sidebar>*{pointer-events:auto}
+  .aurex-dashboard .aurex-main{position:relative;z-index:1}
+  .aurex-dashboard .aurex-sidebar button{width:100%;min-height:46px}
+}
